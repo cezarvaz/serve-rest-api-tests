@@ -1,0 +1,18 @@
+{
+  "verbose": true,
+  "testTimeout": 10000,
+  "moduleDirectories": ["node_modules", "gestao-performance-evaluation-api-tests"],
+  "reporters": [
+    "default",
+    [
+      "jest-html-reporters",
+      {
+        "publicPath": "./html-report",
+        "filename": "report.html",
+        "expand": true,
+        "openReport": false,
+        "pageTitle": "Test Report - GESTÃO PERFORMANCE EVALUATION API Tests"
+      }
+    ]
+  ]
+}

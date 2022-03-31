@@ -1,0 +1,23 @@
+{
+  "name": "gestao-performance-evaluation-api-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --runInBand",
+    "clear": "jest --clearCache"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "ajv": "^8.11.0",
+    "ajv-formats": "^2.1.1",
+    "faker": "^5.5.3",
+    "faker-br": "^0.4.1",
+    "jest": "^27.5.1",
+    "jest-html-reporters": "^3.0.6",
+    "supertest": "^6.2.2"
+  }
+}
