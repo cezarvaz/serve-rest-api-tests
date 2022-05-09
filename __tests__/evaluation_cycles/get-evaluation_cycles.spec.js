@@ -6,8 +6,8 @@ import errorSchema from "../../schemas/error";
 const EXPIRED_TOKEN =
   "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNDMzMjgsImNvbXBhbnlfYWRtaW4iOnRydWUsInVzZXJfZW1haWwiOiJjb250YXRvQGNvbnRhYmlsaWRhZGUtYXV0ZW50aWNhLmNvbS5iciIsInVzZXJfbmFtZSI6IlRoaWFnbyBNb3JlaXJhIiwidXNlcl9jb21wYW55X25hbWUiOiJDb250YWJpbGlkYWRlIEF1dMOqbnRpY2EiLCJleHAiOjE2NDg3NjI1MzgsInVzZXJfY29tcGFueV9pZCI6NzQxMzksInRva2VuX3VzZSI6InJlZnJlc2giLCJpc3MiOiJHZXN0w6NvIFYxIiwiaWF0IjoxNjQ4NzI2NTM4fQ.GY-zA5kWUehzgjcqW-vbKAuE_FlMh1_mSNfk87xscQc";
 
-describe.only("Get all the evaluation cycles", () => {
-  it("successfully", async () => {
+describe("Get all the evaluation cycles", () => {
+  test("successfully", async () => {
     const res = await request
       .get("evaluation_cycles")
       .set("Authorization", EXPIRED_TOKEN);
@@ -33,7 +33,7 @@ describe.only("Get all the evaluation cycles", () => {
     expect(validate.jsonSchema(res.body, getEvalutaionCyclesSchema)).toBe(true);
   });
 
-  it("expired token", async () => {
+  test("expired token", async () => {
     const res = await request
       .get("evaluation_cycles")
       .set("Authorization", EXPIRED_TOKEN);

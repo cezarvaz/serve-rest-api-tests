@@ -21,7 +21,7 @@ beforeEach(() => {
 });
 
 describe("Create an evaluation cycle", () => {
-  it("successfully", async () => {
+  test("successfully", async () => {
     const res = await request
       .post("evaluation_cycles")
       .send(payload)
@@ -48,7 +48,7 @@ describe("Create an evaluation cycle", () => {
     expect(validate.jsonSchema(res.body, getEvalutaionCyclesSchema)).toBe(true);
   });
 
-  it("expired token", async () => {
+  test("expired token", async () => {
     const res = await request
       .post("evaluation_cycles")
       .send(payload)

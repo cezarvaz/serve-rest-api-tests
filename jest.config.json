@@ -1,7 +1,10 @@
 {
   "verbose": true,
   "testTimeout": 10000,
-  "moduleDirectories": ["node_modules", "gestao-performance-evaluation-api-tests"],
+  "moduleDirectories": [
+    "node_modules",
+    "gestao-performance-evaluation-api-tests"
+  ],
   "reporters": [
     "default",
     [
@@ -11,7 +14,7 @@
         "filename": "report.html",
         "expand": true,
         "openReport": false,
-        "pageTitle": "Test Report - GESTÃO PERFORMANCE EVALUATION API Tests"
+        "pageTitle": "Test Report - GESTÃO PERFORMANCE EVALUATION API TESTS"
       }
     ]
   ]

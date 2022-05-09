@@ -18,6 +18,7 @@
     "faker-br": "^0.4.1",
     "jest": "^27.5.1",
     "jest-html-reporters": "^3.0.6",
+    "jwt-decode": "^3.1.2",
     "supertest": "^6.2.2"
   }
 }
