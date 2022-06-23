@@ -73,4 +73,19 @@ describe("Update a Group Criteria", () => {
     expect(res.body.error.name[0]).toBe("Este campo é obrigatório")
     expect(validate.jsonSchema(res.body, invalidNameSchema)).toBe(true);
   });
+
+  test("archiving group criteria", async () => {
+    payload.group_criteria.active = false
+    const res = await request
+      .put("group_criterias/" + successfuly_id)
+      .set("Authorization", "Bearer " + client.accessToken)
+      .send(payload);
+
+      expect(res.status).toBe(202);
+      expect(res.body.data.id).toBe(successfuly_id);
+      expect(res.body.data.type).toBe("group_criterias");
+      expect(res.body.data.attributes.name).toBe(payload.group_criteria.name);
+      expect(res.body.data.attributes.active).toBe(false)
+      expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
+  });
 });

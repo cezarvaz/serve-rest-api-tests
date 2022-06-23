@@ -1,7 +1,7 @@
 const errorExistingNameSchema = {
   definitions: {},
   $schema: "http://json-schema.org/draft-07/schema#",
-  $id: "https://example.com/object1655823449.json",
+  $id: "#existing-name-post-group-criteria",
   title: "Root",
   type: "object",
   properties: {

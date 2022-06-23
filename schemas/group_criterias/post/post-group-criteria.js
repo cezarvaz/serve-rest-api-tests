@@ -1,6 +1,6 @@
 const postGroupCriteriaSchema = {
   $schema: "http://json-schema.org/draft-07/schema",
-  $id: "#post-group-criteria",
+  $id: "#success-post-group-criteria",
   type: "object",
   required: ["data"],
   additionalProperties: false,

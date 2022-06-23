@@ -1,7 +1,7 @@
 const invalidNameSchema = {
   definitions: {},
   $schema: "http://json-schema.org/draft-07/schema#",
-  $id: "https://example.com/object1656015825.json",
+  $id: "#invalid-id-put-group-criterias",
   title: "Root",
   type: "object",
   required: ["message", "error"],

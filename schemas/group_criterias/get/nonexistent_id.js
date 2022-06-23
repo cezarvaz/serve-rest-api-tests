@@ -1,7 +1,7 @@
 const nonExistentIdSchema = {
   definitions: {},
   $schema: "http://json-schema.org/draft-07/schema#",
-  $id: "https://example.com/object1656007958.json",
+  $id: "#nonexistent-id-get-group-criteria",
   title: "Root",
   type: "object",
   required: ["errors"],

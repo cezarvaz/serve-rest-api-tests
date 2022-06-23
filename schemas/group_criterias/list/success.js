@@ -1,7 +1,7 @@
 const sucessSchema = {
   definitions: {},
   $schema: "http://json-schema.org/draft-07/schema#",
-  $id: "https://example.com/object1655986126.json",
+  $id: "#success-list-group-criteria",
   title: "Root",
   type: "object",
   required: ["data", "meta"],
