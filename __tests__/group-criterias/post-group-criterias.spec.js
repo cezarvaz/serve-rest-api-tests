@@ -2,8 +2,9 @@ import request from "config/request";
 import client from "helper/auth-client";
 import EXPIRED_TOKEN from "utils/constants";
 import validate from "helper/validate";
-import postGroupCriteriaSchema from "schemas/post-group-criteria";
-import errorSchema from "schemas/error";
+import postGroupCriteriaSchema from "schemas/group_criterias/post/post-group-criteria";
+import errorTokenSchema from "schemas/group_criterias/post/error_token";
+import errorExistingNameSchema from "schemas/group_criterias/post/error_existing_name";
 import fakerBr from "faker-br";
 
 beforeAll(async () => {
@@ -55,8 +56,6 @@ describe("Create group criteria", () => {
       .send(payload)
       .set("Authorization", "Bearer " + client.accessToken);
 
-    console.log(res.body);
-
     expect(res.headers).toHaveProperty(
       "content-type",
       "application/json; charset=utf-8"
@@ -69,7 +68,7 @@ describe("Create group criteria", () => {
       "Já existe um grupo de competências com este nome."
     );
 
-    expect(validate.jsonSchema(res.body, errorSchema)).toBe(true);
+    expect(validate.jsonSchema(res.body, errorExistingNameSchema)).toBe(true);
   });
 
   test("expired token", async () => {
@@ -85,6 +84,6 @@ describe("Create group criteria", () => {
     expect(res.status).toBe(401);
     expect(res.body.errors).toBe("decoding error");
 
-    expect(validate.jsonSchema(res.body, errorSchema)).toBe(true);
+    expect(validate.jsonSchema(res.body, errorTokenSchema)).toBe(true);
   });
 });

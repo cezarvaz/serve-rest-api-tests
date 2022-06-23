@@ -1,4 +1,4 @@
-const errorSchema = {
+const errorTokenSchema = {
   $schema: "http://json-schema.org/draft-07/schema",
   $id: "#error",
   type: "object",
@@ -11,4 +11,5 @@ const errorSchema = {
   },
   additionalProperties: false,
 };
-export default errorSchema;
+export default errorTokenSchema;
+
