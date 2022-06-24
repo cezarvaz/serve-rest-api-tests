@@ -1,6 +1,6 @@
-const errorSchema = {
+const errorTokenSchema = {
   $schema: "http://json-schema.org/draft-07/schema",
-  $id: "#error",
+  $id: "#invalid-token-post-group-criteria",
   type: "object",
   required: ["errors"],
   properties: {
@@ -11,4 +11,5 @@ const errorSchema = {
   },
   additionalProperties: false,
 };
-export default errorSchema;
+export default errorTokenSchema;
+

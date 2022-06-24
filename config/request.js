@@ -1,5 +1,5 @@
 import supertest from "supertest";
 const request = supertest(
-  "https://apigwstg.solides.com.br/performance-evaluation/api/"
+  "http://internalalb-stg.solides.com.br/evaluation/api/"
 );
 export default request;
