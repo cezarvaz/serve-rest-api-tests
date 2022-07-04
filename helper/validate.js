@@ -1,5 +1,5 @@
-import Ajv from "ajv";
-import addFormats from "ajv-formats";
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
 
 class Validate {
   jsonSchema(body, schema) {
