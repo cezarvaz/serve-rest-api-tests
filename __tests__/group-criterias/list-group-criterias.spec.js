@@ -1,15 +1,15 @@
 import request from 'config/request';
-import client from 'helper/auth-client';
+import client from 'helper/AuthClient';
 import EXPIRED_TOKEN from 'utils/constants';
-import validate from 'helper/validate';
+import validate from 'helper/Validate';
 import successSchema from 'schemas/group_criterias/list/success';
 import expiredTokenSchema from 'schemas/group_criterias/list/expired_token';
 
-beforeAll(async () => {
-  await client.auth();
-});
-
 describe('List Group Criterias', () => {
+  beforeAll(async () => {
+    await client.auth();
+  });
+
   test('successfully', async () => {
     const res = await request
       .get('skill_groups')

@@ -1,5 +1,6 @@
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
+import betterAjvErrors from 'better-ajv-errors';
 
 class Validate {
   jsonSchema(body, schema) {
@@ -11,13 +12,10 @@ class Validate {
     });
     addFormats(ajv);
 
+    const validate = ajv.compile(schema);
     const valid = ajv.validate(schema, body);
-    if (!valid)
-      return {
-        valid,
-        err_msg: ajv.errors,
-      };
-    return valid;
+
+    return valid || betterAjvErrors(schema, body, validate.errors);
   }
 }
 

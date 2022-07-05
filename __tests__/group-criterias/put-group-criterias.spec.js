@@ -1,30 +1,30 @@
 import request from 'config/request';
-import client from 'helper/auth-client';
+import client from 'helper/AuthClient';
 import EXPIRED_TOKEN from 'utils/constants';
-import validate from 'helper/validate';
+import validate from 'helper/Validate';
 import fakerBr from 'faker-br';
 import successSchema from 'schemas/group_criterias/put/success';
 import expiredTokenSchema from 'schemas/group_criterias/put/expired_token';
 import invalidNameSchema from 'schemas/group_criterias/put/invalid_name';
 
-beforeAll(async () => {
-  await client.auth();
-});
-
 let successfuly_id = 18;
 let payload;
 const number = fakerBr.random.number({ max: 5000 });
 
-beforeEach(() => {
-  payload = {
-    group_criteria: {
-      name: number + '_Teste_API',
-      active: true,
-    },
-  };
-});
-
 describe('Update a Group Criteria', () => {
+  beforeAll(async () => {
+    await client.auth();
+  });
+
+  beforeEach(() => {
+    payload = {
+      group_criteria: {
+        name: number + '_Teste_API',
+        active: true,
+      },
+    };
+  });
+
   test('successfully', async () => {
     const res = await request
       .put('skill_groups/' + successfuly_id)

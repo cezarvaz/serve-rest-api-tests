@@ -1,29 +1,29 @@
 import request from 'config/request';
-import client from 'helper/auth-client';
+import client from 'helper/AuthClient';
 import EXPIRED_TOKEN from 'utils/constants';
-import validate from 'helper/validate';
+import validate from 'helper/Validate';
 import postGroupCriteriaSchema from 'schemas/group_criterias/post/post-group-criteria';
 import errorTokenSchema from 'schemas/group_criterias/post/error_token';
 import errorExistingNameSchema from 'schemas/group_criterias/post/error_existing_name';
 import fakerBr from 'faker-br';
 
-beforeAll(async () => {
-  await client.auth();
-});
-
 let payload, postedGroupCriteria;
 
 const number = fakerBr.random.number({ max: 5000 });
 
-beforeEach(() => {
-  payload = {
-    group_criteria: {
-      name: number + '_Teste_API',
-    },
-  };
-});
-
 describe('Create group criteria', () => {
+  beforeAll(async () => {
+    await client.auth();
+  });
+
+  beforeEach(() => {
+    payload = {
+      group_criteria: {
+        name: number + '_Teste_API',
+      },
+    };
+  });
+
   test('successfully', async () => {
     postedGroupCriteria = payload.group_criteria.name;
 

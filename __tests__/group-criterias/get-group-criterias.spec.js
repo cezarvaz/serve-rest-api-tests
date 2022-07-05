@@ -1,20 +1,20 @@
 import request from 'config/request';
-import client from 'helper/auth-client';
+import client from 'helper/AuthClient';
 import EXPIRED_TOKEN from 'utils/constants';
-import validate from 'helper/validate';
+import validate from 'helper/Validate';
 import successSchema from 'schemas/group_criterias/get/success';
 import expiredTokenSchema from 'schemas/group_criterias/get/expired_token';
 import nonExistentIdSchema from 'schemas/group_criterias/get/nonexistent_id';
-
-beforeAll(async () => {
-  await client.auth();
-});
 
 let successfuly_id = 166;
 let nonexistent_id = 999999;
 let invalid_id = 'asda@sdasd';
 
 describe('Get Group Criterias', () => {
+  beforeAll(async () => {
+    await client.auth();
+  });
+
   test('successfully', async () => {
     const res = await request
       .get('skill_groups/' + successfuly_id)
