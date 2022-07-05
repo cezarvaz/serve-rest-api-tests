@@ -4,27 +4,29 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "jest",
     "clear": "jest --clearCache",
     "lint": "npx eslint . --fix"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.18.2",
-    "@babel/preset-env": "^7.18.2",
+    "@babel/core": "^7.18.6",
+    "@babel/preset-env": "^7.18.6",
     "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
+    "better-ajv-errors": "^1.2.0",
     "eslint": "^8.19.0",
-    "faker": "^5.5.3",
-    "faker-br": "^0.4.1",
-    "jest": "^28.1.1",
-    "jest-html-reporters": "^3.0.9",
-    "supertest": "^6.2.3",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-jest": "^26.5.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.7.1"
+    "faker": "^5.5.3",
+    "faker-br": "^0.4.1",
+    "jest": "^28.1.2",
+    "jest-html-reporters": "^3.0.9",
+    "jwt-decode": "^3.1.2",
+    "prettier": "^2.7.1",
+    "supertest": "^6.2.4"
   }
 }
