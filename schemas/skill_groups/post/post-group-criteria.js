@@ -1,14 +1,14 @@
 const postGroupCriteriaSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#success-post-group-criteria',
+  $id: '#success-post-skill-groups',
   type: 'object',
-  required: ['data'],
-  additionalProperties: false,
+  required: ['data', 'included'],
+  additionalProperties: true,
   properties: {
     data: {
       type: 'object',
       required: ['id', 'type', 'attributes'],
-      additionalProperties: false,
+      additionalProperties: true,
       properties: {
         id: {
           type: 'integer',
@@ -21,11 +21,11 @@ const postGroupCriteriaSchema = {
           required: [
             'name',
             'external_id',
-            'active',
+            'archived',
             'created_at',
             'updated_at',
           ],
-          additionalProperties: false,
+          additionalProperties: true,
           properties: {
             name: {
               type: 'string',
@@ -33,20 +33,22 @@ const postGroupCriteriaSchema = {
             external_id: {
               type: 'null',
             },
-            active: {
+            archived: {
               type: 'boolean',
             },
             created_at: {
               type: 'string',
-              format: 'date-time',
             },
             updated_at: {
               type: 'string',
-              format: 'date-time',
             },
           },
         },
       },
+    },
+    included: {
+      type: 'array',
+      items: {},
     },
   },
 };
