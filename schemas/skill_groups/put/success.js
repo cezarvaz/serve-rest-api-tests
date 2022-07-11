@@ -1,8 +1,8 @@
-const postGroupCriteriaSchema = {
+const sucessSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#success-post-group-criteria',
+  $id: '#success-put-skill-groups',
   type: 'object',
-  required: ['data'],
+  required: ['data', 'included'],
   additionalProperties: false,
   properties: {
     data: {
@@ -21,7 +21,7 @@ const postGroupCriteriaSchema = {
           required: [
             'name',
             'external_id',
-            'active',
+            'archived',
             'created_at',
             'updated_at',
           ],
@@ -33,22 +33,23 @@ const postGroupCriteriaSchema = {
             external_id: {
               type: 'null',
             },
-            active: {
+            archived: {
               type: 'boolean',
             },
             created_at: {
               type: 'string',
-              format: 'date-time',
             },
             updated_at: {
               type: 'string',
-              format: 'date-time',
             },
           },
         },
       },
     },
+    included: {
+      type: 'array',
+      items: {},
+    },
   },
 };
-
-export default postGroupCriteriaSchema;
+export default sucessSchema;

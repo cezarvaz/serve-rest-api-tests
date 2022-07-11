@@ -1,7 +1,7 @@
 const expiredTokenSchema = {
   definitions: {},
   $schema: 'http://json-schema.org/draft-07/schema#',
-  $id: '#expired-token-put-group-criterias',
+  $id: '#expired-token-put-skill-groups',
   title: 'Root',
   type: 'object',
   required: ['errors'],
