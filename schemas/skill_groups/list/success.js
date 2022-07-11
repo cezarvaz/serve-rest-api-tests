@@ -3,14 +3,14 @@ const sucessSchema = {
   $id: '#success-list-skill-groups',
   type: 'object',
   required: ['data', 'included', 'meta'],
-  additionalProperties: true,
+  additionalProperties: false,
   properties: {
     data: {
       type: 'array',
       items: {
         type: 'object',
         required: ['id', 'type', 'attributes'],
-        additionalProperties: true,
+        additionalProperties: false,
         properties: {
           id: {
             type: 'integer',
@@ -27,7 +27,7 @@ const sucessSchema = {
               'created_at',
               'updated_at',
             ],
-            additionalProperties: true,
+            additionalProperties: false,
             properties: {
               name: {
                 type: 'string',
@@ -56,7 +56,7 @@ const sucessSchema = {
     meta: {
       type: 'object',
       required: ['pagination'],
-      additionalProperties: true,
+      additionalProperties: false,
       properties: {
         pagination: {
           type: 'object',
@@ -68,7 +68,7 @@ const sucessSchema = {
             'pages',
             'total_count',
           ],
-          additionalProperties: true,
+          additionalProperties: false,
           properties: {
             current: {
               type: 'integer',

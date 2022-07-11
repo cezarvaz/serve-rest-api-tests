@@ -3,7 +3,7 @@ const invalidNameSchema = {
   $id: '#invalid-name-put-skill-groups',
   type: 'object',
   required: ['message', 'error'],
-  additionalProperties: true,
+  additionalProperties: false,
   properties: {
     message: {
       type: 'string',
@@ -11,7 +11,7 @@ const invalidNameSchema = {
     error: {
       type: 'object',
       required: ['name'],
-      additionalProperties: true,
+      additionalProperties: false,
       properties: {
         name: {
           type: 'array',

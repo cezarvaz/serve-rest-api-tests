@@ -3,12 +3,12 @@ const postGroupCriteriaSchema = {
   $id: '#success-post-skill-groups',
   type: 'object',
   required: ['data', 'included'],
-  additionalProperties: true,
+  additionalProperties: false,
   properties: {
     data: {
       type: 'object',
       required: ['id', 'type', 'attributes'],
-      additionalProperties: true,
+      additionalProperties: false,
       properties: {
         id: {
           type: 'integer',
@@ -25,7 +25,7 @@ const postGroupCriteriaSchema = {
             'created_at',
             'updated_at',
           ],
-          additionalProperties: true,
+          additionalProperties: false,
           properties: {
             name: {
               type: 'string',

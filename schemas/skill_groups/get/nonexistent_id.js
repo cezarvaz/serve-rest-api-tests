@@ -3,12 +3,12 @@ const nonExistentIdSchema = {
   $id: '#nonexistent-id-skill-groups',
   type: 'object',
   required: ['errors'],
-  additionalProperties: true,
+  additionalProperties: false,
   properties: {
     errors: {
       type: 'object',
       required: ['status', 'message'],
-      additionalProperties: true,
+      additionalProperties: false,
       properties: {
         status: {
           type: 'integer',
