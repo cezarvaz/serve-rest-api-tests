@@ -14,10 +14,10 @@ describe('Get Group Criterias', () => {
 
   test('successfully', async () => {
     const res = await request
-      .get('skill_groups/' + skillgroup.data().successfuly_id)
+      .get('skill_groups/' + skillgroup.id().successfuly_id)
       .set('Authorization', 'Bearer ' + client.accessToken);
     expect(res.status).toBe(200);
-    expect(res.body.data.id).toBe(skillgroup.data().successfuly_id);
+    expect(res.body.data.id).toBe(skillgroup.id().successfuly_id);
     expect(res.body.data.type).toBe('skill_groups');
     expect(res.body.data.attributes.created_at).toBeDefined();
     expect(res.body.data.attributes.updated_at).toBeDefined();
@@ -26,7 +26,7 @@ describe('Get Group Criterias', () => {
 
   test('expired token', async () => {
     const res = await request
-      .get('skill_groups/' + skillgroup.data().successfuly_id)
+      .get('skill_groups/' + skillgroup.id().successfuly_id)
       .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
 
     expect(res.status).toBe(401);
@@ -35,7 +35,7 @@ describe('Get Group Criterias', () => {
 
   test('nonexistentent id', async () => {
     const res = await request
-      .get('skill_groups/' + skillgroup.data().nonexistent_id)
+      .get('skill_groups/' + skillgroup.id().nonexistent_id)
       .set('Authorization', 'Bearer ' + client.accessToken);
 
     expect(res.status).toBe(404);
@@ -46,7 +46,7 @@ describe('Get Group Criterias', () => {
 
   test('invalid id', async () => {
     const res = await request
-      .get('skill_groups/' + skillgroup.data().invalid_id)
+      .get('skill_groups/' + skillgroup.id().invalid_id)
       .set('Authorization', 'Bearer ' + client.accessToken);
 
     expect(res.status).toBe(404);

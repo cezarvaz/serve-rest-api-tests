@@ -2,31 +2,19 @@ import request from 'config/request';
 import client from 'helper/AuthClient';
 import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helper/Validate';
+import skillgroup from 'test_data/SkillGroups';
 import postGroupCriteriaSchema from 'schemas/skill_groups/post/post-group-criteria';
 import errorTokenSchema from 'schemas/skill_groups/post/error_token';
 import errorExistingNameSchema from 'schemas/skill_groups/post/error_existing_name';
-import fakerBr from 'faker-br';
-
-let payload, postedGroupCriteria;
-
-const number = fakerBr.random.number({ max: 5000 });
 
 describe('Create group criteria', () => {
   beforeAll(async () => {
     await client.auth();
   });
-  beforeEach(() => {
-    payload = {
-      skill_group: {
-        name: number + '_Teste_API',
-      },
-    };
-  });
   test('successfully', async () => {
-    postedGroupCriteria = payload.skill_group.name;
     const res = await request
       .post('skill_groups')
-      .send(payload)
+      .send(skillgroup.payload_post())
       .set('Authorization', 'Bearer ' + client.accessToken);
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -35,7 +23,9 @@ describe('Create group criteria', () => {
     expect(res.status).toBe(201);
     expect(res.body.data.id).toBeDefined();
     expect(res.body.data.type).toBe('skill_groups');
-    expect(res.body.data.attributes.name).toBe(postedGroupCriteria);
+    expect(res.body.data.attributes.name).toBe(
+      skillgroup.payload_post().skill_group.name
+    );
     expect(res.body.data.attributes.external_id).toBe(null);
     expect(res.body.data.attributes.archived).toBe(false);
     expect(res.body.data.attributes.created_at).toBeDefined();
@@ -43,10 +33,9 @@ describe('Create group criteria', () => {
     expect(validate.jsonSchema(res.body, postGroupCriteriaSchema)).toBe(true);
   });
   test('unsuccefully due to the same name as before', async () => {
-    payload.skill_group.name = postedGroupCriteria;
     const res = await request
       .post('skill_groups')
-      .send(payload)
+      .send(skillgroup.payload_post())
       .set('Authorization', 'Bearer ' + client.accessToken);
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -62,7 +51,7 @@ describe('Create group criteria', () => {
   test('expired token', async () => {
     const res = await request
       .post('skill_groups')
-      .send(payload)
+      .send(skillgroup.payload_post())
       .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
     expect(res.headers).toHaveProperty(
       'content-type',
