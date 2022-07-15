@@ -1,7 +1,6 @@
 import request from 'config/request';
 import client from 'helper/AuthClient';
 import groupCriteria from 'helper/GroupCriteria';
-import skillGroup from 'test_data/SkillGroups';
 import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helper/Validate';
 import successSchema from 'schemas/skill_groups/get/success';
@@ -47,8 +46,9 @@ describe('Get Group Criterias', () => {
   });
 
   test('nonexistentent id', async () => {
+    console.log(groupCriteria.ids());
     const res = await request
-      .get('skill_groups/' + skillGroup.id().nonexistent_id)
+      .get('skill_groups/' + groupCriteria.ids().nonexistent_id)
       .set('Authorization', 'Bearer ' + client.accessToken);
 
     expect(res.headers).toHaveProperty(
@@ -64,7 +64,7 @@ describe('Get Group Criterias', () => {
 
   test('invalid id', async () => {
     const res = await request
-      .get('skill_groups/' + skillGroup.id().invalid_id)
+      .get('skill_groups/' + groupCriteria.ids().invalid_id)
       .set('Authorization', 'Bearer ' + client.accessToken);
 
     expect(res.headers).toHaveProperty(

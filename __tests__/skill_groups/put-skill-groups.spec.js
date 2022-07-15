@@ -3,7 +3,6 @@ import client from 'helper/AuthClient';
 import groupCriteria from 'helper/GroupCriteria';
 import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helper/Validate';
-import skillGroup from 'test_data/SkillGroups';
 import successSchema from 'schemas/skill_groups/put/success';
 import expiredTokenSchema from 'schemas/skill_groups/put/expired_token';
 import invalidNameSchema from 'schemas/skill_groups/put/invalid_name';
@@ -18,7 +17,7 @@ describe('Update a Group Criteria', () => {
     const res = await request
       .put('skill_groups/' + groupCriteria.id)
       .set('Authorization', 'Bearer ' + client.accessToken)
-      .send(skillGroup.putPayload());
+      .send(groupCriteria.putPayload());
 
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -28,7 +27,7 @@ describe('Update a Group Criteria', () => {
     expect(res.body.data.id).toBe(groupCriteria.id);
     expect(res.body.data.type).toBe('skill_groups');
     expect(res.body.data.attributes.name).toBe(
-      skillGroup.putPayload().skill_group.name
+      groupCriteria.putPayload().skill_group.name
     );
 
     expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
@@ -38,7 +37,7 @@ describe('Update a Group Criteria', () => {
     const res = await request
       .put('skill_groups/' + groupCriteria.id)
       .set('Authorization', 'Bearer ' + EXPIRED_TOKEN)
-      .send(skillGroup.putPayload());
+      .send(groupCriteria.putPayload());
 
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -50,7 +49,7 @@ describe('Update a Group Criteria', () => {
   });
 
   test('null name', async () => {
-    let payload = skillGroup.putPayload();
+    let payload = groupCriteria.putPayload();
     payload.skill_group.name = null;
 
     const res = await request
@@ -69,7 +68,7 @@ describe('Update a Group Criteria', () => {
   });
 
   test('empty name', async () => {
-    let payload = skillGroup.putPayload();
+    let payload = groupCriteria.putPayload();
     payload.skill_group.name = '';
 
     const res = await request
@@ -89,7 +88,7 @@ describe('Update a Group Criteria', () => {
   });
 
   test('archiving group criteria', async () => {
-    let payload = skillGroup.putPayload();
+    let payload = groupCriteria.putPayload();
     payload.skill_group.active = false;
 
     const res = await request
