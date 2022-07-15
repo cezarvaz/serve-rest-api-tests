@@ -6,7 +6,7 @@ beforeAll(async () => {
   await client.auth();
 });
 
-const valid_id = fakerBr.random.number({ max: 5000 });
+const random_number = fakerBr.random.number({ max: 5000 });
 const invalid_id = fakerBr.random.words();
 const nonexistent_number = fakerBr.random.number({ min: 99999 });
 
@@ -32,7 +32,7 @@ class GroupCriteria {
   postPayload() {
     const payload = {
       skill_group: {
-        name: `${valid_id}_Teste_API`,
+        name: `${random_number}_Teste_API`,
       },
     };
     return payload;
@@ -41,7 +41,7 @@ class GroupCriteria {
   putPayload() {
     const payload = {
       skill_group: {
-        name: `${valid_id}_Teste_API`,
+        name: `${random_number}_Teste_API`,
         archived: true,
       },
     };
