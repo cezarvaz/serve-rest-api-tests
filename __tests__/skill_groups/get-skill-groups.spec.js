@@ -46,7 +46,6 @@ describe('Get Group Criterias', () => {
   });
 
   test('nonexistentent id', async () => {
-    console.log(groupCriteria.ids());
     const res = await request
       .get('skill_groups/' + groupCriteria.ids().nonexistent_id)
       .set('Authorization', 'Bearer ' + client.accessToken);
