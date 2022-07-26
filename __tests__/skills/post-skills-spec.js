@@ -1,9 +1,9 @@
 import request from 'config/request';
 import client from 'helper/AuthClient';
-import EXPIRED_TOKEN from 'utils/constants';
-import validate from 'helper/Validate';
-import successSchema from 'schemas/skills/list/success';
-import expiredTokenSchema from 'schemas/skills/list/expired_token';
+// import EXPIRED_TOKEN from 'utils/constants';
+// import validate from 'helper/Validate';
+// import successSchema from 'schemas/skills/list/success';
+// import expiredTokenSchema from 'schemas/skills/list/expired_token';
 import skills from 'helper/Skills';
 
 describe('Create skill', () => {
@@ -13,11 +13,11 @@ describe('Create skill', () => {
   });
 
   test('successfully', async () => {
-    console.log(JSON.stringify(skills.getPositionList()));
     const res = await request
       .post('skills')
-      .send(skills.postPayload())
+      .send(skills.postPayload(skills.positionIdList))
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'

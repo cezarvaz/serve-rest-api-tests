@@ -3,7 +3,7 @@ import addFormats from 'ajv-formats';
 import betterAjvErrors from 'better-ajv-errors';
 
 class Validate {
-  jsonSchema(body, schema) {
+  jsonSchema(response, schema) {
     const ajv = new Ajv({
       allErrors: true,
       verbose: true,
@@ -13,9 +13,9 @@ class Validate {
     addFormats(ajv);
 
     const validate = ajv.compile(schema);
-    const valid = ajv.validate(schema, body);
+    const valid = validate(response);
 
-    return valid || betterAjvErrors(schema, body, validate.errors);
+    return valid || betterAjvErrors(schema, response, validate.errors);
   }
 }
 

@@ -64,6 +64,7 @@ describe('Update a Group Criteria', () => {
     expect(res.status).toBe(422);
     expect(res.body.message).toBe('Não pode ser atualizado');
     expect(res.body.error.name[0]).toBe('Este campo não pode estar vazio');
+
     expect(validate.jsonSchema(res.body, invalidNameSchema)).toBe(true);
   });
 
