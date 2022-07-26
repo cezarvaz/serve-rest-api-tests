@@ -20,6 +20,7 @@ describe('List skills', () => {
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(200);
+
     expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
   });
 
