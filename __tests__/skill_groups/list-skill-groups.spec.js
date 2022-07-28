@@ -1,10 +1,10 @@
 import request from 'config/request';
-import client from 'helper/AuthClient';
-import groupCriteria from 'helper/GroupCriteria';
+import client from 'helpers/AuthClient';
+import groupCriteria from 'factories/GroupCriteria';
 import EXPIRED_TOKEN from 'utils/constants';
-import validate from 'helper/Validate';
+import validate from 'helpers/Validate';
 import successSchema from 'schemas/skill_groups/list/success';
-import expiredTokenSchema from 'schemas/skill_groups/list/expired_token';
+import expiredTokenSchema from 'schemas/skill_groups/list/expired-token';
 
 describe('List Group Criterias', () => {
   beforeAll(async () => {

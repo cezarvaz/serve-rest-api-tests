@@ -20,4 +20,5 @@ const nonExistentIdSchema = {
     },
   },
 };
+
 export default nonExistentIdSchema;

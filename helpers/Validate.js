@@ -15,7 +15,10 @@ class Validate {
     const validate = ajv.compile(schema);
     const valid = validate(response);
 
-    return valid || betterAjvErrors(schema, response, validate.errors);
+    return (
+      valid ||
+      betterAjvErrors(schema, response, validate.errors, { format: 'js' })
+    );
   }
 }
 

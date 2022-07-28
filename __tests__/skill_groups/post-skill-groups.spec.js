@@ -1,11 +1,11 @@
 import request from 'config/request';
-import client from 'helper/AuthClient';
+import client from 'helpers/AuthClient';
 import EXPIRED_TOKEN from 'utils/constants';
-import validate from 'helper/Validate';
-import groupCriteria from 'helper/GroupCriteria';
+import validate from 'helpers/Validate';
+import groupCriteria from 'factories/GroupCriteria';
 import postGroupCriteriaSchema from 'schemas/skill_groups/post/post-group-criteria';
-import errorTokenSchema from 'schemas/skill_groups/post/error_token';
-import errorExistingNameSchema from 'schemas/skill_groups/post/error_existing_name';
+import errorTokenSchema from 'schemas/skill_groups/post/error-token';
+import errorExistingNameSchema from 'schemas/skill_groups/post/error-existing-name';
 
 describe('Create group criteria', () => {
   beforeAll(async () => {

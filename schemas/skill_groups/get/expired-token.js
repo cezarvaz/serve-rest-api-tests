@@ -16,4 +16,5 @@ const expiredTokenSchema = {
     },
   },
 };
+
 export default expiredTokenSchema;

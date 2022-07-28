@@ -1,5 +1,5 @@
 import request from 'config/request';
-import client from 'helper/AuthClient';
+import client from 'helpers/AuthClient';
 import fakerBr from 'faker-br';
 
 beforeAll(async () => {

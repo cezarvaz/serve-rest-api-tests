@@ -1,9 +1,9 @@
 import request from 'config/request';
-import client from 'helper/AuthClient';
+import client from 'helpers/AuthClient';
 import EXPIRED_TOKEN from 'utils/constants';
-import validate from 'helper/Validate';
+import validate from 'helpers/Validate';
 import successSchema from 'schemas/skills/list/success';
-import expiredTokenSchema from 'schemas/skills/list/expired_token';
+import expiredTokenSchema from 'schemas/skills/list/expired-token';
 
 describe('List skills', () => {
   beforeAll(async () => {
