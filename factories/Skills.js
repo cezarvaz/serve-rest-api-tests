@@ -6,9 +6,9 @@ beforeAll(async () => {
   await client.auth();
 });
 
-const random_number = fakerBr.random.number({ max: 5000 });
-// const invalid_id = fakerBr.random.words();
-// const nonexistent_number = fakerBr.random.number({ min: 99999 });
+const randomNumber = fakerBr.random.number({ max: 5000 });
+// const invalidId = fakerBr.random.words();
+// const nonexistentNumber = fakerBr.random.number({ min: 99999 });
 
 class Skills {
   async getPositionList() {
@@ -29,7 +29,7 @@ class Skills {
   postPayload(positionIdList) {
     const payload = {
       skill: {
-        name: `${random_number}_criado pela automação`,
+        name: `${randomNumber}_criado pela automação`,
         description: 'random description',
         factor: 1,
         archived: true,
