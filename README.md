@@ -4,14 +4,14 @@ It's an integration testing suite for the Gestão Performance Evaluation API app
 
 ## Requirements
 
-- node and npm
+- node LTS and yarn
 
 ## Running Locally
 
 To install the application and all it's dependencies with the command:
 
 ```
-npm install
+yarn
 ```
 
 ## Running Tests
@@ -19,11 +19,11 @@ npm install
 To run all tests, use the following command:
 
 ```
-npm test
+yarn test
 ```
 
 To run a specific file or scenario (with .only annotation also), use the following command:
 
 ```
-npm test -t {file-name}.js
+yarn test -t {file-name}.js
 ```

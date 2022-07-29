@@ -1,11 +1,11 @@
 import request from 'config/request';
-import client from 'helper/AuthClient';
-import groupCriteria from 'helper/GroupCriteria';
+import client from 'helpers/AuthClient';
+import groupCriteria from 'factories/GroupCriteria';
 import EXPIRED_TOKEN from 'utils/constants';
-import validate from 'helper/Validate';
+import validate from 'helpers/Validate';
 import successSchema from 'schemas/skill_groups/put/success';
-import expiredTokenSchema from 'schemas/skill_groups/put/expired_token';
-import invalidNameSchema from 'schemas/skill_groups/put/invalid_name';
+import expiredTokenSchema from 'schemas/skill_groups/put/expired-token';
+import invalidNameSchema from 'schemas/skill_groups/put/invalid-name';
 
 describe('Update a Group Criteria', () => {
   beforeAll(async () => {
@@ -64,6 +64,7 @@ describe('Update a Group Criteria', () => {
     expect(res.status).toBe(422);
     expect(res.body.message).toBe('Não pode ser atualizado');
     expect(res.body.error.name[0]).toBe('Este campo não pode estar vazio');
+
     expect(validate.jsonSchema(res.body, invalidNameSchema)).toBe(true);
   });
 

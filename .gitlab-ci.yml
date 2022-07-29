@@ -1,15 +1,14 @@
 default:
   tags:
     - aws-linux
-
 stages:
   - test
 test:
   image: node:16.15.1-alpine3.16
   stage: test
   script:
-    - npm ci
-    - npm test
+    - yarn install --frozen-lockfile
+    - yarn test
   artifacts:
     expire_in: 1 week
     when: always

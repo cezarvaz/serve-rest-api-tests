@@ -1,11 +1,11 @@
 import request from 'config/request';
-import client from 'helper/AuthClient';
-import groupCriteria from 'helper/GroupCriteria';
+import client from 'helpers/AuthClient';
+import groupCriteria from 'factories/GroupCriteria';
 import EXPIRED_TOKEN from 'utils/constants';
-import validate from 'helper/Validate';
+import validate from 'helpers/Validate';
 import successSchema from 'schemas/skill_groups/get/success';
-import expiredTokenSchema from 'schemas/skill_groups/get/expired_token';
-import nonExistentIdSchema from 'schemas/skill_groups/get/nonexistent_id';
+import expiredTokenSchema from 'schemas/skill_groups/get/expired-token';
+import nonExistentIdSchema from 'schemas/skill_groups/get/nonexistent-id';
 
 describe('Get Group Criterias', () => {
   beforeAll(async () => {
@@ -46,7 +46,6 @@ describe('Get Group Criterias', () => {
   });
 
   test('nonexistentent id', async () => {
-    console.log(groupCriteria.ids());
     const res = await request
       .get('skill_groups/' + groupCriteria.ids().nonexistent_id)
       .set('Authorization', 'Bearer ' + client.accessToken);
