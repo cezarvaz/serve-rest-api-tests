@@ -141,10 +141,9 @@ describe('Create skill', () => {
     );
     expect(res.status).toBe(422);
     expect(res.body.message).toBe('Não pode ser criado');
-    // validação comentada aguardando correção do desenvolvedor
-    // expect(res.body.error.name[0]).toBe(
-    //   'O nome da competências deverá conter pelo menos uma letra do alfabeto.'
-    // );
+    expect(res.body.error.name[0]).toBe(
+      'O nome da competências deverá conter pelo menos uma letra do alfabeto.'
+    );
     expect(validate.jsonSchema(res.body, emptyNameSchema)).toBe(true);
   });
 });

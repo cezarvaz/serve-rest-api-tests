@@ -40,7 +40,34 @@ class Skills {
     this.groupId = parseInt(skillGroupId);
   }
 
+  async getDataToPut() {
+    const res = await request
+      .get('skills')
+      .set('Authorization', 'Bearer ' + client.accessToken)
+      .expect(200);
+    let dataJson = {
+      skillId: res.body.data[0].id,
+      groupId: res.body.data[0].relationships.skill_group.data.id,
+    };
+    this.data = dataJson;
+  }
+
   postPayload(random_number, positionId, groupId) {
+    const payload = {
+      skill: {
+        name: `${random_number}_criado pela automação`,
+        description: 'random description',
+        factor: 1,
+        archived: true,
+        skill_group_id: groupId,
+        position_ids: positionId,
+      },
+    };
+
+    return payload;
+  }
+
+  putPayload(random_number, positionId, groupId) {
     const payload = {
       skill: {
         name: `${random_number}_criado pela automação`,
