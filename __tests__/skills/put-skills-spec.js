@@ -26,8 +26,6 @@ describe('Edit skill', () => {
     payload.skill.name = `${randomNumber}__editado pela automação`;
     payload.skill.archived = false;
     payload.skill.skill_group_id = skills.data.groupId;
-    console.log(skills.data);
-    console.log(payload);
     const res = await request
       .put(`skills/${skills.data.skillId}`)
       .send(payload)
@@ -37,10 +35,6 @@ describe('Edit skill', () => {
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(202);
-    expect(res.data.id).toBe(skills.data.skillId);
-    expect(res.data.relationships.skill_group.data.id).toBe(
-      skills.data.groupId
-    );
     expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
   });
 
