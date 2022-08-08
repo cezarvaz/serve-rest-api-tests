@@ -7,7 +7,7 @@ import successSchema from 'schemas/skill_groups/put/success';
 import expiredTokenSchema from 'schemas/skill_groups/put/expired-token';
 import invalidNameSchema from 'schemas/skill_groups/put/invalid-name';
 
-describe.only('Update a Group Criteria', () => {
+describe('Update a Group Criteria', () => {
   beforeAll(async () => {
     await client.auth();
     await groupCriteria.create();

@@ -1,6 +1,6 @@
 const successSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: 'http://example.com/example.json',
+  $id: '#success-post-skill',
   type: 'object',
   required: ['data', 'included'],
   properties: {
