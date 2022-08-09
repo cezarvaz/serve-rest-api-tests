@@ -17,7 +17,6 @@ describe('Create group criteria', () => {
       .post('skill_groups')
       .send(groupCriteria.postPayload())
       .set('Authorization', 'Bearer ' + client.accessToken);
-
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'

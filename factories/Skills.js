@@ -1,14 +1,8 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
-import fakerBr from 'faker-br';
-
 beforeAll(async () => {
   await client.auth();
 });
-
-const randomNumber = fakerBr.random.number({ max: 5000 });
-// const invalidId = fakerBr.random.words();
-// const nonexistentNumber = fakerBr.random.number({ min: 99999 });
 
 class Skills {
   async getPositionList() {
@@ -26,15 +20,62 @@ class Skills {
     this.positionIdList = list;
   }
 
-  postPayload(positionIdList) {
+  async getSkillsList() {
+    const res = await request
+      .get('skills')
+      .set('Authorization', 'Bearer ' + client.accessToken)
+      .expect(200);
+
+    let skillFirstId = res.body.data[0].id;
+    this.skillId = parseInt(skillFirstId);
+  }
+
+  async getSkillGroup() {
+    const res = await request
+      .get('skill_groups')
+      .set('Authorization', 'Bearer ' + client.accessToken)
+      .expect(200);
+
+    let skillGroupId = res.body.data[0].id;
+    this.groupId = parseInt(skillGroupId);
+  }
+
+  async getDataToPut() {
+    const res = await request
+      .get('skills')
+      .set('Authorization', 'Bearer ' + client.accessToken)
+      .expect(200);
+    let dataJson = {
+      skillId: res.body.data[0].id,
+      groupId: res.body.data[0].relationships.skill_group.data.id,
+    };
+    this.data = dataJson;
+  }
+
+  postPayload(random_number, positionId, groupId) {
     const payload = {
       skill: {
-        name: `${randomNumber}_criado pela automação`,
+        name: `${random_number}_criado pela automação`,
         description: 'random description',
         factor: 1,
         archived: true,
-        skill_group_id: 67,
-        position_ids: positionIdList,
+        skill_group_id: groupId,
+        position_ids: positionId,
+      },
+    };
+
+    return payload;
+  }
+
+  putPayload(random_number, positionId, groupId) {
+    const payload = {
+      skill: {
+        name: `${random_number}_criado pela automação`,
+        description: 'random description',
+        factor: 1,
+        archived: true,
+        skill_group_id: groupId,
+        position_ids: positionId,
       },
     };
 

@@ -1,7 +1,7 @@
 const successSchema = {
   definitions: {},
   $schema: 'http://json-schema.org/draft-07/schema#',
-  $id: '#success-get-skill-groups',
+  $id: '#success-list-skill-groups',
   title: 'Root',
   type: 'object',
   required: ['data', 'included', 'meta'],
