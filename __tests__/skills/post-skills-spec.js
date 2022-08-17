@@ -15,14 +15,20 @@ describe('Create skill', () => {
     await skills.getSkillGroup();
   });
 
+  let randomNumber;
+
+  beforeEach(async () => {
+    randomNumber = fakerBr.random.number({ max: 999999999999 });
+  });
+
   test('successfully with multiple positions', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
     const res = await request
       .post('skills')
       .send(
         skills.postPayload(randomNumber, skills.positionIdList, skills.groupId)
       )
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -32,7 +38,6 @@ describe('Create skill', () => {
   });
 
   test('successfully with one position', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
     const res = await request
       .post('skills')
       .send(
@@ -43,6 +48,7 @@ describe('Create skill', () => {
         )
       )
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -52,12 +58,12 @@ describe('Create skill', () => {
   });
 
   test('successfully without any position', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
     let emptyArray = [];
     const res = await request
       .post('skills')
       .send(skills.postPayload(randomNumber, emptyArray, skills.groupId))
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -67,12 +73,12 @@ describe('Create skill', () => {
   });
 
   test('expired token', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
     let emptyArray = [];
     const res = await request
       .post('skills')
       .send(skills.postPayload(randomNumber, emptyArray, skills.groupId))
       .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -82,17 +88,18 @@ describe('Create skill', () => {
   });
 
   test('unsuccessfully with empty name', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
     let payload = skills.postPayload(
       randomNumber,
       skills.positionIdList,
       skills.groupId
     );
     payload.skill.name = '';
+
     const res = await request
       .post('skills')
       .send(payload)
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -104,7 +111,6 @@ describe('Create skill', () => {
   });
 
   test('unsuccessfully with null name', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
     let payload = skills.postPayload(
       randomNumber,
       skills.positionIdList,
@@ -115,6 +121,7 @@ describe('Create skill', () => {
       .post('skills')
       .send(payload)
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -124,7 +131,6 @@ describe('Create skill', () => {
   });
 
   test('unsuccessfully with invalid name', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
     let payload = skills.postPayload(
       randomNumber,
       skills.positionIdList,
@@ -135,6 +141,7 @@ describe('Create skill', () => {
       .post('skills')
       .send(payload)
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
