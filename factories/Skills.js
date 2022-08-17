@@ -1,5 +1,6 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
+
 beforeAll(async () => {
   await client.auth();
 });
