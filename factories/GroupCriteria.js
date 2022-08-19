@@ -6,7 +6,7 @@ beforeAll(async () => {
   await client.auth();
 });
 
-const randomNumber = fakerBr.random.number({ max: 5000 });
+const randomNumber = fakerBr.random.number({ max: 999999999 });
 const invalidId = fakerBr.random.words();
 const nonexistentNumber = fakerBr.random.number({ min: 99999 });
 

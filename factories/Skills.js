@@ -30,6 +30,22 @@ class Skills {
     this.skillId = parseInt(skillFirstId);
   }
 
+  async getList() {
+    const res = await request
+      .get('skills')
+      .set('Authorization', 'Bearer ' + client.accessToken)
+      .expect(200);
+
+    let list = [];
+    for (let i = 0; i < 5; i++) {
+      if (res.body.data[i].type == 'skills') {
+        list.push(res.body.data[i].id);
+      }
+    }
+
+    this.skillsList = list;
+  }
+
   async getSkillGroup() {
     const res = await request
       .get('skill_groups')

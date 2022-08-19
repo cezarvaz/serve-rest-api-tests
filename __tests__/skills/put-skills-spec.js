@@ -17,7 +17,7 @@ describe('Edit skill', () => {
   });
 
   test('successfully archived', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
+    let randomNumber = fakerBr.random.number({ max: 999999999 });
     let payload = skills.postPayload(
       randomNumber,
       skills.positionIdList,
@@ -39,7 +39,7 @@ describe('Edit skill', () => {
   });
 
   test('unsuccessfully with null name', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
+    let randomNumber = fakerBr.random.number({ max: 999999999 });
     let payload = skills.postPayload(
       randomNumber,
       skills.positionIdList,
@@ -60,7 +60,7 @@ describe('Edit skill', () => {
   });
 
   test('expired token', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
+    let randomNumber = fakerBr.random.number({ max: 999999999 });
     let payload = skills.postPayload(
       randomNumber,
       skills.positionIdList,

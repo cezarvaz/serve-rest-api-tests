@@ -16,7 +16,7 @@ describe('Create skill', () => {
   });
 
   test('successfully with multiple positions', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
+    let randomNumber = fakerBr.random.number({ max: 999999999 });
     const res = await request
       .post('skills')
       .send(
@@ -32,7 +32,7 @@ describe('Create skill', () => {
   });
 
   test('successfully with one position', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
+    let randomNumber = fakerBr.random.number({ max: 999999999 });
     const res = await request
       .post('skills')
       .send(
@@ -52,7 +52,7 @@ describe('Create skill', () => {
   });
 
   test('successfully without any position', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
+    let randomNumber = fakerBr.random.number({ max: 999999999 });
     let emptyArray = [];
     const res = await request
       .post('skills')
@@ -67,7 +67,7 @@ describe('Create skill', () => {
   });
 
   test('expired token', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
+    let randomNumber = fakerBr.random.number({ max: 999999999 });
     let emptyArray = [];
     const res = await request
       .post('skills')
@@ -82,7 +82,7 @@ describe('Create skill', () => {
   });
 
   test('unsuccessfully with empty name', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
+    let randomNumber = fakerBr.random.number({ max: 999999999 });
     let payload = skills.postPayload(
       randomNumber,
       skills.positionIdList,
@@ -104,7 +104,7 @@ describe('Create skill', () => {
   });
 
   test('unsuccessfully with null name', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
+    let randomNumber = fakerBr.random.number({ max: 999999999 });
     let payload = skills.postPayload(
       randomNumber,
       skills.positionIdList,
@@ -124,7 +124,7 @@ describe('Create skill', () => {
   });
 
   test('unsuccessfully with invalid name', async () => {
-    let randomNumber = fakerBr.random.number({ max: 5000 });
+    let randomNumber = fakerBr.random.number({ max: 999999999 });
     let payload = skills.postPayload(
       randomNumber,
       skills.positionIdList,
