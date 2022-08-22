@@ -15,6 +15,12 @@ describe('Create skill', () => {
     await skills.getSkillGroup();
   });
 
+  let randomNumber;
+
+  beforeEach(async () => {
+    randomNumber = fakerBr.random.number({ max: 999999999999 });
+  });
+
   test('successfully with multiple positions', async () => {
     let randomNumber = fakerBr.random.number({ max: 999999999 });
     const res = await request
@@ -23,6 +29,7 @@ describe('Create skill', () => {
         skills.postPayload(randomNumber, skills.positionIdList, skills.groupId)
       )
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -43,6 +50,7 @@ describe('Create skill', () => {
         )
       )
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -58,6 +66,7 @@ describe('Create skill', () => {
       .post('skills')
       .send(skills.postPayload(randomNumber, emptyArray, skills.groupId))
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -73,6 +82,7 @@ describe('Create skill', () => {
       .post('skills')
       .send(skills.postPayload(randomNumber, emptyArray, skills.groupId))
       .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -89,10 +99,12 @@ describe('Create skill', () => {
       skills.groupId
     );
     payload.skill.name = '';
+
     const res = await request
       .post('skills')
       .send(payload)
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -115,6 +127,7 @@ describe('Create skill', () => {
       .post('skills')
       .send(payload)
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -135,6 +148,7 @@ describe('Create skill', () => {
       .post('skills')
       .send(payload)
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'

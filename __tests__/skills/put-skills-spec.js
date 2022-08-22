@@ -16,6 +16,12 @@ describe('Edit skill', () => {
     await skills.getDataToPut();
   });
 
+  let randomNumber;
+
+  beforeEach(async () => {
+    randomNumber = fakerBr.random.number({ max: 999999999999 });
+  });
+
   test('successfully archived', async () => {
     let randomNumber = fakerBr.random.number({ max: 999999999 });
     let payload = skills.postPayload(
@@ -26,10 +32,12 @@ describe('Edit skill', () => {
     payload.skill.name = `${randomNumber}__editado pela automação`;
     payload.skill.archived = false;
     payload.skill.skill_group_id = skills.data.groupId;
+
     const res = await request
       .put(`skills/${skills.data.skillId}`)
       .send(payload)
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -47,10 +55,12 @@ describe('Edit skill', () => {
     );
     payload.skill.name = null;
     payload.skill.skill_group_id = skills.data.groupId;
+
     const res = await request
       .put(`skills/${skills.data.skillId}`)
       .send(payload)
       .set('Authorization', 'Bearer ' + client.accessToken);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -68,10 +78,12 @@ describe('Edit skill', () => {
     );
     payload.skill.archived = false;
     payload.skill.skill_group_id = skills.data.groupId;
+
     const res = await request
       .put(`skills/${skills.data.skillId}`)
       .send(payload)
       .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
