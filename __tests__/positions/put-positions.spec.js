@@ -29,9 +29,6 @@ describe('Update Position', () => {
     expect(res.status).toBe(202);
     expect(res.body.data.id).toBe(skills.positionIdList[0]);
     expect(res.body.data.type).toBe('positions');
-    expect(res.body.data.relationships.skills.data[0].id).toBe(
-      skills.data.skillId
-    );
     expect(res.body.data.relationships.skills.data[0].type).toBe('skills');
     expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
   });
