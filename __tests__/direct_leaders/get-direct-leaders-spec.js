@@ -2,7 +2,7 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/evaluation_statistic/get/success';
+import successSchema from 'schemas/direct_leaders/get/success';
 import expiredTokenSchema from 'schemas/departments/get/expired-token';
 
 describe('Get List Direct Leaders', () => {
@@ -20,7 +20,7 @@ describe('Get List Direct Leaders', () => {
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(200);
-    // expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
+    expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
   });
 
   test('expired token', async () => {
