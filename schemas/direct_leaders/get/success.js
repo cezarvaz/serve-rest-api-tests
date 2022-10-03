@@ -9,7 +9,6 @@ const successSchema = {
       items: {
         type: 'object',
         required: ['id', 'type', 'attributes'],
-        additionalProperties: false,
         properties: {
           id: {
             type: 'integer',
@@ -63,6 +62,7 @@ const successSchema = {
     meta: {
       type: 'object',
       required: ['pagination'],
+      additionalProperties: false,
       properties: {
         pagination: {
           type: 'object',
