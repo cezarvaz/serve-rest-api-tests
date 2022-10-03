@@ -9,6 +9,7 @@ const successSchema = {
       items: {
         type: 'object',
         required: ['id', 'type', 'attributes'],
+        additionalProperties: false,
         properties: {
           id: {
             type: 'integer',
