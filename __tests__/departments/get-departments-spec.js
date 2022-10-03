@@ -1,4 +1,4 @@
-import request from 'config/internal-request';
+import request from 'config/request';
 import client from 'helpers/AuthClient';
 import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helpers/Validate';

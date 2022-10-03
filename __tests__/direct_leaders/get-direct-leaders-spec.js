@@ -2,17 +2,17 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/hierarchy/get/success';
+import successSchema from 'schemas/direct_leaders/get/success';
 import expiredTokenSchema from 'schemas/departments/get/expired-token';
 
-describe('Hierarchies list', () => {
+describe('Get List Direct Leaders', () => {
   beforeAll(async () => {
     await client.auth();
   });
 
   test('successfully', async () => {
     const res = await request
-      .get('hierarchy')
+      .get('direct_leaders')
       .set('Authorization', 'Bearer ' + client.accessToken);
 
     expect(res.headers).toHaveProperty(
@@ -25,7 +25,7 @@ describe('Hierarchies list', () => {
 
   test('expired token', async () => {
     const res = await request
-      .get('hierarchy')
+      .get('direct_leaders')
       .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
 
     expect(res.headers).toHaveProperty(
