@@ -3,10 +3,12 @@ const successSchema = {
   $id: '#succes-put-evaluation-requests',
   type: 'object',
   required: ['data', 'included'],
+  additionalProperties: false,
   properties: {
     data: {
       type: 'object',
       required: ['id', 'type', 'attributes', 'relationships'],
+      additionalProperties: false,
       properties: {
         id: {
           type: 'integer',
@@ -24,6 +26,7 @@ const successSchema = {
             'created_at',
             'expired_at',
           ],
+          additionalProperties: false,
           properties: {
             evaluator_name: {
               type: 'string',
@@ -48,14 +51,17 @@ const successSchema = {
         relationships: {
           type: 'object',
           required: ['position'],
+          additionalProperties: false,
           properties: {
             position: {
               type: 'object',
               required: ['links', 'data'],
+              additionalProperties: false,
               properties: {
                 links: {
                   type: 'object',
                   required: ['self', 'related'],
+                  additionalProperties: false,
                   properties: {
                     self: {
                       type: 'string',
@@ -68,6 +74,7 @@ const successSchema = {
                 data: {
                   type: 'object',
                   required: ['id', 'type'],
+                  additionalProperties: false,
                   properties: {
                     id: {
                       type: 'integer',
@@ -99,6 +106,7 @@ const successSchema = {
           attributes: {
             type: 'object',
             required: ['name', 'description'],
+            additionalProperties: false,
             properties: {
               name: {
                 type: 'string',

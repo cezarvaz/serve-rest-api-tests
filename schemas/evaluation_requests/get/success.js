@@ -1,14 +1,16 @@
 const successSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#success-get-list-evaluation-request',
+  $id: '#success-get-evaluation-requests',
   type: 'object',
   required: ['data', 'included', 'meta'],
+  additionalProperties: false,
   properties: {
     data: {
       type: 'array',
       items: {
         type: 'object',
         required: ['id', 'type', 'attributes', 'relationships'],
+        additionalProperties: false,
         properties: {
           id: {
             type: 'integer',
@@ -24,7 +26,6 @@ const successSchema = {
               'evaluated_name',
               'status',
               'created_at',
-              'expired_at',
             ],
             properties: {
               evaluator_name: {
@@ -40,9 +41,6 @@ const successSchema = {
                 type: 'string',
               },
               created_at: {
-                type: 'string',
-              },
-              expired_at: {
                 type: 'string',
               },
             },
@@ -90,6 +88,7 @@ const successSchema = {
       type: 'array',
       items: {
         type: 'object',
+        required: ['id', 'type', 'attributes'],
         properties: {
           id: {
             type: 'integer',
@@ -99,6 +98,7 @@ const successSchema = {
           },
           attributes: {
             type: 'object',
+            required: ['name'],
             properties: {
               name: {
                 type: 'string',
@@ -111,7 +111,6 @@ const successSchema = {
     meta: {
       type: 'object',
       required: ['pagination'],
-      additionalProperties: false,
       properties: {
         pagination: {
           type: 'object',

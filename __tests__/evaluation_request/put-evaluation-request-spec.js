@@ -1,10 +1,9 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
-import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helpers/Validate';
-import expiredTokenSchema from 'schemas/departments/get/expired-token';
 import evaluation from '../../factories/EvaluationRequest';
 import successSchema from 'schemas/evaluation_requests/put/success';
+import unsuccessSchema from 'schemas/evaluation_requests/delete/unsuccess';
 
 describe('Edit Evaluation Request', () => {
   beforeAll(async () => {
@@ -35,5 +34,8 @@ describe('Edit Evaluation Request', () => {
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(404);
+    expect(validate.jsonSchema(res.body, unsuccessSchema)).toBe(true);
+    expect(res.body.errors.status).toBe(404);
+    expect(res.body.errors.message).toBe('Error');
   });
 });

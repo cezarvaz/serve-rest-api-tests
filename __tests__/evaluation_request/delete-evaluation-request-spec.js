@@ -4,6 +4,7 @@ import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helpers/Validate';
 import expiredTokenSchema from 'schemas/departments/get/expired-token';
 import evaluation from '../../factories/EvaluationRequest';
+import unsuccessSchema from 'schemas/evaluation_requests/delete/unsuccess';
 
 describe('Delete Evaluation Request', () => {
   beforeAll(async () => {
@@ -13,26 +14,27 @@ describe('Delete Evaluation Request', () => {
 
   test('successfully', async () => {
     const res = await request
-      .get(`evaluation_requests/${evaluation.evaluationId}`)
+      .delete(`evaluation_requests/${evaluation.evaluationId}`)
       .set('Authorization', 'Bearer ' + client.accessToken);
 
-    expect(res.headers).toHaveProperty(
-      'content-type',
-      'text/html; charset=UTF-8'
-    );
-    expect(res.status).toBe(404);
+    expect(res.headers).toHaveProperty('content-type', 'application/json');
+    expect(res.status).toBe(204);
+    expect(res.body).toBe('');
   });
 
   test('try to delete non-existent id ', async () => {
     const res = await request
-      .get(`evaluation_requests/0001`)
+      .delete(`evaluation_requests/0001`)
       .set('Authorization', 'Bearer ' + client.accessToken);
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'text/html; charset=UTF-8'
+      'application/json; charset=utf-8'
     );
     expect(res.status).toBe(404);
+    expect(validate.jsonSchema(res.body, unsuccessSchema)).toBe(true);
+    expect(res.body.errors.status).toBe(404);
+    expect(res.body.errors.message).toBe('Error');
   });
 
   test('expired token', async () => {
