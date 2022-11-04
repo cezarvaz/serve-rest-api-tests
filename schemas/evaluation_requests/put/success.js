@@ -3,12 +3,10 @@ const successSchema = {
   $id: '#succes-put-evaluation-requests',
   type: 'object',
   required: ['data', 'included'],
-  additionalProperties: false,
   properties: {
     data: {
       type: 'object',
       required: ['id', 'type', 'attributes', 'relationships'],
-      additionalProperties: false,
       properties: {
         id: {
           type: 'integer',
@@ -20,15 +18,18 @@ const successSchema = {
           type: 'object',
           required: [
             'evaluator_name',
+            'evaluator_position',
             'evaluator_email',
             'evaluated_name',
             'status',
             'created_at',
             'expired_at',
           ],
-          additionalProperties: false,
           properties: {
             evaluator_name: {
+              type: 'string',
+            },
+            evaluator_position: {
               type: 'string',
             },
             evaluator_email: {
@@ -43,6 +44,9 @@ const successSchema = {
             created_at: {
               type: 'string',
             },
+            answered_at: {
+              type: 'string',
+            },
             expired_at: {
               type: 'string',
             },
@@ -51,22 +55,19 @@ const successSchema = {
         relationships: {
           type: 'object',
           required: ['position'],
-          additionalProperties: false,
           properties: {
             position: {
               type: 'object',
               required: ['links', 'data'],
-              additionalProperties: false,
               properties: {
                 links: {
                   type: 'object',
-                  required: ['self', 'related'],
-                  additionalProperties: false,
+                  required: ['related', 'self'],
                   properties: {
-                    self: {
+                    related: {
                       type: 'string',
                     },
-                    related: {
+                    self: {
                       type: 'string',
                     },
                   },
@@ -74,7 +75,6 @@ const successSchema = {
                 data: {
                   type: 'object',
                   required: ['id', 'type'],
-                  additionalProperties: false,
                   properties: {
                     id: {
                       type: 'integer',
@@ -95,7 +95,6 @@ const successSchema = {
       items: {
         type: 'object',
         required: ['id', 'type', 'attributes'],
-        additionalProperties: false,
         properties: {
           id: {
             type: 'integer',
@@ -106,13 +105,48 @@ const successSchema = {
           attributes: {
             type: 'object',
             required: ['name', 'description'],
-            additionalProperties: false,
             properties: {
               name: {
                 type: 'string',
               },
               description: {
                 type: 'string',
+              },
+            },
+          },
+          relationships: {
+            type: 'object',
+            required: ['skills'],
+            properties: {
+              skills: {
+                type: 'object',
+                required: ['links', 'data'],
+                properties: {
+                  links: {
+                    type: 'object',
+                    required: ['related'],
+                    properties: {
+                      related: {
+                        type: 'string',
+                      },
+                    },
+                  },
+                  data: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      required: ['id', 'type'],
+                      properties: {
+                        id: {
+                          type: 'integer',
+                        },
+                        type: {
+                          type: 'string',
+                        },
+                      },
+                    },
+                  },
+                },
               },
             },
           },
