@@ -1,6 +1,6 @@
 const successSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#succes-put-evaluation-requests',
+  $id: 'success-put-evaluation-requests',
   type: 'object',
   required: ['data', 'included'],
   properties: {
@@ -18,18 +18,16 @@ const successSchema = {
           type: 'object',
           required: [
             'evaluator_name',
-            'evaluator_position',
             'evaluator_email',
             'evaluated_name',
             'status',
             'created_at',
             'expired_at',
+            'answered_at',
+            'evaluator_position',
           ],
           properties: {
             evaluator_name: {
-              type: 'string',
-            },
-            evaluator_position: {
               type: 'string',
             },
             evaluator_email: {
@@ -44,10 +42,13 @@ const successSchema = {
             created_at: {
               type: 'string',
             },
-            answered_at: {
+            expired_at: {
               type: 'string',
             },
-            expired_at: {
+            answered_at: {
+              type: 'null',
+            },
+            evaluator_position: {
               type: 'string',
             },
           },
@@ -62,12 +63,12 @@ const successSchema = {
               properties: {
                 links: {
                   type: 'object',
-                  required: ['related', 'self'],
+                  required: ['self', 'related'],
                   properties: {
-                    related: {
+                    self: {
                       type: 'string',
                     },
-                    self: {
+                    related: {
                       type: 'string',
                     },
                   },
@@ -104,49 +105,10 @@ const successSchema = {
           },
           attributes: {
             type: 'object',
-            required: ['name', 'description'],
+            required: ['name'],
             properties: {
               name: {
                 type: 'string',
-              },
-              description: {
-                type: 'string',
-              },
-            },
-          },
-          relationships: {
-            type: 'object',
-            required: ['skills'],
-            properties: {
-              skills: {
-                type: 'object',
-                required: ['links', 'data'],
-                properties: {
-                  links: {
-                    type: 'object',
-                    required: ['related'],
-                    properties: {
-                      related: {
-                        type: 'string',
-                      },
-                    },
-                  },
-                  data: {
-                    type: 'array',
-                    items: {
-                      type: 'object',
-                      required: ['id', 'type'],
-                      properties: {
-                        id: {
-                          type: 'integer',
-                        },
-                        type: {
-                          type: 'string',
-                        },
-                      },
-                    },
-                  },
-                },
               },
             },
           },
