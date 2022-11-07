@@ -15,10 +15,10 @@ describe('Get List of Evaluation Request', () => {
       .get('evaluation_requests')
       .set('Authorization', 'Bearer ' + client.accessToken);
 
-    // expect(res.headers).toHaveProperty(
-    //   'content-type',
-    //   'application/json; charset=utf-8'
-    // );
+    expect(res.headers).toHaveProperty(
+      'content-type',
+      'application/json; charset=utf-8'
+    );
     expect(res.status).toBe(200);
     expect(res.body.data[1].type).toBe('evaluation_requests');
     expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
