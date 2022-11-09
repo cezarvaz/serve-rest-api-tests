@@ -9,7 +9,7 @@ const successSchema = {
       type: 'array',
       items: {
         type: 'object',
-        required: ['id', 'type', 'attributes', 'relationships'],
+        required: ['id', 'type', 'attributes'],
         additionalProperties: false,
         properties: {
           id: {

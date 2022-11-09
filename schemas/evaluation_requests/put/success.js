@@ -1,14 +1,12 @@
 const successSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#succes-put-evaluation-requests',
+  $id: 'success-put-evaluation-requests',
   type: 'object',
   required: ['data', 'included'],
-  additionalProperties: false,
   properties: {
     data: {
       type: 'object',
       required: ['id', 'type', 'attributes', 'relationships'],
-      additionalProperties: false,
       properties: {
         id: {
           type: 'integer',
@@ -25,8 +23,9 @@ const successSchema = {
             'status',
             'created_at',
             'expired_at',
+            'answered_at',
+            'evaluator_position',
           ],
-          additionalProperties: false,
           properties: {
             evaluator_name: {
               type: 'string',
@@ -46,22 +45,25 @@ const successSchema = {
             expired_at: {
               type: 'string',
             },
+            answered_at: {
+              type: 'null',
+            },
+            evaluator_position: {
+              type: 'string',
+            },
           },
         },
         relationships: {
           type: 'object',
           required: ['position'],
-          additionalProperties: false,
           properties: {
             position: {
               type: 'object',
               required: ['links', 'data'],
-              additionalProperties: false,
               properties: {
                 links: {
                   type: 'object',
                   required: ['self', 'related'],
-                  additionalProperties: false,
                   properties: {
                     self: {
                       type: 'string',
@@ -74,7 +76,6 @@ const successSchema = {
                 data: {
                   type: 'object',
                   required: ['id', 'type'],
-                  additionalProperties: false,
                   properties: {
                     id: {
                       type: 'integer',
@@ -95,7 +96,6 @@ const successSchema = {
       items: {
         type: 'object',
         required: ['id', 'type', 'attributes'],
-        additionalProperties: false,
         properties: {
           id: {
             type: 'integer',
@@ -105,13 +105,9 @@ const successSchema = {
           },
           attributes: {
             type: 'object',
-            required: ['name', 'description'],
-            additionalProperties: false,
+            required: ['name'],
             properties: {
               name: {
-                type: 'string',
-              },
-              description: {
                 type: 'string',
               },
             },

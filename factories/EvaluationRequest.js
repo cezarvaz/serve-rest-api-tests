@@ -26,6 +26,18 @@ class Evaluations {
 
     return payload;
   }
+
+  postPayload() {
+    const payload = {
+      data: {
+        message: 'ready to download',
+        status: 'ready',
+        contents: 'http://site.com/file.pdf',
+      },
+    };
+
+    return payload;
+  }
 }
 
 export default new Evaluations();
