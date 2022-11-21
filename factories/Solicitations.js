@@ -7,6 +7,7 @@ class Solicitations {
     const payload = {
       solicitation: {
         name: `${randomNumber}Solicitação Criada pela Automação`,
+        description: 'descrição criada pela automação de testes',
       },
     };
 
