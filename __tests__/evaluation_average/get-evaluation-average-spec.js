@@ -4,8 +4,11 @@ import validate from 'helpers/Validate';
 import evaluation from '../../factories/EvaluationRequest';
 import EXPIRED_TOKEN from 'utils/constants';
 import expiredTokenSchema from 'schemas/departments/get/expired-token';
+import successSkillsSchema from 'schemas/evaluation_average/get/success-skills';
+import successPositionsSchema from 'schemas/evaluation_average/get/success-positions';
+import successDepartmentsSchema from 'schemas/evaluation_average/get/success-departments';
 
-describe('Request Evaluation averages', () => {
+describe('List of Evaluation averages', () => {
   beforeAll(async () => {
     await client.auth();
     await evaluation.getEvaluationList();
@@ -13,44 +16,38 @@ describe('Request Evaluation averages', () => {
 
   test('successfully with skills', async () => {
     const res = await request
-      .post(`evaluation_averages/skills?request_report=true`)
+      .get(`evaluation_averages/skills`)
       .set('Authorization', 'Bearer ' + client.accessToken);
     expect(res.headers).toHaveProperty('content-type');
     expect(res.status).toBe(200);
-    expect(res.body.message).toBe(
-      'Em breve enviaremos o relatório CVS para o seu e-mail.'
-    );
+    expect(res.body.data[1].type).toBe('skills');
+    expect(validate.jsonSchema(res.body, successSkillsSchema)).toBe(true);
   });
 
   test('successfully with positions', async () => {
     const res = await request
-      .post(`evaluation_averages/positions?request_report=true`)
-      .set('Authorization', 'Bearer ' + client.accessToken)
-      .send(evaluation.postPayload());
+      .get(`evaluation_averages/positions`)
+      .set('Authorization', 'Bearer ' + client.accessToken);
     expect(res.headers).toHaveProperty('content-type');
     expect(res.status).toBe(200);
-    expect(res.body.message).toBe(
-      'Em breve enviaremos o relatório CVS para o seu e-mail.'
-    );
+    expect(res.body.data[1].type).toBe('positions');
+    expect(validate.jsonSchema(res.body, successPositionsSchema)).toBe(true);
   });
 
   test('successfully with departments', async () => {
     const res = await request
-      .post(`evaluation_averages/departments?request_report=true`)
-      .set('Authorization', 'Bearer ' + client.accessToken)
-      .send(evaluation.postPayload());
+      .get(`evaluation_averages/departments`)
+      .set('Authorization', 'Bearer ' + client.accessToken);
     expect(res.headers).toHaveProperty('content-type');
     expect(res.status).toBe(200);
-    expect(res.body.message).toBe(
-      'Em breve enviaremos o relatório CVS para o seu e-mail.'
-    );
+    expect(res.body.data[1].type).toBe('departments');
+    expect(validate.jsonSchema(res.body, successDepartmentsSchema)).toBe(true);
   });
 
   test('expired token', async () => {
     const res = await request
-      .post(`evaluation_averages/departments?request_report=true`)
-      .set('Authorization', 'Bearer ' + EXPIRED_TOKEN)
-      .send(evaluation.postPayload());
+      .get(`evaluation_averages/departments`)
+      .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
 
     expect(res.headers).toHaveProperty(
       'content-type',
