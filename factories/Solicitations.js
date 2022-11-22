@@ -7,6 +7,9 @@ class Solicitations {
     const payload = {
       solicitation: {
         name: `${randomNumber}Solicitação Criada pela Automação`,
+        description: 'descrição criada pela automação de testes',
+        started_at: '2029-11-21',
+        finished_at: '2029-12-29',
       },
     };
 
