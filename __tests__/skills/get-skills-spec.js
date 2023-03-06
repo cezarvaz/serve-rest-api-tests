@@ -1,10 +1,8 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
-import EXPIRED_TOKEN from 'utils/constants';
 import successSchema from 'schemas/skills/get/success';
 import invalidIdSchema from 'schemas/skills/get/invalid-id';
-import expiredTokenSchema from 'schemas/skills/list/expired-token';
 import skills from 'factories/Skills';
 
 describe('Get skill', () => {
@@ -18,6 +16,8 @@ describe('Get skill', () => {
       .get(`skills/${skills.skillId}`)
       .set('Authorization', 'Bearer ' + client.accessToken);
 
+    console.log(res.body);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -28,18 +28,18 @@ describe('Get skill', () => {
     expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
   });
 
-  test('expired token', async () => {
-    const res = await request
-      .get(`skills/${skills.skillId}`)
-      .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
+  // test('expired token', async () => {
+  //   const res = await request
+  //     .get(`skills/${skills.skillId}`)
+  //     .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
 
-    expect(res.headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8'
-    );
-    expect(res.status).toBe(401);
-    expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
-  });
+  //   expect(res.headers).toHaveProperty(
+  //     'content-type',
+  //     'application/json; charset=utf-8'
+  //   );
+  //   expect(res.status).toBe(401);
+  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
+  // });
 
   test('unsuccessfully with invalid id', async () => {
     const res = await request

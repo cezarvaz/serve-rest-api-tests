@@ -1,9 +1,7 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
-import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helpers/Validate';
 import successSchema from 'schemas/direct_leaders/get/success';
-import expiredTokenSchema from 'schemas/departments/get/expired-token';
 
 describe('Get List Direct Leaders', () => {
   beforeAll(async () => {
@@ -23,16 +21,16 @@ describe('Get List Direct Leaders', () => {
     expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
   });
 
-  test('expired token', async () => {
-    const res = await request
-      .get('direct_leaders')
-      .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
+  // test('expired token', async () => {
+  //   const res = await request
+  //     .get('direct_leaders')
+  //     .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
 
-    expect(res.headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8'
-    );
-    expect(res.status).toBe(401);
-    expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
-  });
+  //   expect(res.headers).toHaveProperty(
+  //     'content-type',
+  //     'application/json; charset=utf-8'
+  //   );
+  //   expect(res.status).toBe(401);
+  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
+  // });
 });

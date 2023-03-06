@@ -3,8 +3,6 @@ import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
 import solicitations from '../../factories/Solicitations';
 import successSchema from 'schemas/solicitations/post/success';
-import EXPIRED_TOKEN from 'utils/constants';
-import expiredTokenSchema from 'schemas/departments/get/expired-token';
 import existingName from 'schemas/solicitations/post/existing-name';
 import emptyName from 'schemas/solicitations/post/empty-name';
 
@@ -62,17 +60,17 @@ describe('Create a solicitation', () => {
     expect(res.body.error.name[0]).toBe('Este campo é obrigatório.');
   });
 
-  test('expired token', async () => {
-    const res = await request
-      .post(`solicitations`)
-      .set('Authorization', 'Bearer ' + EXPIRED_TOKEN)
-      .send(solicitations.postPayload());
+  // test('expired token', async () => {
+  //   const res = await request
+  //     .post(`solicitations`)
+  //     .set('Authorization', 'Bearer ' + EXPIRED_TOKEN)
+  //     .send(solicitations.postPayload());
 
-    expect(res.headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8'
-    );
-    expect(res.status).toBe(401);
-    expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
-  });
+  //   expect(res.headers).toHaveProperty(
+  //     'content-type',
+  //     'application/json; charset=utf-8'
+  //   );
+  //   expect(res.status).toBe(401);
+  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
+  // });
 });

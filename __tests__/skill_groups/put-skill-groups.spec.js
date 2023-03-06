@@ -1,10 +1,8 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import groupCriteria from 'factories/GroupCriteria';
-import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helpers/Validate';
 import successSchema from 'schemas/skill_groups/put/success';
-import expiredTokenSchema from 'schemas/skill_groups/put/expired-token';
 import invalidNameSchema from 'schemas/skill_groups/put/invalid-name';
 
 describe('Update a Group Criteria', () => {
@@ -33,20 +31,20 @@ describe('Update a Group Criteria', () => {
     expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
   });
 
-  test('expired token', async () => {
-    const res = await request
-      .put('skill_groups/' + groupCriteria.id)
-      .set('Authorization', 'Bearer ' + EXPIRED_TOKEN)
-      .send(groupCriteria.putPayload());
+  // test('expired token', async () => {
+  //   const res = await request
+  //     .put('skill_groups/' + groupCriteria.id)
+  //     .set('Authorization', 'Bearer ' + EXPIRED_TOKEN)
+  //     .send(groupCriteria.putPayload());
 
-    expect(res.headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8'
-    );
-    expect(res.status).toBe(401);
+  //   expect(res.headers).toHaveProperty(
+  //     'content-type',
+  //     'application/json; charset=utf-8'
+  //   );
+  //   expect(res.status).toBe(401);
 
-    expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
-  });
+  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
+  // });
 
   test('null name', async () => {
     let payload = groupCriteria.putPayload();

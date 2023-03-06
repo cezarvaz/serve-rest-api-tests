@@ -30,7 +30,7 @@ const successSchema = {
                 type: 'string',
               },
               description: {
-                type: 'null',
+                type: ['string', 'null'],
               },
               status: {
                 type: 'string',

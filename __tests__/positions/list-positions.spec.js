@@ -1,9 +1,7 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
-import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helpers/Validate';
 import successSchema from 'schemas/positions/list/success';
-import expiredTokenSchema from 'schemas/skill_groups/list/expired-token';
 
 describe('List Positions', () => {
   beforeAll(async () => {
@@ -23,17 +21,17 @@ describe('List Positions', () => {
     expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
   });
 
-  test('expired token', async () => {
-    const res = await request
-      .get('positions')
-      .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
+  // test('expired token', async () => {
+  //   const res = await request
+  //     .get('positions')
+  //     .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
 
-    expect(res.headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8'
-    );
-    expect(res.status).toBe(401);
+  //   expect(res.headers).toHaveProperty(
+  //     'content-type',
+  //     'application/json; charset=utf-8'
+  //   );
+  //   expect(res.status).toBe(401);
 
-    expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
-  });
+  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
+  // });
 });

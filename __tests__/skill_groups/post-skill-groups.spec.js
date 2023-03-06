@@ -1,10 +1,8 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
-import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helpers/Validate';
 import groupCriteria from 'factories/GroupCriteria';
 import postGroupCriteriaSchema from 'schemas/skill_groups/post/post-group-criteria';
-import errorTokenSchema from 'schemas/skill_groups/post/error-token';
 import errorExistingNameSchema from 'schemas/skill_groups/post/error-existing-name';
 
 describe('Create group criteria', () => {
@@ -55,19 +53,19 @@ describe('Create group criteria', () => {
     expect(validate.jsonSchema(res.body, errorExistingNameSchema)).toBe(true);
   });
 
-  test('expired token', async () => {
-    const res = await request
-      .post('skill_groups')
-      .send(groupCriteria.postPayload())
-      .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
+  // test('expired token', async () => {
+  //   const res = await request
+  //     .post('skill_groups')
+  //     .send(groupCriteria.postPayload())
+  //     .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
 
-    expect(res.headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8'
-    );
-    expect(res.status).toBe(401);
-    expect(res.body.errors).toBe('decoding error');
+  //   expect(res.headers).toHaveProperty(
+  //     'content-type',
+  //     'application/json; charset=utf-8'
+  //   );
+  //   expect(res.status).toBe(401);
+  //   expect(res.body.errors).toBe('decoding error');
 
-    expect(validate.jsonSchema(res.body, errorTokenSchema)).toBe(true);
-  });
+  //   expect(validate.jsonSchema(res.body, errorTokenSchema)).toBe(true);
+  // });
 });

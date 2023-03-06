@@ -16,6 +16,7 @@ describe('Edit Evaluation Request', () => {
       .put(`evaluation_requests/${evaluation.evaluationId}`)
       .set('Authorization', 'Bearer ' + client.accessToken)
       .send(evaluation.putPayload());
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -24,11 +25,12 @@ describe('Edit Evaluation Request', () => {
     expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
   });
 
-  test('try to update non-existent id ', async () => {
+  test('try to update non-existent id', async () => {
     const res = await request
       .put(`evaluation_requests/00001`)
       .set('Authorization', 'Bearer ' + client.accessToken)
       .send(evaluation.putPayload());
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'

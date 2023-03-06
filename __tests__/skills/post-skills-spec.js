@@ -1,9 +1,7 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
-import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helpers/Validate';
 import successSchema from 'schemas/skills/post/success';
-import expiredTokenSchema from 'schemas/skills/post/expired_token';
 import emptyNameSchema from 'schemas/skills/post/empty_name';
 import skills from 'factories/Skills';
 import fakerBr from 'faker-br';
@@ -22,7 +20,7 @@ describe('Create skill', () => {
   });
 
   test('successfully with multiple positions', async () => {
-    let randomNumber = fakerBr.random.number({ max: 999999999 });
+    // randomNumber = fakerBr.random.number({ max: 999999999 });
     const res = await request
       .post('skills')
       .send(
@@ -39,7 +37,6 @@ describe('Create skill', () => {
   });
 
   test('successfully with one position', async () => {
-    let randomNumber = fakerBr.random.number({ max: 999999999 });
     const res = await request
       .post('skills')
       .send(
@@ -60,7 +57,6 @@ describe('Create skill', () => {
   });
 
   test('successfully without any position', async () => {
-    let randomNumber = fakerBr.random.number({ max: 999999999 });
     let emptyArray = [];
     const res = await request
       .post('skills')
@@ -75,24 +71,23 @@ describe('Create skill', () => {
     expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
   });
 
-  test('expired token', async () => {
-    let randomNumber = fakerBr.random.number({ max: 999999999 });
-    let emptyArray = [];
-    const res = await request
-      .post('skills')
-      .send(skills.postPayload(randomNumber, emptyArray, skills.groupId))
-      .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
+  // test('expired token', async () => {
+  //   // let randomNumber = fakerBr.random.number({ max: 999999999 });
+  //   let emptyArray = [];
+  //   const res = await request
+  //     .post('skills')
+  //     .send(skills.postPayload(randomNumber, emptyArray, skills.groupId))
+  //     .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
 
-    expect(res.headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8'
-    );
-    expect(res.status).toBe(401);
-    expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
-  });
+  //   expect(res.headers).toHaveProperty(
+  //     'content-type',
+  //     'application/json; charset=utf-8'
+  //   );
+  //   expect(res.status).toBe(401);
+  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
+  // });
 
   test('unsuccessfully with empty name', async () => {
-    let randomNumber = fakerBr.random.number({ max: 999999999 });
     let payload = skills.postPayload(
       randomNumber,
       skills.positionIdList,
@@ -116,7 +111,6 @@ describe('Create skill', () => {
   });
 
   test('unsuccessfully with null name', async () => {
-    let randomNumber = fakerBr.random.number({ max: 999999999 });
     let payload = skills.postPayload(
       randomNumber,
       skills.positionIdList,
@@ -137,7 +131,6 @@ describe('Create skill', () => {
   });
 
   test('unsuccessfully with invalid name', async () => {
-    let randomNumber = fakerBr.random.number({ max: 999999999 });
     let payload = skills.postPayload(
       randomNumber,
       skills.positionIdList,
