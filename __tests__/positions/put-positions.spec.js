@@ -40,10 +40,10 @@ describe('Update Position', () => {
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload);
 
-    // expect(res.headers).toHaveProperty(
-    //   'content-type',
-    //   'application/json; charset=utf-8'
-    // );
+    expect(res.headers).toHaveProperty(
+      'content-type',
+      'application/json; charset=utf-8'
+    );
     expect(res.status).toBe(202);
     expect(res.body.data.id).toBe(skills.positionIdList[0]);
     expect(res.body.data.type).toBe('positions');

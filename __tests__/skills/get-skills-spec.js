@@ -16,8 +16,6 @@ describe('Get skill', () => {
       .get(`skills/${skills.skillId}`)
       .set('Authorization', 'Bearer ' + client.accessToken);
 
-    console.log(res.body);
-
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
