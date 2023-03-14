@@ -38,8 +38,6 @@ describe('Get Group Criterias', () => {
       .get('skill_groups/' + groupCriteria.ids().nonexistent_id)
       .set('Authorization', 'Bearer ' + client.accessToken);
 
-    console.log(res.body);
-
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'

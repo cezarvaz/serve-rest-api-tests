@@ -17,8 +17,6 @@ describe('Edit Evaluation Request', () => {
       .set('Authorization', 'Bearer ' + client.accessToken)
       .send(evaluation.putPayload());
 
-    console.log(res.body);
-
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
