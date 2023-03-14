@@ -1,0 +1,3235 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/evaluation/api/business_units":
+    get:
+      summary: BusinessUnits list
+      tags:
+      - BusinessUnits
+      security:
+      - bearer: []
+      parameters:
+      - name: q[nome_cont]
+        in: query
+        description: Search by name
+        required: false
+        example: name
+        schema:
+          type: string
+      - name: q[s]
+        in: query
+        description: Sort items
+        required: false
+        example: id desc
+        schema:
+          type: string
+      responses:
+        '200':
+          description: business_units
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/BusinessUnit"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        type: string
+                        example: 
+                        nullable: true
+  "/evaluation/api/collaborators":
+    get:
+      summary: Collaborators list
+      tags:
+      - Collaborators
+      security:
+      - bearer: []
+      parameters:
+      - name: q[name_cont]
+        in: query
+        description: Search by name
+        required: false
+        example: name
+        schema:
+          type: string
+      - name: q[s]
+        in: query
+        description: Sort items
+        required: false
+        example: id desc
+        schema:
+          type: string
+      - name: q[department_id_eq]
+        in: query
+        description: Query by department_id
+        required: false
+        example: 1
+        schema:
+          type: string
+      - name: q[department_id_in]
+        in: query
+        description: to use in -> q[department_id_in][]=1&q[department_id_in][]=2
+        required: false
+        example: 1
+        schema:
+          type: string
+      - name: q[position_id_eq]
+        in: query
+        description: Query by position_id
+        required: false
+        example: 1
+        schema:
+          type: string
+      - name: q[position_id_in]
+        in: query
+        description: to use in -> q[position_id_in][]=1&q[position_id_in][]=2
+        required: false
+        example: 1
+        schema:
+          type: string
+      - name: q[unit_id_eq]
+        in: query
+        description: Query by unit_id
+        required: false
+        example: 1
+        schema:
+          type: string
+      - name: q[unit_id_in]
+        in: query
+        description: to use in -> q[unit_id_in][]=1&q[unit_id_in][]=2
+        required: false
+        example: 1
+        schema:
+          type: string
+      responses:
+        '200':
+          description: collaborators
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Collaborator"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        "$ref": "#/components/schemas/Pagination"
+  "/evaluation/api/solicitations/{solicitation_id}/evaluateds/{evaluated_id}/comments":
+    get:
+      summary: Comments index
+      tags:
+      - Comments
+      security:
+      - bearer: []
+      parameters:
+      - name: solicitation_id
+        in: path
+        required: true
+      - name: evaluated_id
+        in: path
+        required: true
+      responses:
+        '200':
+          description: List evaluators comments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Comments"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+  "/evaluation/api/company/evaluations_stats":
+    get:
+      summary: Values dashboard statistics
+      tags:
+      - Company::EvaluationsStats
+      security:
+      - bearer: []
+      description: if you need more references about filters -> https://activerecord-hackery.github.io/ransack/getting-started/search-matches/
+      parameters:
+      - name: q[name_cont]
+        in: query
+        description: Search by name in positions, name evaluator and people name
+        required: false
+        example: name
+        schema:
+          type: string
+      - name: q[department_id_eq]
+        in: query
+        description: filter by department id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      - name: q[business_unit_id_eq]
+        in: query
+        description: filter by business_unit id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      - name: q[direct_leader_id_eq]
+        in: query
+        description: filter by direct superior id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      - name: q[answered_eq]
+        in: query
+        description: filter by answared
+        required: false
+        example: 'true'
+        schema:
+          type: string
+      - name: q[expired_eq]
+        in: query
+        description: filter by expired (true or false)
+        required: false
+        example: 'true'
+        schema:
+          type: string
+      - name: q[created_at_lt]
+        in: query
+        description: filter by created_at lt
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_lteq]
+        in: query
+        description: filter by created_at lteq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_gt]
+        in: query
+        description: filter by created_at gt
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_gteq]
+        in: query
+        description: filter by created_at gteq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_eq]
+        in: query
+        description: filter by created_at eq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: return data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      evaluations:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                            example: 2
+                          answered:
+                            type: integer
+                            example: 1
+                          pending:
+                            type: integer
+                            example: 1
+                      evaluators:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                            example: 2
+                          pending:
+                            type: integer
+                            example: 1
+  "/evaluation/api/departments":
+    get:
+      summary: Departments list
+      tags:
+      - Departments
+      security:
+      - bearer: []
+      parameters:
+      - name: q[nome_cont]
+        in: query
+        description: Search by name
+        required: false
+        example: name
+        schema:
+          type: string
+      - name: q[s]
+        in: query
+        description: Sort items
+        required: false
+        example: id desc
+        schema:
+          type: string
+      responses:
+        '200':
+          description: departments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Department"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        type: string
+                        example: 
+                        nullable: true
+  "/evaluation/api/direct_leaders":
+    get:
+      summary: List direct_leaders
+      tags:
+      - DirectLeaders
+      security:
+      - bearer: []
+      parameters:
+      - name: q[nome_cont]
+        in: query
+        description: Search by name
+        required: false
+        example: name
+        schema:
+          type: string
+      - name: q[s]
+        in: query
+        description: Sort items
+        required: false
+        example: id desc
+        schema:
+          type: string
+      - name: per_page
+        in: query
+        description: Item per page
+        required: false
+        example: '20'
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page select
+        required: false
+        example: '1'
+        schema:
+          type: string
+      responses:
+        '400':
+          description: bad request
+        '200':
+          description: direct_leaders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/DirectLeader"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        "$ref": "#/components/schemas/Pagination"
+  "/evaluation/api/evaluation_averages/{type}":
+    get:
+      summary: List of Evaluation averages
+      tags:
+      - EvaluationAverage
+      security:
+      - bearer: []
+      parameters:
+      - name: type
+        in: path
+        required: true
+        example: skills
+        description: you can use skills, positions or departments
+      - name: q[s]
+        in: query
+        description: Sort by item... you can use examplo name
+        required: false
+        example: name desc
+        schema:
+          type: string
+      - name: q[name_cont]
+        in: query
+        description: Search by name in positions, name evaluator and people name
+        required: false
+        example: name
+        schema:
+          type: string
+      - name: q[created_at_lt]
+        in: query
+        description: filter by created_at lt
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_lteq]
+        in: query
+        description: filter by created_at lteq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_gt]
+        in: query
+        description: filter by created_at gt
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_gteq]
+        in: query
+        description: filter by created_at gteq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_eq]
+        in: query
+        description: filter by created_at eq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[department_id_eq]
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: q[position_id_eq]
+        in: query
+        required: false
+        schema:
+          type: string
+      description: if you need more references about filters -> https://activerecord-hackery.github.io/ransack/getting-started/search-matches/
+      responses:
+        '200':
+          description: 'return evaluation '
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/EvaluationAverage"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        "$ref": "#/components/schemas/Pagination"
+    post:
+      summary: Request Evaluation averages
+      tags:
+      - EvaluationAverage
+      security:
+      - bearer: []
+      parameters:
+      - name: request_report
+        in: query
+        required: false
+        example: true
+      - name: type
+        in: path
+        required: true
+        example: skills
+        description: you can use skills, positions or departments
+      - name: q[name_cont]
+        in: query
+        description: Search by name in positions, name evaluator and people name
+        required: false
+        example: name
+        schema:
+          type: string
+      - name: q[created_at_lt]
+        in: query
+        description: filter by created_at lt
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_lteq]
+        in: query
+        description: filter by created_at lteq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_gt]
+        in: query
+        description: filter by created_at gt
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_gteq]
+        in: query
+        description: filter by created_at gteq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_eq]
+        in: query
+        description: filter by created_at eq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[department_id_eq]
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: q[position_id_eq]
+        in: query
+        required: false
+        schema:
+          type: string
+      description: if you need more references about filters -> https://activerecord-hackery.github.io/ransack/getting-started/search-matches/
+      responses:
+        '200':
+          description: request evaluation averages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Em breve enviaremos o relatório CVS para o seu e-mail.
+        '204':
+          description: no content
+  "/evaluation/api/evaluation_requests":
+    get:
+      summary: List of Evaluation Request
+      tags:
+      - EvaluationRequest
+      security:
+      - bearer: []
+      description: if you need more references about filters -> https://activerecord-hackery.github.io/ransack/getting-started/search-matches/
+      parameters:
+      - name: q[s]
+        in: query
+        description: |-
+          Sort by item, you can use examplo evaluator_name,
+                                          direct_leader_name, evaluated_name, position_name and others
+        required: false
+        example: evaluator_name desc
+        schema:
+          type: string
+      - name: q[name_cont]
+        in: query
+        description: Search by name in positions, name evaluator and people name
+        required: false
+        example: name
+        schema:
+          type: string
+      - name: q[department_id_eq]
+        in: query
+        description: filter by department id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      - name: q[business_unit_id_eq]
+        in: query
+        description: filter by business_unit id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      - name: q[direct_leader_id_eq]
+        in: query
+        description: filter by direct superior id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      - name: q[answered_eq]
+        in: query
+        description: filter by answared
+        required: false
+        example: 'true'
+        schema:
+          type: string
+      - name: q[expired_eq]
+        in: query
+        description: filter by expired (true or false)
+        required: false
+        example: 'true'
+        schema:
+          type: string
+      - name: q[created_at_lt]
+        in: query
+        description: filter by created_at lt
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_lteq]
+        in: query
+        description: filter by created_at lteq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_gt]
+        in: query
+        description: filter by created_at gt
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_gteq]
+        in: query
+        description: filter by created_at gteq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_eq]
+        in: query
+        description: filter by created_at eq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: return evaluation requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/EvaluationRequest"
+                  included:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/PositionSingle"
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        "$ref": "#/components/schemas/Pagination"
+    post:
+      summary: create a request to generate a report or create evaluation request
+      tags:
+      - EvaluationRequest
+      security:
+      - bearer: []
+      parameters:
+      - name: request_report
+        in: query
+        required: false
+      responses:
+        '200':
+          description: request success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/EvaluationRequestReport"
+        '204':
+          description: no content
+  "/evaluation/api/evaluation_requests/{id}":
+    delete:
+      summary: Delete Evaluation request
+      tags:
+      - EvaluationRequest
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        in: path
+        description: EvaluationRequest ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Deleted
+        '404':
+          description: Not found
+    put:
+      summary: Update Evaluation request
+      tags:
+      - EvaluationRequest
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        in: path
+        description: EvaluationRequest ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Updated (Accepted)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/EvaluationRequest"
+                  included:
+                    type: array
+                    items:
+                      anyOf:
+                      - "$ref": "#/components/schemas/Position"
+        '422':
+          description: Return error when try update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                evaluation_request:
+                  type: object
+                  properties:
+                    expired_at:
+                      type: string
+                      nullable: true
+                      example: '2021-01-31'
+                      description: Date needs to be greater than today
+                    resend:
+                      type: boolean
+                      nullable: true
+  "/evaluation/api/evaluations":
+    get:
+      summary: List evaluations
+      tags:
+      - Evaluations
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: evaluations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/EvaluationWithCollaborators/Evaluation"
+                  included:
+                    type: array
+                    items:
+                      anyOf:
+                      - "$ref": "#/components/schemas/EvaluationWithCollaborators/Solicitation"
+                      - "$ref": "#/components/schemas/EvaluationWithCollaborators/Evaluator"
+                      - "$ref": "#/components/schemas/EvaluationWithCollaborators/Evaluated"
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        "$ref": "#/components/schemas/Pagination"
+  "/evaluation/api/evaluations/{id}":
+    get:
+      summary: Get evaluation
+      tags:
+      - Evaluations
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        in: path
+        description: Evaluation by id
+        require: true
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Return evaluation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/EvaluationWithCollaborators/Evaluation"
+                  included:
+                    type: array
+                    items:
+                      anyOf:
+                      - "$ref": "#/components/schemas/EvaluationWithCollaborators/Solicitation"
+                      - "$ref": "#/components/schemas/EvaluationWithCollaborators/Evaluator"
+                      - "$ref": "#/components/schemas/EvaluationWithCollaborators/Evaluated"
+        '404':
+          description: Return not found
+        '401':
+          description: unauthorized
+  "/evaluation/api/evaluations/{solicitation_id}/{evaluator_id}/{evaluated_id}":
+    get:
+      summary: Get evaluation
+      tags:
+      - Evaluations
+      security:
+      - bearer: []
+      parameters:
+      - name: solicitation_id
+        in: path
+        description: Evaluation by solicitation_id
+        require: true
+        required: true
+        schema:
+          type: string
+      - name: evaluator_id
+        in: path
+        description: Evaluation by evalutorid
+        require: true
+        required: true
+        schema:
+          type: string
+      - name: evaluated_id
+        in: path
+        description: Evaluation by evaluated_id
+        require: true
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Return evaluation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/EvaluationWithCollaborators/Evaluation"
+                  included:
+                    type: array
+                    items:
+                      anyOf:
+                      - "$ref": "#/components/schemas/EvaluationWithCollaborators/Solicitation"
+                      - "$ref": "#/components/schemas/EvaluationWithCollaborators/Evaluator"
+                      - "$ref": "#/components/schemas/EvaluationWithCollaborators/Evaluated"
+        '404':
+          description: Return not found
+        '401':
+          description: unauthorized
+  "/evaluation/api/hierarchy":
+    get:
+      summary: Hierarchies list
+      tags:
+      - Hierarchy
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Hierarchy"
+  "/evaluation/api/positions":
+    get:
+      summary: List positions
+      tags:
+      - Positions
+      security:
+      - bearer: []
+      parameters:
+      - name: q[nome_cont]
+        in: query
+        description: Search by name
+        required: false
+        example: name
+        schema:
+          type: string
+      - name: q[s]
+        in: query
+        description: Sort items
+        required: false
+        example: id desc
+        schema:
+          type: string
+      - name: without_included
+        in: query
+        description: Without included
+        required: false
+        example: 'true'
+        schema:
+          type: string
+      - name: per_page
+        in: query
+        description: Item per page
+        required: false
+        example: '20'
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page select
+        required: false
+        example: '1'
+        schema:
+          type: string
+      responses:
+        '400':
+          description: bad request
+        '200':
+          description: positions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Position"
+                  included:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/PositionSkill"
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        "$ref": "#/components/schemas/Pagination"
+  "/evaluation/api/positions/{id}":
+    get:
+      summary: Get position
+      tags:
+      - Positions
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        in: path
+        description: Position id
+        require: true
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Return position
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Position"
+                  included:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/PositionSkill"
+        '404':
+          description: not found
+    put:
+      summary: Update Position
+      tags:
+      - Positions
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        in: path
+        description: Position id
+        require: true
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Position"
+                  included:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/PositionSkill"
+        '422':
+          description: Return erro update a Position
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                position:
+                  type: object
+                  properties:
+                    skill_ids:
+                      type: array
+                      items:
+                        anyOf: []
+                      example:
+                      - 1
+                      - 2
+                      - 3
+                  required:
+                  - skill_ids
+  "/evaluation/api/evaluations/{evaluation_id}/rates":
+    get:
+      summary: List rates
+      tags:
+      - Rates
+      security:
+      - bearer: []
+      parameters:
+      - name: evaluation_id
+        in: path
+        required: true
+      responses:
+        '200':
+          description: rates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Rate"
+                  included:
+                    type: array
+                  meta:
+                    type: object
+    post:
+      summary: Create rates
+      tags:
+      - Rates
+      security:
+      - bearer: []
+      parameters:
+      - name: evaluation_id
+        in: path
+        required: true
+      responses:
+        '201':
+          description: rates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Rate"
+                  included:
+                    type: array
+                  meta:
+                    type: object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rate:
+                  type: object
+                  properties:
+                    rates_attributes:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          skill_id:
+                            type: integer
+                            example: 1
+                          rate:
+                            type: integer
+                            example: 1
+                    comments_attributes:
+                      type: object
+                      properties:
+                        text:
+                          type: string
+                          example: Describe you comment
+    put:
+      summary: Update rates
+      tags:
+      - Rates
+      security:
+      - bearer: []
+      parameters:
+      - name: evaluation_id
+        in: path
+        required: true
+      responses:
+        '202':
+          description: rates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Rate"
+                  included:
+                    type: array
+                  meta:
+                    type: object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rate:
+                  type: object
+                  properties:
+                    rates_attributes:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          skill_id:
+                            type: integer
+                            example: 1
+                          rate:
+                            type: integer
+                            example: 1
+                    comments_attributes:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        text:
+                          type: string
+                          example: Describe you comment
+  "/evaluation/api/solicitations/{solicitation_id}/evaluateds/{evaluated_id}/averages":
+    get:
+      summary: Rates average
+      tags:
+      - RatesAvarege
+      security:
+      - bearer: []
+      parameters:
+      - name: solicitation_id
+        in: path
+        required: true
+      - name: evaluated_id
+        in: path
+        required: true
+      responses:
+        '200':
+          description: rates average
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/RatesAverage"
+                  included:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Solicitation"
+        '404':
+          description: not found
+  "/evaluation/api/skill_groups":
+    get:
+      summary: List skill groups
+      tags:
+      - SkillGroups
+      security:
+      - bearer: []
+      parameters:
+      - name: q[name_cont]
+        in: query
+        description: Search by name
+        required: false
+        example: name
+        schema:
+          type: string
+      - name: q[skills_skill_positions_position_id_eq]
+        in: query
+        description: Search by position
+        required: false
+        example: true
+        schema:
+          type: integer
+      - name: q[archived_eq]
+        in: query
+        description: Search by archived
+        required: false
+        example: true
+        schema:
+          type: boolean
+      - name: q[skills_archived_eq]
+        in: query
+        description: Search by skill archived
+        required: false
+        example: true
+        schema:
+          type: boolean
+      - name: include
+        in: query
+        description: Search by skill
+        require: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: skill groups found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/SkillGroup"
+                  included:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Skill"
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        "$ref": "#/components/schemas/Pagination"
+    post:
+      summary: Create a SkillGroup
+      tags:
+      - SkillGroups
+      security:
+      - bearer: []
+      description: Create and manage competency groups
+      parameters: []
+      responses:
+        '201':
+          description: Return a SkillGroup created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/SkillGroup"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+        '422':
+          description: Return erro create a SkillGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                skill_group:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+  "/evaluation/api/skill_groups/{id}":
+    get:
+      summary: Get a SkillGroup
+      tags:
+      - SkillGroups
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        in: path
+        description: SkillGroup ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Return a SkillGroup
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/SkillGroup"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+        '404':
+          description: Return error not found
+    put:
+      summary: Update a SkillGroup
+      tags:
+      - SkillGroups
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Return a SkillGroup updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/SkillGroup"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+        '422':
+          description: Return erro update a SkillGroup
+        '404':
+          description: Not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                skill_group:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    archived:
+                      type: boolean
+  "/evaluation/api/skills":
+    get:
+      summary: List skills
+      tags:
+      - Skills
+      security:
+      - bearer: []
+      parameters:
+      - name: q[name_cont]
+        in: query
+        description: Search by name
+        required: false
+        example: name
+        schema:
+          type: string
+      - name: q[archived_eq]
+        in: query
+        description: Search by archived
+        required: false
+        example: true
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: skill found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Skill"
+                  included:
+                    type: array
+                    items:
+                      anyOf:
+                      - "$ref": "#/components/schemas/SkillGroup"
+                      - "$ref": "#/components/schemas/PositionSingle"
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        "$ref": "#/components/schemas/Pagination"
+    post:
+      summary: Create a Skill
+      tags:
+      - Skills
+      security:
+      - bearer: []
+      description: Create and manage competency
+      parameters: []
+      responses:
+        '201':
+          description: Return a Skill created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Skill"
+                  included:
+                    type: array
+                    items:
+                      anyOf:
+                      - "$ref": "#/components/schemas/SkillGroup"
+                      - "$ref": "#/components/schemas/Position"
+        '422':
+          description: Return erro create a Skill
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                skill:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string
+                      nullable: true
+                    factor:
+                      type: integer
+                      nullable: true
+                    archived:
+                      type: boolean
+                    skill_group_id:
+                      type: integer
+                    position_ids:
+                      type: array
+                      items:
+                        type: integer
+                        example: 1, 2, 3
+  "/evaluation/api/skills/{id}":
+    get:
+      summary: Get a Skill
+      tags:
+      - Skills
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        in: path
+        description: Skill ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Return a Skill
+        '404':
+          description: Return error not found
+    put:
+      summary: Update a Skill
+      tags:
+      - Skills
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Return a Skill updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Skill"
+                  included:
+                    type: array
+                    items:
+                      anyOf:
+                      - "$ref": "#/components/schemas/SkillGroup"
+                      - "$ref": "#/components/schemas/Position"
+        '422':
+          description: Return erro update a Skill
+        '404':
+          description: Not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                skill:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string
+                      nullable: true
+                    factor:
+                      type: integer
+                      nullable: true
+                    archived:
+                      type: boolean
+                    position_ids:
+                      type: array
+                      items:
+                        anyOf: []
+                      example:
+                      - 1
+                      - 2
+                      - 3
+  "/evaluation/api/solicitations/{solicitation_id}/evaluations":
+    get:
+      summary: List of evaluations
+      tags:
+      - Solicitations/Evaluations
+      security:
+      - bearer: []
+      description: list all evaluations with pagination
+      parameters:
+      - name: solicitation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: q[evaluated_name_or_evaluator_name_cont]
+        in: query
+        required: false
+        example: Maria
+        schema:
+          type: string
+      - name: q[evaluation_status]
+        in: query
+        enum:
+        - pending
+        - answered
+        description: Search by status
+        required: false
+        example: pending
+        schema:
+          type: string
+      - name: q[evaluator_name_cont]
+        in: query
+        description: Search by evaluator name
+        required: false
+        example: Maria
+        schema:
+          type: string
+      - name: q[evaluated_name_cont]
+        in: query
+        description: Search by evaluated name
+        required: false
+        example: Maria
+        schema:
+          type: string
+      - name: q[solicitation_id_eq]
+        in: query
+        description: Search by solicitation id
+        required: false
+        example: 1
+        schema:
+          type: integer
+      - name: q[position_id_eq]
+        in: query
+        description: Search by position id
+        required: false
+        example: 1
+        schema:
+          type: integer
+      - name: q[department_id_eq]
+        in: query
+        description: Search by department id
+        required: false
+        example: 1
+        schema:
+          type: integer
+      - name: q[unit_id_eq]
+        in: query
+        description: Search by unit id
+        required: false
+        example: 1
+        schema:
+          type: integer
+      - name: q[direct_leader_id_eq]
+        in: query
+        description: Search by direct leader id
+        required: false
+        example: 1
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: all evaluations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/SolicitationEvaluation"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        "$ref": "#/components/schemas/Pagination"
+    post:
+      summary: Create evaluations
+      tags:
+      - Solicitations/Evaluations
+      security:
+      - bearer: []
+      description: Create evaluations
+      parameters:
+      - name: solicitation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: created many evaluations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/SolicitationEvaluation"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        type: object
+                        nullable: true
+                        example: 
+        '422':
+          description: Return error try to create evaluations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                evaluation:
+                  type: object
+                  properties:
+                    evaluators:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          evaluator_id:
+                            type: integer
+                          evaluator_name:
+                            type: string
+                          evaluator_email:
+                            type: string
+                        required:
+                        - evaluator_id
+                        - evaluator_name
+                        - evaluator_email
+                    evaluateds:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          evaluated_id:
+                            type: integer
+                          evaluated_name:
+                            type: string
+                          position_id:
+                            type: integer
+                        required:
+                        - evaluated_id
+                        - evaluated_name
+                        - position_id
+                    moderated:
+                      type: boolean
+                  required:
+                  - evaluateds
+                  - evaluators
+  "/evaluation/api/solicitations/evaluations":
+    get:
+      summary: List of evaluations
+      tags:
+      - Solicitations/Evaluations
+      security:
+      - bearer: []
+      description: list all evaluations with pagination
+      parameters:
+      - name: q[evaluated_name_or_evaluator_name_cont]
+        in: query
+        required: false
+        example: Maria
+        schema:
+          type: string
+      - name: q[evaluation_status]
+        in: query
+        enum:
+        - pending
+        - answered
+        description: Search by status
+        required: false
+        example: pending
+        schema:
+          type: string
+      - name: q[evaluator_name_cont]
+        in: query
+        description: Search by evaluator name
+        required: false
+        example: Maria
+        schema:
+          type: string
+      - name: q[evaluated_name_cont]
+        in: query
+        description: Search by evaluated name
+        required: false
+        example: Maria
+        schema:
+          type: string
+      - name: q[solicitation_id_eq]
+        in: query
+        description: Search by solicitation id
+        required: false
+        example: 1
+        schema:
+          type: integer
+      - name: q[position_id_eq]
+        in: query
+        description: Search by position id
+        required: false
+        example: 1
+        schema:
+          type: integer
+      - name: q[department_id_eq]
+        in: query
+        description: Search by department id
+        required: false
+        example: 1
+        schema:
+          type: integer
+      - name: q[unit_id_eq]
+        in: query
+        description: Search by unit id
+        required: false
+        example: 1
+        schema:
+          type: integer
+      - name: q[direct_leader_id_eq]
+        in: query
+        description: Search by direct leader id
+        required: false
+        example: 1
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: all evaluations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/SolicitationEvaluation"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        "$ref": "#/components/schemas/Pagination"
+  "/evaluation/api/solicitations/{solicitation_id}/evaluations/{id}":
+    delete:
+      summary: destroy evaluation
+      tags:
+      - Solicitations/Evaluations
+      security:
+      - bearer: []
+      description: Destroy an evaluation
+      parameters:
+      - name: solicitation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: deleted an evaluation
+        '404':
+          description: Not found evaluation
+  "/evaluation/api/solicitations/stats":
+    get:
+      summary: Values dashboard statistics
+      tags:
+      - Solicitation/Stats
+      security:
+      - bearer: []
+      description: if you need more references about filters -> https://activerecord-hackery.github.io/ransack/getting-started/search-matches/
+      parameters:
+      - name: q[evaluated_name_or_evaluator_name_cont]
+        in: query
+        description: Search by name in positions, name evaluator and people name
+        required: false
+        example: name
+        schema:
+          type: string
+      - name: q[department_id_eq]
+        in: query
+        description: filter by department id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      - name: q[unit_id_eq]
+        in: query
+        description: filter by business_unit id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      - name: q[direct_leader_id_eq]
+        in: query
+        description: filter by direct superior id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      - name: q[evaluation_status]
+        in: query
+        enum:
+        - pending
+        - answered
+        description: Search by status
+        required: false
+        example: pending
+        schema:
+          type: string
+      - name: q[solicitation_id_eq]
+        in: query
+        description: Search by solicitation id
+        required: false
+        example: 1
+        schema:
+          type: integer
+      - name: q[created_at_lt]
+        in: query
+        description: filter by created_at lt
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_lteq]
+        in: query
+        description: filter by created_at lteq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_gt]
+        in: query
+        description: filter by created_at gt
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_gteq]
+        in: query
+        description: filter by created_at gteq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      - name: q[created_at_eq]
+        in: query
+        description: filter by created_at eq
+        required: false
+        example: '2000-10-31'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: return data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      evaluations:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                            example: 2
+                          answered:
+                            type: integer
+                            example: 1
+                          pending:
+                            type: integer
+                            example: 1
+                      evaluators:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                            example: 2
+                          pending:
+                            type: integer
+                            example: 1
+  "/evaluation/api/solicitations":
+    get:
+      summary: List of solicitations
+      tags:
+      - Solicitations
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: List
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Solicitation"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+    post:
+      summary: Create a Solicitation
+      tags:
+      - Solicitations
+      security:
+      - bearer: []
+      description: Create and solicitation
+      parameters: []
+      responses:
+        '201':
+          description: Return a Solicitation created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Solicitation"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+        '422':
+          description: Return erro create a solicitation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                solicitation:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    started_at:
+                      type: string
+                      example: '2020-01-29'
+                    finished_at:
+                      type: string
+                      example: '2020-01-29'
+  "/evaluation/api/solicitations/{id}":
+    get:
+      summary: Get solicitation
+      tags:
+      - Solicitations
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+      responses:
+        '200':
+          description: Show
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Solicitation"
+        '404':
+          description: Not found
+    put:
+      summary: Update a Solicitation
+      tags:
+      - Solicitations
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Return a Solicitation updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Solicitation"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+        '422':
+          description: Return erro update a Solicitation
+        '404':
+          description: Not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                solicitation:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    action:
+                      type: string
+                      example: create
+                      enum:
+                      - create
+                      - cancel
+                      - save_and_next
+                    scale:
+                      type: string
+                      example: none
+                      nullable: true
+                      enum:
+                      - none
+                      - agreement
+                      - excellence
+                      - expectation
+                      - frequency
+                    pattern:
+                      type: string
+                      example: custom
+                      nullable: true
+                      enum:
+                      - custom
+                    started_at:
+                      type: string
+                      example: '2022-10-01'
+                    finished_at:
+                      type: string
+                      example: '2022-10-01'
+    delete:
+      summary: Destroy solicitation
+      tags:
+      - Solicitations
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Deleted
+        '404':
+          description: Not found
+  "/evaluation/api/solicitations/evaluateds":
+    get:
+      summary: List of evaluateds
+      tags:
+      - Solicitation/Evaluateds
+      security:
+      - bearer: []
+      parameters:
+      - name: q[solicitation_id_eq]
+        in: query
+        description: filter by solicitation id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      - name: q[department_id_eq]
+        in: query
+        description: filter by department id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      - name: q[position_id_eq]
+        in: query
+        description: filter by position id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      - name: q[unit_id_eq]
+        in: query
+        description: filter by unit id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      - name: q[direct_leader_id_eq]
+        in: query
+        description: filter by direct leader id
+        required: false
+        example: '1'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List evaluateds
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Evaluateds"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        "$ref": "#/components/schemas/Pagination"
+  "/evaluation/api/solicitations/{solicitation_id}/evaluateds/{evaluated_id}/details":
+    get:
+      summary: Evaluated details
+      tags:
+      - Solicitation/Evaluateds
+      security:
+      - bearer: []
+      parameters:
+      - name: solicitation_id
+        in: path
+        required: true
+      - name: evaluated_id
+        in: path
+        required: true
+      responses:
+        '200':
+          description: Return evaluted with details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    items:
+                      "$ref": "#/components/schemas/EvaluatedDetails"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+        '404':
+          description: Not found evaluated
+  "/evaluation/api/solicitations/{solicitation_id}/evaluateds/{evaluated_id}/skill_rates":
+    get:
+      summary: Skill rates
+      tags:
+      - Solicitation/Evaluateds
+      security:
+      - bearer: []
+      parameters:
+      - name: solicitation_id
+        in: path
+        required: true
+      - name: evaluated_id
+        in: path
+        required: true
+      responses:
+        '200':
+          description: List skill rates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/SkillRates"
+                  included:
+                    type: array
+                    items:
+                      anyOf: []
+        '404':
+          description: Not found skill rates
+  "/":
+    get:
+      summary: Returns a welcome message
+      tags:
+      - Welcome
+      description: Returns a welcome message
+      responses:
+        '200':
+          description: Returns a welcome message
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        current:
+          type: integer
+        previous:
+          type: integer
+          nullable: true
+        next:
+          type: integer
+          nullable: true
+        per_page:
+          type: integer
+        pages:
+          type: integer
+        total_count:
+          type: integer
+    EvaluationRequestReport:
+      type: object
+      properties:
+        message:
+          type: string
+          example: ready to download
+        status:
+          type: string
+          example: ready
+          enum:
+          - ready
+          - important
+          - equested
+          - error
+        contents:
+          type: string
+          example: http://site.com/file.pdf
+          nullable: true
+    SkillGroup:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: skill_groups
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            external_id:
+              type: integer
+              nullable: true
+            archived:
+              type: boolean
+            created_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+            updated_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+    Skill:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: skills
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+              nullable: true
+            factor:
+              type: integer
+            external_id:
+              type: integer
+              nullable: true
+            archived:
+              type: boolean
+            created_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+            updated_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+        relationships:
+          type: object
+          properties:
+            skill_group:
+              type: object
+              properties:
+                links:
+                  type: object
+                  properties:
+                    related:
+                      type: string
+                      example: evaluation/api/v1/skill_groups/1
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    type:
+                      type: string
+                      example: skill_groups
+            positions:
+              type: object
+              properties:
+                links:
+                  type: object
+                  properties:
+                    related:
+                      type: string
+                      example: evaluation/api/v1/positions?q[id_in][]=1
+                data:
+                  type: array
+                  items:
+                    "$ref": "#/components/schemas/PositionRelation"
+    PositionSingle:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: positions
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+              nullable: true
+    EvaluationRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: evaluation_requests
+        attributes:
+          type: object
+          properties:
+            evaluator_name:
+              type: string
+            evaluator_position:
+              type: string
+              nullable: true
+            evaluator_email:
+              type: string
+            evaluated_name:
+              type: string
+            status:
+              type: string
+              description: can be answered, pending or expired
+              example: pending
+            created_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+            answered_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+              nullable: true
+            expired_at:
+              type: string
+              example: '2022-01-01'
+              nullable: true
+        relationships:
+          type: object
+          properties:
+            position:
+              type: object
+              properties:
+                links:
+                  type: object
+                  properties:
+                    related:
+                      type: string
+                      example: evaluation/api/evaluation_requests?q[colaborador_cargo_id_eq]=161661
+                    self:
+                      type: string
+                      example: evaluation/api/positions/161661
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    type:
+                      type: string
+                      example: positions
+    Position:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: positions
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+              nullable: true
+        relationships:
+          type: object
+          properties:
+            skills:
+              type: object
+              properties:
+                links:
+                  type: object
+                  properties:
+                    related:
+                      type: string
+                      example: evaluation/api/skills?q[skill_positions_position_id_eq]=1
+                data:
+                  type: array
+                  items:
+                    "$ref": "#/components/schemas/SkillRelation"
+    PositionSkill:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: skills
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+              nullable: true
+            factor:
+              type: integer
+            external_id:
+              type: integer
+              nullable: true
+            archived:
+              type: boolean
+            created_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+            updated_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+    PositionRelation:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: positions
+    SkillRelation:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: skills
+    Department:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: departaments
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+              nullable: true
+    Collaborator:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: collaborators
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+            position_id:
+              type: integer
+            department_id:
+              type: integer
+            unit_id:
+              type: integer
+              nullable: true
+          required:
+          - name
+          - email
+          - position_id
+          - department_id
+          - unit_id
+    Hierarchy:
+      type: object
+      properties:
+        id:
+          type: string
+          example: direct_leaders
+        name:
+          type: object
+          properties:
+            pt-BR:
+              type: string
+              example: Superior Direto
+            en:
+              type: string
+              example: Direct Leader
+        link:
+          type: string
+          example: "/evaluation/api/direct_leaders"
+          description: Link to get data
+          nullable: true
+    BusinessUnit:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: business_units
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+    DirectLeader:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: direct_leaders
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            image:
+              type: json
+              nullable: true
+              example:
+                url: ''
+                thumb:
+                  url: ''
+                avatar:
+                  url: ''
+    Solicitation:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: solicitations
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            status:
+              type: string
+              enum:
+              - draft
+              - active
+              - scheduled
+              - canceled
+              - finished
+            step:
+              type: integer
+              example: 1
+            pattern:
+              type: string
+              example: custom
+              nullable: true
+            scale:
+              type: string
+              example: none
+              nullable: true
+            started_at:
+              type: string
+              example: '2022-10-01'
+            finished_at:
+              type: string
+              example: '2022-10-01'
+            actions:
+              type: array
+              example:
+              - edit
+              - delete
+              - reschedule
+              - view
+              - edit_participants
+              - cancel
+              - prolong
+              - view_results
+              - reopen
+            created_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+            updated_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+          required:
+          - name
+          - status
+          - created_at
+          - updated_at
+        links:
+          type: array
+          items:
+            type: object
+            properties:
+              href:
+                type: string
+                example: evaluation/api/solicitations/1
+              rel:
+                type: string
+                example: self
+                enum:
+                - self
+                - update
+                - delete
+              type:
+                type: string
+                example: GET
+                enum:
+                - GET
+                - PUT
+                - DELETE
+    EvaluationAverage:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: skills
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            average:
+              type: number
+              example: 40.11
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+              example: "/evaluation/api/skills/2"
+    SolicitationEvaluation:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: evaluations
+        attributes:
+          type: object
+          properties:
+            evaluator_id:
+              type: integer
+            evaluator_name:
+              type: string
+            evaluated_id:
+              type: integer
+            evaluated_name:
+              type: string
+            position_id:
+              type: integer
+            position_name:
+              type: string
+              nullable: true
+            department_id:
+              type: integer
+              nullable: true
+            unit_id:
+              type: integer
+              nullable: true
+            direct_leader_id:
+              type: integer
+              nullable: true
+            moderated:
+              type: boolean
+            status:
+              type: string
+            created_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+            updated_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+          required:
+          - evaluated_id
+          - evaluated_name
+          - evaluator_id
+          - evaluator_name
+          - position_id
+          - created_at
+          - updated_at
+    EvaluationWithCollaborators:
+      Solicitation:
+        type: object
+        properties:
+          id:
+            type: integer
+          type:
+            type: string
+            example: solicitations
+          attributes:
+            type: object
+            properties:
+              mandatory_comment:
+                type: boolean
+              scale:
+                type: string
+      Evaluator:
+        type: object
+        properties:
+          id:
+            type: integer
+          type:
+            type: string
+            example: evaluators
+          attributes:
+            type: object
+            properties:
+              name:
+                type: string
+              email:
+                type: string
+              avatar:
+                type: string
+                example: https://www.example.com/avt.jpg
+      Evaluated:
+        type: object
+        properties:
+          id:
+            type: integer
+          type:
+            type: string
+            example: evaluateds
+          attributes:
+            type: object
+            properties:
+              name:
+                type: string
+              employed_since:
+                type: integer
+              department:
+                type: string
+              position:
+                type: string
+              avatar:
+                type: string
+                example: https://www.example.com/avt.jpg
+            required:
+            - name
+            - department
+            - employed_since
+            - profiler
+            - position
+            - avatar
+            - director_leader
+          relationships:
+            type: object
+            properties:
+              position:
+                type: object
+                properties:
+                  links:
+                    type: object
+                    properties:
+                      related:
+                        type: string
+                      skill_groups:
+                        type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      type:
+                        type: string
+                        example: positions
+      Evaluation:
+        type: object
+        properties:
+          id:
+            type: integer
+          type:
+            type: string
+            example: evaluations
+          attributes:
+            type: object
+            properties:
+              solicitation_id:
+                type: integer
+              evaluator_id:
+                type: integer
+              evaluated_id:
+                type: integer
+              status:
+                type: string
+                enum:
+                - pending
+                - answared
+                - moderated
+              expired_at:
+                type: string
+                example: '2022-07-11T17:49:40.000-03:00'
+                format: datetime
+            required:
+            - solicitation_id
+            - evaluator_id
+            - evaluated_id
+            - status
+            - expired_at
+          relationships:
+            type: object
+            properties:
+              solicitation:
+                type: object
+                properties:
+                  links:
+                    type: object
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      type:
+                        type: string
+                        example: solicitations
+              evaluator:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      type:
+                        type: string
+                        example: evaluators
+              evaluated:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      type:
+                        type: string
+                        example: evaluateds
+    Evaluation:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: evaluations
+        attributes:
+          type: object
+          properties:
+            evaluator_id:
+              type: integer
+            evaluator_name:
+              type: string
+            evaluated_id:
+              type: integer
+            evaluated_name:
+              type: string
+            position_id:
+              type: integer
+            created_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+            updated_at:
+              type: string
+              example: '2022-07-11T17:49:40.000-03:00'
+    Rate:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: evaluations
+        attributes:
+          type: object
+          properties:
+            company_id:
+              type: integer
+              example: 1
+            evaluation_id:
+              type: integer
+              example: 1
+            evaluator_id:
+              type: integer
+              example: 1
+            evaluated_id:
+              type: integer
+              example: 1
+            department_id:
+              type: integer
+              nullable: true
+              example: 
+            position_id:
+              type: integer
+              example: 1
+            skill_id:
+              type: integer
+              example: 1
+            rate:
+              type: integer
+              example: 1
+            factor_at_moment:
+              type: integer
+              example: 1
+            skill_group_id:
+              type: integer
+              example: 1
+    Evaluateds:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: evaluateds
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+        relationships:
+          type: object
+          properties:
+            solicitation:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    type:
+                      type: string
+                      example: solicitations
+    EvaluatedDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: evaluateds_details
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            avatar:
+              type: string
+              nullable: true
+              example: https://site.com/avatar.jpg
+            position:
+              type: string
+            position_id:
+              type: integer
+            department:
+              type: string
+              nullable: true
+            department_id:
+              type: integer
+              nullable: true
+            employed_since:
+              type: integer
+            direct_leader:
+              type: string
+              nullable: true
+            direct_leader_id:
+              type: integer
+            profiler:
+              type: string
+              nullable: true
+            unit_id:
+              type: integer
+              nullable: true
+          required:
+          - name
+          - avatar
+          - position
+          - department
+          - employed_since
+          - direct_leader
+    Comments:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: comments
+        attributes:
+          type: object
+          properties:
+            evaluator_name:
+              type: string
+            created_at:
+              type: string
+            text:
+              type: string
+    RatesAverage:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: rates_averages
+        attributes:
+          type: object
+          properties:
+            position_average:
+              type: number
+            evaluated_average:
+              type: number
+          required:
+          - evaluated_average
+          - position_average
+        relationships:
+          type: object
+          properties:
+            solicitation:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    type:
+                      type: string
+                      example: solicitations
+    SkillRates:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          example: skill_rates
+        attributes:
+          type: object
+          properties:
+            skill_group:
+              type: string
+              example: Skill Group name
+            skill_group_average:
+              type: number
+              example: 40.11
+            skills:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  evaluated_average:
+                    type: number
+                    example: 40.11
+                  position_average:
+                    type: number
+                    example: 40.11
+                  rates:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        evaluator:
+                          type: string
+                          example: Antônio da Silva
+                        rate:
+                          type: number
+                          example: 3
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000

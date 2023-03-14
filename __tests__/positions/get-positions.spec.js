@@ -21,7 +21,7 @@ describe('Get Position', () => {
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(200);
-    expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
+    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });
 
   // test('expired token', async () => {
@@ -35,7 +35,7 @@ describe('Get Position', () => {
   //   );
   //   expect(res.status).toBe(401);
 
-  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
+  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBeTrue();
   // });
 
   test('unsuccessfully with invalid id', async () => {
@@ -51,6 +51,6 @@ describe('Get Position', () => {
 
     expect(res.body.errors.status).toBe(404);
     expect(res.body.errors.message).toBe('Error');
-    expect(validate.jsonSchema(res.body, invalidIdSchema)).toBe(true);
+    expect(validate.jsonSchema(res.body, invalidIdSchema)).toBeTrue();
   });
 });

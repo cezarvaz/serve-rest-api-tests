@@ -2,9 +2,9 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
 import evaluation from '../../factories/EvaluationRequest';
-import successSkillsSchema from 'schemas/evaluation_average/get/success-skills';
-import successPositionsSchema from 'schemas/evaluation_average/get/success-positions';
-import successDepartmentsSchema from 'schemas/evaluation_average/get/success-departments';
+import successSkillsSchema from 'schemas/evaluation-average/get/success-skills';
+import successPositionsSchema from 'schemas/evaluation-average/get/success-positions';
+import successDepartmentsSchema from 'schemas/evaluation-average/get/success-departments';
 
 describe('List of Evaluation averages', () => {
   beforeAll(async () => {
@@ -19,7 +19,7 @@ describe('List of Evaluation averages', () => {
     expect(res.headers).toHaveProperty('content-type');
     expect(res.status).toBe(200);
     expect(res.body.data[1].type).toBe('skills');
-    expect(validate.jsonSchema(res.body, successSkillsSchema)).toBe(true);
+    expect(validate.jsonSchema(res.body, successSkillsSchema)).toBeTrue();
   });
 
   test('successfully with positions', async () => {
@@ -29,7 +29,7 @@ describe('List of Evaluation averages', () => {
     expect(res.headers).toHaveProperty('content-type');
     expect(res.status).toBe(200);
     expect(res.body.data[1].type).toBe('positions');
-    expect(validate.jsonSchema(res.body, successPositionsSchema)).toBe(true);
+    expect(validate.jsonSchema(res.body, successPositionsSchema)).toBeTrue();
   });
 
   test('successfully with departments', async () => {
@@ -39,7 +39,7 @@ describe('List of Evaluation averages', () => {
     expect(res.headers).toHaveProperty('content-type');
     expect(res.status).toBe(200);
     expect(res.body.data[1].type).toBe('departments');
-    expect(validate.jsonSchema(res.body, successDepartmentsSchema)).toBe(true);
+    expect(validate.jsonSchema(res.body, successDepartmentsSchema)).toBeTrue();
   });
 
   // test('expired token', async () => {
@@ -52,6 +52,6 @@ describe('List of Evaluation averages', () => {
   //     'application/json; charset=utf-8'
   //   );
   //   expect(res.status).toBe(401);
-  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
+  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBeTrue();
   // });
 });

@@ -55,6 +55,6 @@ describe('Request Evaluation averages', () => {
   //     'application/json; charset=utf-8'
   //   );
   //   expect(res.status).toBe(401);
-  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
+  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBeTrue();
   // });
 });

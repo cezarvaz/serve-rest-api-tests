@@ -42,9 +42,11 @@ const successSchema = {
             },
             created_at: {
               type: 'string',
+              format: 'date-time',
             },
             updated_at: {
               type: 'string',
+              format: 'date-time',
             },
           },
         },
@@ -140,9 +142,11 @@ const successSchema = {
               },
               created_at: {
                 type: 'string',
+                format: 'date-time',
               },
               updated_at: {
                 type: 'string',
+                format: 'date-time',
               },
               description: {
                 type: ['string', 'null'],

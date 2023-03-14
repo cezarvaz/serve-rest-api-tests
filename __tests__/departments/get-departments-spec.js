@@ -18,7 +18,7 @@ describe('Department List', () => {
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(200);
-    expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
+    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });
 
   // test('expired token', async () => {
@@ -31,6 +31,6 @@ describe('Department List', () => {
   //     'application/json; charset=utf-8'
   //   );
   //   expect(res.status).toBe(401);
-  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
+  //   expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBeTrue();
   // });
 });
