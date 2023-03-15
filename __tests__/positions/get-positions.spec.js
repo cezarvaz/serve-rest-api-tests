@@ -1,11 +1,12 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import skills from 'factories/Skills';
-import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helpers/Validate';
 import successSchema from 'schemas/positions/get/success';
-import invalidIdSchema from 'schemas/positions/get/invalid-id';
-import expiredTokenSchema from 'schemas/skill_groups/list/expired-token';
+import each from 'jest-each';
+import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
+import simpleErrorSchema from 'schemas/errors/simple-error';
+import errorsSchema from 'schemas/errors/errors';
 
 describe('Get Position', () => {
   beforeAll(async () => {
@@ -23,26 +24,18 @@ describe('Get Position', () => {
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(200);
-    expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
+
+    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });
 
-  test('expired token', async () => {
+  each`
+  id             | scenario            
+  ${'a'}         | ${'an invalid'}
+  ${null}        | ${'a null'}
+  ${'999999999'} | ${'an inexistent'}
+  `.test('should validate $scenario id', async ({ id }) => {
     const res = await request
-      .get(`positions/${skills.positionIdList[0]}`)
-      .set('Authorization', 'Bearer ' + EXPIRED_TOKEN);
-
-    expect(res.headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8'
-    );
-    expect(res.status).toBe(401);
-
-    expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
-  });
-
-  test('unsuccessfully with invalid id', async () => {
-    const res = await request
-      .get(`positions/a`)
+      .get(`positions/${id}`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
@@ -50,9 +43,32 @@ describe('Get Position', () => {
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(404);
-
     expect(res.body.errors.status).toBe(404);
     expect(res.body.errors.message).toBe('Error');
-    expect(validate.jsonSchema(res.body, invalidIdSchema)).toBe(true);
+
+    expect(validate.jsonSchema(res.body, errorsSchema)).toBeTrue();
   });
+
+  each`
+  token                | scenario            
+  ${'token'}           | ${'an invalid'}
+  ${null}              | ${'a null'}
+  ${''}                | ${'an empty'}
+  ${EXPIRED_TOKEN}     | ${'an expired'}
+  ${UNAUTHORIZED_TOKEN}| ${'an unauthorized'}
+  `.test(
+    'should validate $scenario authentication token',
+    async ({ token }) => {
+      const res = await request.get('positions').set('Authorization', token);
+
+      expect(res.headers).toHaveProperty(
+        'content-type',
+        'application/json; charset=utf-8'
+      );
+      expect(res.status).toBe(401);
+      expect(res.body.errors).toBe('decoding error');
+
+      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+    }
+  );
 });

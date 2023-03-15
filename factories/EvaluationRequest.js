@@ -9,7 +9,7 @@ class Evaluations {
   async getEvaluationList() {
     const res = await request
       .get('evaluation_requests')
-      .set('Authorization', 'Bearer ' + client.accessToken)
+      .set('Authorization', `Bearer ${client.accessToken}`)
       .expect(200);
 
     let fistEvaluationId = res.body.data[0].id;

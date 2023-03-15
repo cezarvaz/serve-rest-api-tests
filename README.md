@@ -21,9 +21,3 @@ To run all tests, use the following command:
 ```
 yarn test
 ```
-
-To run a specific file or scenario (with .only annotation also), use the following command:
-
-```
-yarn test -t {file-name}.js
-```

@@ -2,11 +2,12 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import skills from 'factories/Skills';
 import positions from 'factories/Positions';
-import EXPIRED_TOKEN from 'utils/constants';
 import validate from 'helpers/Validate';
 import successSchema from 'schemas/positions/put/success';
-import unsuccessSchema from 'schemas/positions/put/unsuccess-empty-list';
-import expiredTokenSchema from 'schemas/skill_groups/list/expired-token';
+import unsuccessSchema from 'schemas/positions/put/unsuccessful';
+import each from 'jest-each';
+import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
+import simpleErrorSchema from 'schemas/errors/simple-error';
 
 describe('Update Position', () => {
   beforeAll(async () => {
@@ -30,7 +31,8 @@ describe('Update Position', () => {
     expect(res.body.data.id).toBe(skills.positionIdList[0]);
     expect(res.body.data.type).toBe('positions');
     expect(res.body.data.relationships.skills.data[0].type).toBe('skills');
-    expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
+
+    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });
 
   test('successfully with a list of skills', async () => {
@@ -41,6 +43,7 @@ describe('Update Position', () => {
       .put(`positions/${skills.positionIdList[0]}`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload);
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
@@ -48,11 +51,12 @@ describe('Update Position', () => {
     expect(res.status).toBe(202);
     expect(res.body.data.id).toBe(skills.positionIdList[0]);
     expect(res.body.data.type).toBe('positions');
-    // expect(res.body.data.relationships.skills.data[0].id).toBe(
-    //   skills.data.skillId
-    // );
+    expect(res.body.data.relationships.skills.data[0].id).toBe(
+      skills.data.skillId
+    );
     expect(res.body.data.relationships.skills.data[0].type).toBe('skills');
-    expect(validate.jsonSchema(res.body, successSchema)).toBe(true);
+
+    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });
 
   test('unsuccefully with an empty list of skills', async () => {
@@ -60,13 +64,16 @@ describe('Update Position', () => {
       .put(`positions/${skills.positionIdList[0]}`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(positions.putPayload());
+
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
     );
+
     expect(res.status).toBe(422);
     expect(res.body.message).toBe('Não pode ser atualizado');
-    expect(validate.jsonSchema(res.body, unsuccessSchema)).toBe(true);
+
+    expect(validate.jsonSchema(res.body, unsuccessSchema)).toBeTrue();
   });
 
   test('unsuccefully with an invalid skills', async () => {
@@ -80,26 +87,39 @@ describe('Update Position', () => {
       'content-type',
       'application/json; charset=utf-8'
     );
+
     expect(res.status).toBe(422);
     expect(res.body.message).toBe('Não pode ser atualizado');
     expect(res.body.error.skill_ids[0]).toBe(
       `A ${invalid_skill} é uma competência inválida.`
     );
-    expect(validate.jsonSchema(res.body, unsuccessSchema)).toBe(true);
+
+    expect(validate.jsonSchema(res.body, unsuccessSchema)).toBeTrue();
   });
 
-  test('expired token', async () => {
-    const res = await request
-      .put(`positions/${skills.positionIdList[0]}`)
-      .set('Authorization', 'Bearer ' + EXPIRED_TOKEN)
-      .send(positions.putPayload(skills.data.skillId));
+  each`
+  token                | scenario            
+  ${'token'}           | ${'an invalid'}
+  ${null}              | ${'a null'}
+  ${''}                | ${'an empty'}
+  ${EXPIRED_TOKEN}     | ${'an expired'}
+  ${UNAUTHORIZED_TOKEN}| ${'an unauthorized'}
+  `.test(
+    'should validate $scenario authentication token',
+    async ({ token }) => {
+      const res = await request
+        .put(`positions/${skills.positionIdList[0]}`)
+        .send(positions.putPayload(skills.data.skillId))
+        .set('Authorization', token);
 
-    expect(res.headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8'
-    );
-    expect(res.status).toBe(401);
+      expect(res.headers).toHaveProperty(
+        'content-type',
+        'application/json; charset=utf-8'
+      );
+      expect(res.status).toBe(401);
+      expect(res.body.errors).toBe('decoding error');
 
-    expect(validate.jsonSchema(res.body, expiredTokenSchema)).toBe(true);
-  });
+      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+    }
+  );
 });

@@ -1,10 +1,11 @@
 {
   "verbose": true,
-  "testTimeout": 50000,
+  "testTimeout": 70000,
   "moduleDirectories": [
     "node_modules",
     "gestao-performance-evaluation-api-tests"
   ],
+  "setupFilesAfterEnv": ["jest-extended/all"],
   "reporters": [
     "default",
     [

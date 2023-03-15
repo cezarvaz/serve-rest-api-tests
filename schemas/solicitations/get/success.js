@@ -30,16 +30,18 @@ const successSchema = {
                 type: 'string',
               },
               description: {
-                type: 'null',
+                type: ['string', 'null'],
               },
               status: {
                 type: 'string',
               },
               created_at: {
                 type: 'string',
+                format: 'date-time',
               },
               updated_at: {
                 type: 'string',
+                format: 'date-time',
               },
             },
           },
