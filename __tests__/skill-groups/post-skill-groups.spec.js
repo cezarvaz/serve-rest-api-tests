@@ -18,7 +18,7 @@ describe('Create group criteria', () => {
     const res = await request
       .post('skill_groups')
       .send(groupCriteria.postPayload())
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -42,7 +42,7 @@ describe('Create group criteria', () => {
     const res = await request
       .post('skill_groups')
       .send(groupCriteria.postPayload())
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',

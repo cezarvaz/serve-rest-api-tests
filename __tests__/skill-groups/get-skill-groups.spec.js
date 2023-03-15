@@ -18,7 +18,7 @@ describe('Get Group Criterias', () => {
   test('successfully', async () => {
     const res = await request
       .get('skill_groups/' + groupCriteria.id)
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -36,7 +36,7 @@ describe('Get Group Criterias', () => {
   test('nonexistentent id', async () => {
     const res = await request
       .get('skill_groups/' + groupCriteria.ids().nonexistent_id)
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -52,7 +52,7 @@ describe('Get Group Criterias', () => {
   test('invalid id', async () => {
     const res = await request
       .get('skill_groups/' + groupCriteria.ids().invalid_id)
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',

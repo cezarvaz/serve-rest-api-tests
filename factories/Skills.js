@@ -9,7 +9,7 @@ class Skills {
   async getPositionList() {
     const res = await request
       .get('positions')
-      .set('Authorization', 'Bearer ' + client.accessToken)
+      .set('Authorization', `Bearer ${client.accessToken}`)
       .expect(200);
 
     let list = [];
@@ -24,7 +24,7 @@ class Skills {
   async getSkillsList() {
     const res = await request
       .get('skills')
-      .set('Authorization', 'Bearer ' + client.accessToken)
+      .set('Authorization', `Bearer ${client.accessToken}`)
       .expect(200);
 
     let skillFirstId = res.body.data[0].id;
@@ -34,7 +34,7 @@ class Skills {
   async getList() {
     const res = await request
       .get('skills')
-      .set('Authorization', 'Bearer ' + client.accessToken)
+      .set('Authorization', `Bearer ${client.accessToken}`)
       .expect(200);
 
     let list = [];
@@ -50,7 +50,7 @@ class Skills {
   async getSkillGroup() {
     const res = await request
       .get('skill_groups')
-      .set('Authorization', 'Bearer ' + client.accessToken)
+      .set('Authorization', `Bearer ${client.accessToken}`)
       .expect(200);
 
     let skillGroupId = res.body.data[0].id;
@@ -60,7 +60,7 @@ class Skills {
   async getDataToPut() {
     const res = await request
       .get('skills')
-      .set('Authorization', 'Bearer ' + client.accessToken)
+      .set('Authorization', `Bearer ${client.accessToken}`)
       .expect(200);
     let dataJson = {
       skillId: res.body.data[0].id,

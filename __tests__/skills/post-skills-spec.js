@@ -29,7 +29,7 @@ describe('Create skill', () => {
       .send(
         skills.postPayload(randomNumber, skills.positionIdList, skills.groupId)
       )
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -49,7 +49,7 @@ describe('Create skill', () => {
           skills.groupId
         )
       )
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -64,7 +64,7 @@ describe('Create skill', () => {
     const res = await request
       .post('skills')
       .send(skills.postPayload(randomNumber, emptyArray, skills.groupId))
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -85,7 +85,7 @@ describe('Create skill', () => {
     const res = await request
       .post('skills')
       .send(payload)
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -108,7 +108,7 @@ describe('Create skill', () => {
     const res = await request
       .post('skills')
       .send(payload)
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -129,7 +129,7 @@ describe('Create skill', () => {
     const res = await request
       .post('skills')
       .send(payload)
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',

@@ -15,7 +15,7 @@ describe('List of solicitations', () => {
   test('successfully', async () => {
     const res = await request
       .get(`solicitations`)
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',

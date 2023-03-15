@@ -18,7 +18,7 @@ describe('Get skill', () => {
   test('successfully', async () => {
     const res = await request
       .get(`skills/${skills.skillId}`)
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -30,10 +30,15 @@ describe('Get skill', () => {
     expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });
 
-  test('unsuccessfully with invalid id', async () => {
+  each`
+  id             | scenario            
+  ${'a'}         | ${'an invalid'}
+  ${null}        | ${'a null'}
+  ${'999999999'} | ${'an inexistent'}
+  `.test('should validate $scenario id', async ({ id }) => {
     const res = await request
-      .get('skills/a')
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .get(`skills/${id}`)
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',

@@ -37,7 +37,7 @@ describe('Edit skill', () => {
     const res = await request
       .put(`skills/${skills.data.skillId}`)
       .send(payload)
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -59,7 +59,7 @@ describe('Edit skill', () => {
     const res = await request
       .put(`skills/${skills.data.skillId}`)
       .send(payload)
-      .set('Authorization', 'Bearer ' + client.accessToken);
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
       'content-type',

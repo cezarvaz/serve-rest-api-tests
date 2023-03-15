@@ -15,7 +15,7 @@ class GroupCriteria {
     const res = await request
       .post('skill_groups')
       .send(this.postPayload())
-      .set('Authorization', 'Bearer ' + client.accessToken)
+      .set('Authorization', `Bearer ${client.accessToken}`)
       .expect(201);
 
     this.id = res.body.data.id;

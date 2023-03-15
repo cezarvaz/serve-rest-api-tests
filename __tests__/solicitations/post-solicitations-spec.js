@@ -17,7 +17,7 @@ describe('Create a solicitation', () => {
   test('successfully', async () => {
     const res = await request
       .post(`solicitations`)
-      .set('Authorization', 'Bearer ' + client.accessToken)
+      .set('Authorization', `Bearer ${client.accessToken}`)
       .send(solicitations.postPayload());
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -35,8 +35,10 @@ describe('Create a solicitation', () => {
   test('existing name', async () => {
     const res = await request
       .post(`solicitations`)
-      .set('Authorization', 'Bearer ' + client.accessToken)
+      .set('Authorization', `Bearer ${client.accessToken}`)
       .send(solicitations.existingName());
+
+    console.log(res.body);
 
     expect(res.headers).toHaveProperty(
       'content-type',
@@ -54,7 +56,7 @@ describe('Create a solicitation', () => {
   test('empty name', async () => {
     const res = await request
       .post(`solicitations`)
-      .set('Authorization', 'Bearer ' + client.accessToken)
+      .set('Authorization', `Bearer ${client.accessToken}`)
       .send(solicitations.emptyName());
 
     expect(res.headers).toHaveProperty(
