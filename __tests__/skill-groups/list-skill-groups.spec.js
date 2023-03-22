@@ -24,7 +24,7 @@ describe('List Group Criterias', () => {
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(200);
-    console.log(res.body);
+
     expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });
 
