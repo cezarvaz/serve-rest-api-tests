@@ -1,6 +1,6 @@
 const sucessSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#success-list-skill-groups',
+  $id: '#list-skill-groups',
   type: 'object',
   required: ['data', 'included', 'meta'],
   additionalProperties: false,
@@ -61,7 +61,7 @@ const sucessSchema = {
     },
     meta: {
       type: 'object',
-      required: ['pagination'],
+      required: ['pagination', 'ninebox_turn_on'],
       additionalProperties: false,
       properties: {
         pagination: {
@@ -95,6 +95,9 @@ const sucessSchema = {
               type: 'integer',
             },
           },
+        },
+        ninebox_turn_on: {
+          type: 'boolean',
         },
       },
     },
