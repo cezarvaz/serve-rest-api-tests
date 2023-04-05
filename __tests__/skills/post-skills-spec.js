@@ -10,6 +10,8 @@ import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import businessErrorSchema from 'schemas/errors/business-error';
 
+let payload;
+
 describe('Create skill', () => {
   beforeAll(async () => {
     await client.auth();
@@ -17,69 +19,81 @@ describe('Create skill', () => {
     await skills.getSkillGroup();
   });
 
-  let randomNumber;
-
   beforeEach(async () => {
-    randomNumber = fakerBr.random.number({ max: 999999999999 });
+    payload = {
+      skill: {
+        name: `${fakerBr.random.number({
+          max: 999999999999,
+        })}_criado pela automação de testes de API`,
+        description: fakerBr.random.words(),
+        factor: 1,
+        archived: true,
+        skill_group_id: skills.groupId,
+        position_ids: skills.positionIdList,
+      },
+    };
   });
 
   test('successfully with multiple positions', async () => {
     const res = await request
       .post('skills')
-      .send(
-        skills.postPayload(randomNumber, skills.positionIdList, skills.groupId)
-      )
-      .set('Authorization', `Bearer ${client.accessToken}`);
+      .set('Authorization', `Bearer ${client.accessToken}`)
+      .send(payload);
 
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(201);
+
     expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });
 
   test('successfully with one position', async () => {
+    payload.skill.position_ids = skills.positionIdList[0];
+
     const res = await request
       .post('skills')
-      .send(
-        skills.postPayload(
-          randomNumber,
-          skills.positionIdList[0],
-          skills.groupId
-        )
-      )
-      .set('Authorization', `Bearer ${client.accessToken}`);
+      .set('Authorization', `Bearer ${client.accessToken}`)
+      .send(payload);
 
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(201);
+    // expect(res.body.data.relationships.positions.data).toBe(
+    //   skills.positionIdList[0]
+    // ); // vem vazio
+    expect(res.body.data.relationships.skill_group.data.id).toBe(
+      skills.groupId
+    );
+
     expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });
 
   test('successfully without any position', async () => {
-    let emptyArray = [];
+    payload.skill.position_ids = [];
+
     const res = await request
       .post('skills')
-      .send(skills.postPayload(randomNumber, emptyArray, skills.groupId))
-      .set('Authorization', `Bearer ${client.accessToken}`);
+      .set('Authorization', `Bearer ${client.accessToken}`)
+      .send(payload);
 
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(201);
+    expect(res.body.data.relationships.skill_group.data.id).toBe(
+      skills.groupId
+    );
+    expect(res.body.data.relationships.positions.data).toBeEmpty();
+
     expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });
 
   test('unsuccessfully with empty name', async () => {
-    let payload = skills.postPayload(
-      randomNumber,
-      skills.positionIdList,
-      skills.groupId
-    );
     payload.skill.name = '';
 
     const res = await request
@@ -99,12 +113,8 @@ describe('Create skill', () => {
   });
 
   test('unsuccessfully with null name', async () => {
-    let payload = skills.postPayload(
-      randomNumber,
-      skills.positionIdList,
-      skills.groupId
-    );
     payload.skill.name = null;
+
     const res = await request
       .post('skills')
       .send(payload)
@@ -115,17 +125,15 @@ describe('Create skill', () => {
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(422);
+    expect(res.body.message).toBe('Não pode ser criado');
+    expect(res.body.error.name[0]).toBe('Este campo é obrigatório.');
 
     expect(validate.jsonSchema(res.body, businessErrorSchema)).toBeTrue();
   });
 
   test('unsuccessfully with invalid name', async () => {
-    let payload = skills.postPayload(
-      randomNumber,
-      skills.positionIdList,
-      skills.groupId
-    );
     payload.skill.name = '____';
+
     const res = await request
       .post('skills')
       .send(payload)
@@ -140,6 +148,7 @@ describe('Create skill', () => {
     expect(res.body.error.name[0]).toBe(
       'O nome da competências deverá conter pelo menos uma letra do alfabeto.'
     );
+
     expect(validate.jsonSchema(res.body, businessErrorSchema)).toBeTrue();
   });
 
@@ -153,13 +162,7 @@ describe('Create skill', () => {
     async ({ token, statusCode, message }) => {
       const res = await request
         .post('skills')
-        .send(
-          skills.postPayload(
-            randomNumber,
-            skills.positionIdList,
-            skills.groupId
-          )
-        )
+        .send(payload)
         .set('Authorization', token);
 
       expect(res.headers).toHaveProperty('content-type', 'application/json');
@@ -179,13 +182,7 @@ describe('Create skill', () => {
     async ({ token }) => {
       const res = await request
         .post('skills')
-        .send(
-          skills.postPayload(
-            randomNumber,
-            skills.positionIdList,
-            skills.groupId
-          )
-        )
+        .send(payload)
         .set('Authorization', token);
 
       expect(res.headers).toHaveProperty(

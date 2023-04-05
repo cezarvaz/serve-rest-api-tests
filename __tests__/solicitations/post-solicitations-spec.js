@@ -38,8 +38,6 @@ describe('Create a solicitation', () => {
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(solicitations.existingName());
 
-    console.log(res.body);
-
     expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8'

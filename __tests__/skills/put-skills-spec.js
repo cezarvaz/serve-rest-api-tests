@@ -10,6 +10,8 @@ import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import businessErrorSchema from 'schemas/errors/business-error';
 
+let payload;
+
 describe('Edit skill', () => {
   beforeAll(async () => {
     await client.auth();
@@ -18,21 +20,23 @@ describe('Edit skill', () => {
     await skills.getDataToPut();
   });
 
-  let payload, randomNumber;
-
   beforeEach(async () => {
-    randomNumber = fakerBr.random.number({ max: 999999999999 });
+    payload = {
+      skill: {
+        name: `${fakerBr.random.number({
+          max: 999999999999,
+        })}_criado pela automação de testes de API`,
+        description: fakerBr.random.words(),
+        factor: 1,
+        archived: false,
+        skill_group_id: skills.groupId,
+        position_ids: skills.positionIdList,
+      },
+    };
   });
 
   test('successfully archived', async () => {
-    payload = skills.postPayload(
-      randomNumber,
-      skills.positionIdList,
-      skills.groupId
-    );
-    payload.skill.name = `${randomNumber}__editado pela automação`;
-    payload.skill.archived = false;
-    payload.skill.skill_group_id = skills.data.groupId;
+    payload.skill.archived = true;
 
     const res = await request
       .put(`skills/${skills.data.skillId}`)
@@ -44,17 +48,13 @@ describe('Edit skill', () => {
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(202);
+    expect(res.body.data.attributes.archived).toBeTrue();
+
     expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });
 
   test('unsuccessfully with null name', async () => {
-    payload = skills.postPayload(
-      randomNumber,
-      skills.positionIdList,
-      skills.groupId
-    );
     payload.skill.name = null;
-    payload.skill.skill_group_id = skills.data.groupId;
 
     const res = await request
       .put(`skills/${skills.data.skillId}`)
@@ -66,6 +66,8 @@ describe('Edit skill', () => {
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(422);
+    expect(res.body.message).toBe('Não pode ser atualizado');
+    expect(res.body.error.name).toContain('Este campo é obrigatório.');
 
     expect(validate.jsonSchema(res.body, businessErrorSchema)).toBeTrue();
   });
