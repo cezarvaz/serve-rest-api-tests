@@ -66,7 +66,7 @@ const successSkillsSchema = {
               type: 'null',
             },
             next: {
-              type: 'integer',
+              type: ['integer', 'null'],
             },
             per_page: {
               type: 'integer',

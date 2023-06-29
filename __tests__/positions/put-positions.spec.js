@@ -99,7 +99,7 @@ describe('Update Position', () => {
       'application/json; charset=utf-8'
     );
 
-    expect(res.status).toBe(422);
+    expect(res.status).toBe(422); //422 Unprocessable Entity
     expect(res.body.message).toBe('Não pode ser atualizado');
     expect(res.body.error.skill_ids[0]).toBe(
       `A ${invalid_skill} é uma competência inválida.`

@@ -12,7 +12,7 @@ class Evaluations {
       .set('Authorization', `Bearer ${client.accessToken}`)
       .expect(200);
 
-    let fistEvaluationId = res.body.data[0].id;
+    let fistEvaluationId = res.body.data[0].id; //.id
     this.evaluationId = parseInt(fistEvaluationId);
   }
 

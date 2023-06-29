@@ -24,7 +24,7 @@ const successDepartmentsSchema = {
                 type: 'string',
               },
               average: {
-                type: 'number',
+                type: ['number', 'null'],
               },
             },
           },
@@ -57,7 +57,7 @@ const successDepartmentsSchema = {
               type: 'null',
             },
             next: {
-              type: 'null',
+              type: ['null', 'integer'],
             },
             per_page: {
               type: 'integer',

@@ -1,7 +1,7 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
-import evaluation from 'factories/EvaluationRequest';
+//import evaluation from 'factories/EvaluationRequest';
 import successSkillsSchema from 'schemas/evaluation-average/get/success-skills';
 import successPositionsSchema from 'schemas/evaluation-average/get/success-positions';
 import successDepartmentsSchema from 'schemas/evaluation-average/get/success-departments';
@@ -13,7 +13,7 @@ import errorsSchema from 'schemas/errors/errors';
 describe('List of Evaluation averages', () => {
   beforeAll(async () => {
     await client.auth();
-    await evaluation.getEvaluationList();
+    //await evaluation.getEvaluationList();
   });
 
   test('successfully with skills', async () => {
