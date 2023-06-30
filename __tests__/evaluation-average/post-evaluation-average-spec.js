@@ -10,7 +10,6 @@ import simpleErrorSchema from 'schemas/errors/simple-error';
 describe('Request Evaluation averages', () => {
   beforeAll(async () => {
     await client.auth();
-    //await evaluation.getEvaluationList();
   });
 
   test('successfully with skills', async () => {
