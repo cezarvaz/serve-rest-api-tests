@@ -9,7 +9,6 @@ import simpleErrorSchema from 'schemas/errors/simple-error';
 describe('Create requests to generate a report or create evaluation request', () => {
   beforeAll(async () => {
     await client.auth();
-    await evaluation.getEvaluationList();
   });
 
   test('successfully', async () => {

@@ -21,7 +21,7 @@ describe('Get List of Evaluation Request', () => {
       'application/json; charset=utf-8'
     );
     expect(res.status).toBe(200);
-    expect(res.body.data[1].type).toBe('evaluation_requests');
+    expect(res.body.data[0].type).toBe('evaluation_requests');
 
     expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });

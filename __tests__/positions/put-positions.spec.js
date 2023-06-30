@@ -58,10 +58,6 @@ describe('Update Position', () => {
     expect(res.status).toBe(202);
     expect(res.body.data.id).toBe(skills.positionIdList[0]);
     expect(res.body.data.type).toBe('positions');
-    // expect(res.body.data.relationships.skills.data[0].id).toBe(
-    //   skills.data.skillId
-    // );
-    // expect(res.body.data.relationships.skills.data[0].type).toBe('skills'); //data está vindo vazio
 
     expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });
@@ -99,7 +95,7 @@ describe('Update Position', () => {
       'application/json; charset=utf-8'
     );
 
-    expect(res.status).toBe(422);
+    expect(res.status).toBe(422); //422 Unprocessable Entity
     expect(res.body.message).toBe('Não pode ser atualizado');
     expect(res.body.error.skill_ids[0]).toBe(
       `A ${invalid_skill} é uma competência inválida.`

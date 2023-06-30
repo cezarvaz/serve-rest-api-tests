@@ -48,7 +48,8 @@ const successSchema = {
               format: 'date',
             },
             answered_at: {
-              type: 'null',
+              type: ['null', 'string'],
+              format: 'date-time',
             },
             evaluator_position: {
               type: 'string',

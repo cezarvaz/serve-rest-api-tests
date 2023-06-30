@@ -10,7 +10,6 @@ import simpleErrorSchema from 'schemas/errors/simple-error';
 describe('Request Evaluation averages', () => {
   beforeAll(async () => {
     await client.auth();
-    await evaluation.getEvaluationList();
   });
 
   test('successfully with skills', async () => {
@@ -21,7 +20,7 @@ describe('Request Evaluation averages', () => {
     expect(res.headers).toHaveProperty('content-type');
     expect(res.status).toBe(200);
     expect(res.body.message).toBe(
-      'Em breve enviaremos o relatório CVS para o seu e-mail.'
+      'Em breve enviaremos o relatório CSV para o seu e-mail.'
     );
 
     expect(
@@ -38,7 +37,7 @@ describe('Request Evaluation averages', () => {
     expect(res.headers).toHaveProperty('content-type');
     expect(res.status).toBe(200);
     expect(res.body.message).toBe(
-      'Em breve enviaremos o relatório CVS para o seu e-mail.'
+      'Em breve enviaremos o relatório CSV para o seu e-mail.'
     );
 
     expect(
@@ -55,7 +54,7 @@ describe('Request Evaluation averages', () => {
     expect(res.headers).toHaveProperty('content-type');
     expect(res.status).toBe(200);
     expect(res.body.message).toBe(
-      'Em breve enviaremos o relatório CVS para o seu e-mail.'
+      'Em breve enviaremos o relatório CSV para o seu e-mail.'
     );
 
     expect(

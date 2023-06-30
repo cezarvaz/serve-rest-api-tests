@@ -1,5 +1,5 @@
-const CORRECT_EMAIL = 'nayara.valadares@solides.com.br';
-const CORRECT_PASSWORD = 'nayara.valadares@solides.com.br';
+const CORRECT_EMAIL = 'erick.azevedo@esa-tecnologia.com';
+const CORRECT_PASSWORD = 'erick.azevedo@esa-tecnologia.com';
 const UNAUTHORIZED_TOKEN =
   'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo3NDkwOSwiY29tcGFueV9hZG1pbiI6dHJ1ZSwidXNlcl9lbWFpbCI6ImRpZWdvLmJhbWlycmFAc29saWRlcy5jb20uYnIiLCJ1c2VyX25hbWUiOiJEaWVnbyBUZXN0ZSIsInVzZXJfY29tcGFueV9uYW1lIjpudWxsLCJleHAiOjE3MDc1MjMyMDAsInVzZXJfY29tcGFueV9pZCI6MjgxNywidG9rZW5fdXNlIjoiYWNjZXNzIiwiaXNzIjoiR2VzdMOjbyBWMSIsImlhdCI6MTY0OTk2OTMyMX0.YtLmvx6G3a9JySqxgAR_Q_C48vRCv6hrkpUj1ebah8M';
 const EXPIRED_TOKEN =
