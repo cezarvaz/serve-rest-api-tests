@@ -62,7 +62,7 @@ describe('List of Evaluation averages', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(404);
     expect(res.body.errors.status).toBe(404);
@@ -87,12 +87,12 @@ describe('List of Evaluation averages', () => {
 
       expect(res.headers).toHaveProperty(
         'content-type',
-        'application/json; charset=utf-8'
+        'application/json; charset=utf-8',
       );
       expect(res.status).toBe(401);
       expect(res.body.errors).toBe('decoding error');
 
       expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
-    }
+    },
   );
 });

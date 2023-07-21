@@ -22,7 +22,7 @@ describe('Edit Evaluation Request', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(202);
 
@@ -42,7 +42,7 @@ describe('Edit Evaluation Request', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(404);
     expect(res.body.errors.status).toBe(404);
@@ -68,12 +68,12 @@ describe('Edit Evaluation Request', () => {
 
       expect(res.headers).toHaveProperty(
         'content-type',
-        'application/json; charset=utf-8'
+        'application/json; charset=utf-8',
       );
       expect(res.status).toBe(401);
       expect(res.body.errors).toBe('decoding error');
 
       expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
-    }
+    },
   );
 });

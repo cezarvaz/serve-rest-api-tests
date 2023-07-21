@@ -45,7 +45,7 @@ describe('Edit skill', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(202);
     expect(res.body.data.attributes.archived).toBeTrue();
@@ -63,7 +63,7 @@ describe('Edit skill', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(422);
     expect(res.body.message).toBe('Não pode ser atualizado');
@@ -90,7 +90,7 @@ describe('Edit skill', () => {
       expect(res.body.error.message).toBe(message);
 
       expect(validate.jsonSchema(res.body, errorSchema)).toBeTrue();
-    }
+    },
   );
 
   each`
@@ -107,12 +107,12 @@ describe('Edit skill', () => {
 
       expect(res.headers).toHaveProperty(
         'content-type',
-        'application/json; charset=utf-8'
+        'application/json; charset=utf-8',
       );
       expect(res.status).toBe(401);
       expect(res.body.errors).toBe('decoding error');
 
       expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
-    }
+    },
   );
 });

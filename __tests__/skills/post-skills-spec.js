@@ -42,7 +42,7 @@ describe('Create skill', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(201);
 
@@ -59,14 +59,14 @@ describe('Create skill', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(201);
     // expect(res.body.data.relationships.positions.data).toBe(
     //   skills.positionIdList[0]
     // ); // vem vazio
     expect(res.body.data.relationships.skill_group.data.id).toBe(
-      skills.groupId
+      skills.groupId,
     );
 
     expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
@@ -82,11 +82,11 @@ describe('Create skill', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(201);
     expect(res.body.data.relationships.skill_group.data.id).toBe(
-      skills.groupId
+      skills.groupId,
     );
     expect(res.body.data.relationships.positions.data).toBeEmpty();
 
@@ -103,7 +103,7 @@ describe('Create skill', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(422);
     expect(res.body.message).toBe('Não pode ser criado');
@@ -122,7 +122,7 @@ describe('Create skill', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(422);
     expect(res.body.message).toBe('Não pode ser criado');
@@ -141,12 +141,12 @@ describe('Create skill', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(422);
     expect(res.body.message).toBe('Não pode ser criado');
     expect(res.body.error.name[0]).toBe(
-      'O nome da competências deverá conter pelo menos uma letra do alfabeto.'
+      'O nome da competências deverá conter pelo menos uma letra do alfabeto.',
     );
 
     expect(validate.jsonSchema(res.body, businessErrorSchema)).toBeTrue();
@@ -170,7 +170,7 @@ describe('Create skill', () => {
       expect(res.body.error.message).toBe(message);
 
       expect(validate.jsonSchema(res.body, errorSchema)).toBeTrue();
-    }
+    },
   );
 
   each`
@@ -187,12 +187,12 @@ describe('Create skill', () => {
 
       expect(res.headers).toHaveProperty(
         'content-type',
-        'application/json; charset=utf-8'
+        'application/json; charset=utf-8',
       );
       expect(res.status).toBe(401);
       expect(res.body.errors).toBe('decoding error');
 
       expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
-    }
+    },
   );
 });

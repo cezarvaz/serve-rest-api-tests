@@ -19,7 +19,7 @@ describe('List skills', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(200);
 
@@ -41,7 +41,7 @@ describe('List skills', () => {
       expect(res.body.error.message).toBe(message);
 
       expect(validate.jsonSchema(res.body, errorSchema)).toBeTrue();
-    }
+    },
   );
 
   each`
@@ -55,12 +55,12 @@ describe('List skills', () => {
 
       expect(res.headers).toHaveProperty(
         'content-type',
-        'application/json; charset=utf-8'
+        'application/json; charset=utf-8',
       );
       expect(res.status).toBe(401);
       expect(res.body.errors).toBe('decoding error');
 
       expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
-    }
+    },
   );
 });

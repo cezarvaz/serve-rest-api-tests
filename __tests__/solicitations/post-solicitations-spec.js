@@ -21,12 +21,12 @@ describe('Create a solicitation', () => {
       .send(solicitations.postPayload());
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(201);
     expect(res.body.data.type).toBe('solicitations');
     expect(res.body.data.attributes.name).toBe(
-      solicitations.postPayload().solicitation.name
+      solicitations.postPayload().solicitation.name,
     );
 
     expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
@@ -40,12 +40,12 @@ describe('Create a solicitation', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(422);
     expect(res.body.message).toBe('Não pode ser criado');
     expect(res.body.error.name[0]).toBe(
-      `${solicitations.existingName().solicitation.name} já foi cadastrado`
+      `${solicitations.existingName().solicitation.name} já foi cadastrado`,
     );
 
     expect(validate.jsonSchema(res.body, businessErrorSchema)).toBeTrue();
@@ -59,7 +59,7 @@ describe('Create a solicitation', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(422);
     expect(res.body.message).toBe('Não pode ser criado');
@@ -86,7 +86,7 @@ describe('Create a solicitation', () => {
       expect(res.body.error.message).toBe(message);
 
       expect(validate.jsonSchema(res.body, errorSchema)).toBeTrue();
-    }
+    },
   );
 
   each`
@@ -103,12 +103,12 @@ describe('Create a solicitation', () => {
 
       expect(res.headers).toHaveProperty(
         'content-type',
-        'application/json; charset=utf-8'
+        'application/json; charset=utf-8',
       );
       expect(res.status).toBe(401);
       expect(res.body.errors).toBe('decoding error');
 
       expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
-    }
+    },
   );
 });

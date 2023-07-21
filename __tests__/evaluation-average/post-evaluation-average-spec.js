@@ -20,11 +20,11 @@ describe('Request Evaluation averages', () => {
     expect(res.headers).toHaveProperty('content-type');
     expect(res.status).toBe(200);
     expect(res.body.message).toBe(
-      'Em breve enviaremos o relatório CSV para o seu e-mail.'
+      'Em breve enviaremos o relatório CSV para o seu e-mail.',
     );
 
     expect(
-      validate.jsonSchema(res.body, postEvaluationAverageSchema)
+      validate.jsonSchema(res.body, postEvaluationAverageSchema),
     ).toBeTrue();
   });
 
@@ -37,11 +37,11 @@ describe('Request Evaluation averages', () => {
     expect(res.headers).toHaveProperty('content-type');
     expect(res.status).toBe(200);
     expect(res.body.message).toBe(
-      'Em breve enviaremos o relatório CSV para o seu e-mail.'
+      'Em breve enviaremos o relatório CSV para o seu e-mail.',
     );
 
     expect(
-      validate.jsonSchema(res.body, postEvaluationAverageSchema)
+      validate.jsonSchema(res.body, postEvaluationAverageSchema),
     ).toBeTrue();
   });
 
@@ -54,11 +54,11 @@ describe('Request Evaluation averages', () => {
     expect(res.headers).toHaveProperty('content-type');
     expect(res.status).toBe(200);
     expect(res.body.message).toBe(
-      'Em breve enviaremos o relatório CSV para o seu e-mail.'
+      'Em breve enviaremos o relatório CSV para o seu e-mail.',
     );
 
     expect(
-      validate.jsonSchema(res.body, postEvaluationAverageSchema)
+      validate.jsonSchema(res.body, postEvaluationAverageSchema),
     ).toBeTrue();
   });
 
@@ -78,12 +78,12 @@ describe('Request Evaluation averages', () => {
 
       expect(res.headers).toHaveProperty(
         'content-type',
-        'application/json; charset=utf-8'
+        'application/json; charset=utf-8',
       );
       expect(res.status).toBe(401);
       expect(res.body.errors).toBe('decoding error');
 
       expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
-    }
+    },
   );
 });

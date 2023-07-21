@@ -22,13 +22,13 @@ describe('Create group criteria', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(201);
     expect(res.body.data.id).toBeDefined();
     expect(res.body.data.type).toBe('skill_groups');
     expect(res.body.data.attributes.name).toBe(
-      groupCriteria.postPayload().skill_group.name
+      groupCriteria.postPayload().skill_group.name,
     );
     expect(res.body.data.attributes.external_id).toBe(null);
     expect(res.body.data.attributes.archived).toBeFalse();
@@ -46,12 +46,12 @@ describe('Create group criteria', () => {
 
     expect(res.headers).toHaveProperty(
       'content-type',
-      'application/json; charset=utf-8'
+      'application/json; charset=utf-8',
     );
     expect(res.status).toBe(422);
     expect(res.body.message).toBe('Não pode ser criado');
     expect(res.body.error.name[0]).toBe(
-      'Já existe um grupo de competências com este nome.'
+      'Já existe um grupo de competências com este nome.',
     );
 
     expect(validate.jsonSchema(res.body, businessErrorSchema)).toBeTrue();
@@ -75,7 +75,7 @@ describe('Create group criteria', () => {
       expect(res.body.error.message).toBe(message);
 
       expect(validate.jsonSchema(res.body, errorSchema)).toBeTrue();
-    }
+    },
   );
 
   each`
@@ -92,12 +92,12 @@ describe('Create group criteria', () => {
 
       expect(res.headers).toHaveProperty(
         'content-type',
-        'application/json; charset=utf-8'
+        'application/json; charset=utf-8',
       );
       expect(res.status).toBe(401);
       expect(res.body.errors).toBe('decoding error');
 
       expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
-    }
+    },
   );
 });
