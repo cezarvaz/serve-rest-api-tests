@@ -1,7 +1,7 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/skills/list/success';
+import getSkillsSchema from 'schemas/skills/get-skills';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';
@@ -23,7 +23,7 @@ describe('List skills', () => {
     );
     expect(res.status).toBe(200);
 
-    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
+    expect(validate.jsonSchema(res.body, getSkillsSchema)).toBeTrue();
   });
 
   each`

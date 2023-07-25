@@ -1,7 +1,7 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/skills/get/success';
+import getSkillSchema from 'schemas/skills/get-skills-by-id';
 import skills from 'factories/Skills';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
@@ -27,7 +27,7 @@ describe('Get skill', () => {
     expect(res.status).toBe(200);
     expect(res.body.data.id).toBe(skills.skillId);
     expect(res.body.data.type).toBe('skills');
-    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
+    expect(validate.jsonSchema(res.body, getSkillSchema)).toBeTrue();
   });
 
   each`

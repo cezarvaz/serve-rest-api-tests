@@ -1,4 +1,4 @@
-const successSchema = {
+const getSkillsSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   $id: '#success-list-skill-groups',
   type: 'object',
@@ -204,4 +204,4 @@ const successSchema = {
   },
 };
 
-export default successSchema;
+export default getSkillsSchema;

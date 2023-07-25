@@ -6,22 +6,6 @@ beforeAll(async () => {
 });
 
 class Skills {
-  async getPositionList() {
-    const res = await request
-      .get('positions')
-      .set('Authorization', `Bearer ${client.accessToken}`)
-      .expect(200);
-
-    let list = [];
-    for (let i = 0; i < res.body.data.length; i++) {
-      if (res.body.data[i].type == 'positions') {
-        list.push(res.body.data[i].id);
-      }
-    }
-
-    this.positionIdList = list;
-  }
-
   async getSkillsList() {
     const res = await request
       .get('skills')
@@ -46,16 +30,6 @@ class Skills {
     }
 
     this.skillsList = list;
-  }
-
-  async getSkillGroup() {
-    const res = await request
-      .get('skill_groups')
-      .set('Authorization', `Bearer ${client.accessToken}`)
-      .expect(200);
-
-    let skillGroupId = res.body.data[0].id;
-    this.groupId = parseInt(skillGroupId);
   }
 
   async getDataToPut() {

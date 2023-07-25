@@ -1,8 +1,10 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/skills/post/success';
+import postSkillSchema from 'schemas/skills/post-skill';
 import skills from 'factories/Skills';
+import skillGroups from 'factories/SkillGroups';
+import positions from 'factories/Positions';
 import fakerBr from 'faker-br';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
@@ -15,8 +17,8 @@ let payload;
 describe('Edit skill', () => {
   beforeAll(async () => {
     await client.auth();
-    await skills.getPositionList();
-    await skills.getSkillGroup();
+    await positions.getPositionList();
+    await skillGroups.getSkillGroup();
     await skills.getDataToPut();
   });
 
@@ -29,8 +31,8 @@ describe('Edit skill', () => {
         description: fakerBr.random.words(),
         factor: 1,
         archived: false,
-        skill_group_id: skills.groupId,
-        position_ids: skills.positionIdList,
+        skill_group_id: skillGroups.groupId,
+        position_ids: positions.positionIdList,
       },
     };
   });
@@ -50,7 +52,7 @@ describe('Edit skill', () => {
     expect(res.status).toBe(202);
     expect(res.body.data.attributes.archived).toBeTrue();
 
-    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
+    expect(validate.jsonSchema(res.body, postSkillSchema)).toBeTrue();
   });
 
   test('unsuccessfully with null name', async () => {

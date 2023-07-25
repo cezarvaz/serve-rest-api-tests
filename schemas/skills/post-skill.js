@@ -1,6 +1,6 @@
-const successSchema = {
+const postSkillSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#success-get-skill-groups',
+  $id: '#post-skill',
   type: 'object',
   required: ['data', 'included'],
   properties: {
@@ -20,6 +20,7 @@ const successSchema = {
             'name',
             'description',
             'factor',
+            'external_id',
             'archived',
             'created_at',
             'updated_at',
@@ -83,31 +84,11 @@ const successSchema = {
             },
             positions: {
               type: 'object',
-              required: ['links', 'data'],
+              required: ['data'],
               properties: {
-                links: {
-                  type: 'object',
-                  required: ['related'],
-                  properties: {
-                    related: {
-                      type: 'string',
-                    },
-                  },
-                },
                 data: {
                   type: 'array',
-                  items: {
-                    type: 'object',
-                    required: ['id', 'type'],
-                    properties: {
-                      id: {
-                        type: 'integer',
-                      },
-                      type: {
-                        type: 'string',
-                      },
-                    },
-                  },
+                  items: {},
                 },
               },
             },
@@ -148,9 +129,6 @@ const successSchema = {
                 type: 'string',
                 format: 'date-time',
               },
-              description: {
-                type: ['string', 'null'],
-              },
             },
           },
         },
@@ -159,4 +137,4 @@ const successSchema = {
   },
 };
 
-export default successSchema;
+export default postSkillSchema;

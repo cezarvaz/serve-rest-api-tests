@@ -1,6 +1,7 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import skills from 'factories/Skills';
+import positions from 'factories/Positions';
 import validate from 'helpers/Validate';
 import successSchema from 'schemas/positions/put/success';
 import unsuccessSchema from 'schemas/positions/put/unsuccessful';
@@ -14,7 +15,7 @@ describe('Update Position', () => {
   beforeAll(async () => {
     await client.auth();
     await skills.getDataToPut();
-    await skills.getPositionList();
+    await positions.getPositionList();
     await skills.getList();
   });
 
@@ -28,7 +29,7 @@ describe('Update Position', () => {
 
   test('successfully with one position', async () => {
     const res = await request
-      .put(`positions/${skills.positionIdList[0]}`)
+      .put(`positions/${positions.positionIdList[0]}`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload);
 
@@ -37,7 +38,7 @@ describe('Update Position', () => {
       'application/json; charset=utf-8',
     );
     expect(res.status).toBe(202);
-    expect(res.body.data.id).toBe(skills.positionIdList[0]);
+    expect(res.body.data.id).toBe(positions.positionIdList[0]);
     expect(res.body.data.type).toBe('positions');
 
     expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
@@ -47,7 +48,7 @@ describe('Update Position', () => {
     payload.position.skill_ids = skills.skillsList;
 
     const res = await request
-      .put(`positions/${skills.positionIdList[0]}`)
+      .put(`positions/${positions.positionIdList[0]}`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload);
 
@@ -56,7 +57,7 @@ describe('Update Position', () => {
       'application/json; charset=utf-8',
     );
     expect(res.status).toBe(202);
-    expect(res.body.data.id).toBe(skills.positionIdList[0]);
+    expect(res.body.data.id).toBe(positions.positionIdList[0]);
     expect(res.body.data.type).toBe('positions');
 
     expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
@@ -66,7 +67,7 @@ describe('Update Position', () => {
     payload.position.skill_ids = [];
 
     const res = await request
-      .put(`positions/${skills.positionIdList[0]}`)
+      .put(`positions/${positions.positionIdList[0]}`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload);
 
@@ -86,7 +87,7 @@ describe('Update Position', () => {
     payload.position.skill_ids[0] = invalid_skill;
 
     const res = await request
-      .put(`positions/${skills.positionIdList[0]}`)
+      .put(`positions/${positions.positionIdList[0]}`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload);
 
@@ -115,7 +116,7 @@ describe('Update Position', () => {
     'should validate $scenario authentication token',
     async ({ token }) => {
       const res = await request
-        .put(`positions/${skills.positionIdList[0]}`)
+        .put(`positions/${positions.positionIdList[0]}`)
         .send(payload)
         .set('Authorization', token);
 

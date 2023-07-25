@@ -1,8 +1,9 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/skills/post/success';
-import skills from 'factories/Skills';
+import postSkillSchema from 'schemas/skills/post-skill';
+import skillGroups from 'factories/SkillGroups';
+import positions from 'factories/Positions';
 import fakerBr from 'faker-br';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
@@ -15,8 +16,8 @@ let payload;
 describe('Create skill', () => {
   beforeAll(async () => {
     await client.auth();
-    await skills.getPositionList();
-    await skills.getSkillGroup();
+    await positions.getPositionList();
+    await skillGroups.getSkillGroup();
   });
 
   beforeEach(async () => {
@@ -28,8 +29,8 @@ describe('Create skill', () => {
         description: fakerBr.random.words(),
         factor: 1,
         archived: true,
-        skill_group_id: skills.groupId,
-        position_ids: skills.positionIdList,
+        skill_group_id: skillGroups.groupId,
+        position_ids: positions.positionIdList,
       },
     };
   });
@@ -46,11 +47,11 @@ describe('Create skill', () => {
     );
     expect(res.status).toBe(201);
 
-    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
+    expect(validate.jsonSchema(res.body, postSkillSchema)).toBeTrue();
   });
 
   test('successfully with one position', async () => {
-    payload.skill.position_ids = skills.positionIdList[0];
+    payload.skill.position_ids = positions.positionIdList[0];
 
     const res = await request
       .post('skills')
@@ -63,13 +64,13 @@ describe('Create skill', () => {
     );
     expect(res.status).toBe(201);
     // expect(res.body.data.relationships.positions.data).toBe(
-    //   skills.positionIdList[0]
+    //   skillGroups.positionIdList[0]
     // ); // vem vazio
     expect(res.body.data.relationships.skill_group.data.id).toBe(
-      skills.groupId,
+      skillGroups.groupId,
     );
 
-    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
+    expect(validate.jsonSchema(res.body, postSkillSchema)).toBeTrue();
   });
 
   test('successfully without any position', async () => {
@@ -86,11 +87,11 @@ describe('Create skill', () => {
     );
     expect(res.status).toBe(201);
     expect(res.body.data.relationships.skill_group.data.id).toBe(
-      skills.groupId,
+      skillGroups.groupId,
     );
     expect(res.body.data.relationships.positions.data).toBeEmpty();
 
-    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
+    expect(validate.jsonSchema(res.body, postSkillSchema)).toBeTrue();
   });
 
   test('unsuccessfully with empty name', async () => {
