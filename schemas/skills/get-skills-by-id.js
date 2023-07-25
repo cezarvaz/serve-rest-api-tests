@@ -1,12 +1,14 @@
-const getSkillSchema = {
+const getSkillsByIdSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#get-skill',
+  $id: '#get-skill-by-id',
   type: 'object',
   required: ['data', 'included'],
+  additionalProperties: false,
   properties: {
     data: {
       type: 'object',
       required: ['id', 'type', 'attributes', 'relationships'],
+      additionalProperties: false,
       properties: {
         id: {
           type: 'integer',
@@ -24,6 +26,7 @@ const getSkillSchema = {
             'created_at',
             'updated_at',
           ],
+          additionalProperties: false,
           properties: {
             name: {
               type: 'string',
@@ -53,14 +56,17 @@ const getSkillSchema = {
         relationships: {
           type: 'object',
           required: ['skill_group', 'positions'],
+          additionalProperties: false,
           properties: {
             skill_group: {
               type: 'object',
               required: ['links', 'data'],
+              additionalProperties: false,
               properties: {
                 links: {
                   type: 'object',
                   required: ['related'],
+                  additionalProperties: false,
                   properties: {
                     related: {
                       type: 'string',
@@ -70,6 +76,7 @@ const getSkillSchema = {
                 data: {
                   type: 'object',
                   required: ['id', 'type'],
+                  additionalProperties: false,
                   properties: {
                     id: {
                       type: 'integer',
@@ -84,10 +91,12 @@ const getSkillSchema = {
             positions: {
               type: 'object',
               required: ['links', 'data'],
+              additionalProperties: false,
               properties: {
                 links: {
                   type: 'object',
                   required: ['related'],
+                  additionalProperties: false,
                   properties: {
                     related: {
                       type: 'string',
@@ -99,6 +108,7 @@ const getSkillSchema = {
                   items: {
                     type: 'object',
                     required: ['id', 'type'],
+                    additionalProperties: false,
                     properties: {
                       id: {
                         type: 'integer',
@@ -120,6 +130,7 @@ const getSkillSchema = {
       items: {
         type: 'object',
         required: ['id', 'type', 'attributes'],
+        additionalProperties: false,
         properties: {
           id: {
             type: 'integer',
@@ -130,6 +141,7 @@ const getSkillSchema = {
           attributes: {
             type: 'object',
             required: ['name'],
+            additionalProperties: false,
             properties: {
               name: {
                 type: 'string',
@@ -139,6 +151,9 @@ const getSkillSchema = {
               },
               archived: {
                 type: 'boolean',
+              },
+              axis: {
+                type: 'null',
               },
               created_at: {
                 type: 'string',
@@ -159,4 +174,4 @@ const getSkillSchema = {
   },
 };
 
-export default getSkillSchema;
+export default getSkillsByIdSchema;

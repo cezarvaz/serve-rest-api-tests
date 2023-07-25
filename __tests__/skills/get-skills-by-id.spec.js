@@ -1,7 +1,7 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
-import getSkillSchema from 'schemas/skills/get-skills-by-id';
+import getSkillsByIdSchema from 'schemas/skills/get-skills-by-id';
 import skills from 'factories/Skills';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
@@ -16,18 +16,21 @@ describe('Get skill', () => {
   });
 
   test('successfully', async () => {
-    const res = await request
+    const { status, body, headers } = await request
       .get(`skills/${skills.skillId}`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(200);
-    expect(res.body.data.id).toBe(skills.skillId);
-    expect(res.body.data.type).toBe('skills');
-    expect(validate.jsonSchema(res.body, getSkillSchema)).toBeTrue();
+    console.log(body);
+    console.log(body.data);
+    console.log(body.included);
+    expect(status).toBe(200);
+    expect(body.data.id).toBe(skills.skillId);
+    expect(body.data.type).toBe('skills');
+    expect(validate.jsonSchema(body, getSkillsByIdSchema)).toBeTrue();
   });
 
   each`
@@ -36,19 +39,19 @@ describe('Get skill', () => {
   ${null}        | ${'a null'}
   ${'999999999'} | ${'an inexistent'}
   `.test('should validate $scenario id', async ({ id }) => {
-    const res = await request
+    const { status, body, headers } = await request
       .get(`skills/${id}`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(404);
-    expect(res.body.errors.status).toBe(404);
-    expect(res.body.errors.message).toBe('Não pode ser mostrado');
+    expect(status).toBe(404);
+    expect(body.errors.status).toBe(404);
+    expect(body.errors.message).toBe('Não pode ser mostrado');
 
-    expect(validate.jsonSchema(res.body, errorsSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
   });
 
   each`
@@ -59,15 +62,15 @@ describe('Get skill', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
-      const res = await request
+      const { status, body, headers } = await request
         .get(`skills/${skills.skillId}`)
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty('content-type', 'application/json');
-      expect(res.status).toBe(statusCode);
-      expect(res.body.error.message).toBe(message);
+      expect(headers).toHaveProperty('content-type', 'application/json');
+      expect(status).toBe(statusCode);
+      expect(body.error.message).toBe(message);
 
-      expect(validate.jsonSchema(res.body, errorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, errorSchema)).toBeTrue();
     },
   );
 
@@ -78,18 +81,18 @@ describe('Get skill', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token }) => {
-      const res = await request
+      const { status, body, headers } = await request
         .get(`skills/${skills.skillId}`)
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty(
+      expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('decoding error');
+      expect(status).toBe(401);
+      expect(body.errors).toBe('decoding error');
 
-      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });
