@@ -1,6 +1,6 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
-import groupCriteria from 'factories/GroupCriteria';
+import skillGroup from 'factories/SkillGroups';
 import validate from 'helpers/Validate';
 import successSchema from 'schemas/skill-groups/get/success';
 import each from 'jest-each';
@@ -9,60 +9,60 @@ import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import errorsSchema from 'schemas/errors/errors';
 
-describe('Get Group Criterias', () => {
+describe('Get Skill Groups by id', () => {
   beforeAll(async () => {
     await client.auth();
-    await groupCriteria.create();
+    await skillGroup.create();
   });
 
   test('successfully', async () => {
-    const res = await request
-      .get('skill_groups/' + groupCriteria.id)
+    const { status, body, headers } = await request
+      .get('skill_groups/' + skillGroup.id)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(200);
-    expect(res.body.data.id).toBe(groupCriteria.id);
-    expect(res.body.data.type).toBe('skill_groups');
-    expect(res.body.data.attributes.created_at).toBeDefined();
-    expect(res.body.data.attributes.updated_at).toBeDefined();
+    expect(status).toBe(200);
+    expect(body.data.id).toBe(skillGroup.id);
+    expect(body.data.type).toBe('skill_groups');
+    expect(body.data.attributes.created_at).toBeDefined();
+    expect(body.data.attributes.updated_at).toBeDefined();
 
-    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
   test('nonexistentent id', async () => {
-    const res = await request
-      .get('skill_groups/' + groupCriteria.ids().nonexistent_id)
+    const { status, body, headers } = await request
+      .get('skill_groups/nonexistent_id')
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(404);
-    expect(res.body.errors.status).toBe(404);
-    expect(res.body.errors.message).toBe('Não pode ser mostrado');
+    expect(status).toBe(404);
+    expect(body.errors.status).toBe(404);
+    expect(body.errors.message).toBe('Não pode ser mostrado');
 
-    expect(validate.jsonSchema(res.body, errorsSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
   });
 
   test('invalid id', async () => {
-    const res = await request
-      .get('skill_groups/' + groupCriteria.ids().invalid_id)
+    const { status, body, headers } = await request
+      .get('skill_groups/999999999999')
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(404);
-    expect(res.body.errors.status).toBe(404);
-    expect(res.body.errors.message).toBe('Não pode ser mostrado');
+    expect(status).toBe(404);
+    expect(body.errors.status).toBe(404);
+    expect(body.errors.message).toBe('Não pode ser mostrado');
 
-    expect(validate.jsonSchema(res.body, errorsSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
   });
 
   each`
@@ -73,15 +73,15 @@ describe('Get Group Criterias', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
-      const res = await request
-        .get('skill_groups/' + groupCriteria.id)
+      const { status, body, headers } = await request
+        .get('skill_groups/' + skillGroup.id)
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty('content-type', 'application/json');
-      expect(res.status).toBe(statusCode);
-      expect(res.body.error.message).toBe(message);
+      expect(headers).toHaveProperty('content-type', 'application/json');
+      expect(status).toBe(statusCode);
+      expect(body.error.message).toBe(message);
 
-      expect(validate.jsonSchema(res.body, errorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, errorSchema)).toBeTrue();
     },
   );
 
@@ -92,18 +92,18 @@ describe('Get Group Criterias', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token }) => {
-      const res = await request
-        .get('skill_groups/' + groupCriteria.id)
+      const { status, body, headers } = await request
+        .get('skill_groups/' + skillGroup.id)
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty(
+      expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('decoding error');
+      expect(status).toBe(401);
+      expect(body.errors).toBe('decoding error');
 
-      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });

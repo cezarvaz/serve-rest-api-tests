@@ -40,38 +40,38 @@ describe('Edit skill', () => {
   test('successfully archived', async () => {
     payload.skill.archived = true;
 
-    const res = await request
+    const { status, body, headers } = await request
       .put(`skills/${skills.data.skillId}`)
       .send(payload)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(202);
-    expect(res.body.data.attributes.archived).toBeTrue();
+    expect(status).toBe(202);
+    expect(body.data.attributes.archived).toBeTrue();
 
-    expect(validate.jsonSchema(res.body, postSkillSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, postSkillSchema)).toBeTrue();
   });
 
   test('unsuccessfully with null name', async () => {
     payload.skill.name = null;
 
-    const res = await request
+    const { status, body, headers } = await request
       .put(`skills/${skills.data.skillId}`)
       .send(payload)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(422);
-    expect(res.body.message).toBe('Não pode ser atualizado');
-    expect(res.body.error.name).toContain('Este campo é obrigatório.');
+    expect(status).toBe(422);
+    expect(body.message).toBe('Não pode ser atualizado');
+    expect(body.error.name).toContain('Este campo é obrigatório.');
 
-    expect(validate.jsonSchema(res.body, businessErrorSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
   each`
@@ -82,16 +82,16 @@ describe('Edit skill', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
-      const res = await request
+      const { status, body, headers } = await request
         .put(`skills/${skills.data.skillId}`)
         .send(payload)
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty('content-type', 'application/json');
-      expect(res.status).toBe(statusCode);
-      expect(res.body.error.message).toBe(message);
+      expect(headers).toHaveProperty('content-type', 'application/json');
+      expect(status).toBe(statusCode);
+      expect(body.error.message).toBe(message);
 
-      expect(validate.jsonSchema(res.body, errorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, errorSchema)).toBeTrue();
     },
   );
 
@@ -102,19 +102,19 @@ describe('Edit skill', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token }) => {
-      const res = await request
+      const { status, body, headers } = await request
         .put(`skills/${skills.data.skillId}`)
         .send(payload)
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty(
+      expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('decoding error');
+      expect(status).toBe(401);
+      expect(body.errors).toBe('decoding error');
 
-      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });

@@ -36,121 +36,121 @@ describe('Create skill', () => {
   });
 
   test('successfully with multiple positions', async () => {
-    const res = await request
+    const { status, body, headers } = await request
       .post('skills')
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(201);
+    expect(status).toBe(201);
 
-    expect(validate.jsonSchema(res.body, postSkillSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, postSkillSchema)).toBeTrue();
   });
 
   test('successfully with one position', async () => {
     payload.skill.position_ids = positions.positionIdList[0];
 
-    const res = await request
+    const { status, body, headers } = await request
       .post('skills')
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(201);
-    // expect(res.body.data.relationships.positions.data).toBe(
+    expect(status).toBe(201);
+    // expect(body.data.relationships.positions.data).toBe(
     //   skillGroups.positionIdList[0]
     // ); // vem vazio
-    expect(res.body.data.relationships.skill_group.data.id).toBe(
+    expect(body.data.relationships.skill_group.data.id).toBe(
       skillGroups.groupId,
     );
 
-    expect(validate.jsonSchema(res.body, postSkillSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, postSkillSchema)).toBeTrue();
   });
 
   test('successfully without any position', async () => {
     payload.skill.position_ids = [];
 
-    const res = await request
+    const { status, body, headers } = await request
       .post('skills')
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(201);
-    expect(res.body.data.relationships.skill_group.data.id).toBe(
+    expect(status).toBe(201);
+    expect(body.data.relationships.skill_group.data.id).toBe(
       skillGroups.groupId,
     );
-    expect(res.body.data.relationships.positions.data).toBeEmpty();
+    expect(body.data.relationships.positions.data).toBeEmpty();
 
-    expect(validate.jsonSchema(res.body, postSkillSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, postSkillSchema)).toBeTrue();
   });
 
   test('unsuccessfully with empty name', async () => {
     payload.skill.name = '';
 
-    const res = await request
+    const { status, body, headers } = await request
       .post('skills')
       .send(payload)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(422);
-    expect(res.body.message).toBe('Não pode ser criado');
-    expect(res.body.error.name[0]).toBe('Este campo é obrigatório.');
+    expect(status).toBe(422);
+    expect(body.message).toBe('Não pode ser criado');
+    expect(body.error.name[0]).toBe('Este campo é obrigatório.');
 
-    expect(validate.jsonSchema(res.body, businessErrorSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
   test('unsuccessfully with null name', async () => {
     payload.skill.name = null;
 
-    const res = await request
+    const { status, body, headers } = await request
       .post('skills')
       .send(payload)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(422);
-    expect(res.body.message).toBe('Não pode ser criado');
-    expect(res.body.error.name[0]).toBe('Este campo é obrigatório.');
+    expect(status).toBe(422);
+    expect(body.message).toBe('Não pode ser criado');
+    expect(body.error.name[0]).toBe('Este campo é obrigatório.');
 
-    expect(validate.jsonSchema(res.body, businessErrorSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
   test('unsuccessfully with invalid name', async () => {
     payload.skill.name = '____';
 
-    const res = await request
+    const { status, body, headers } = await request
       .post('skills')
       .send(payload)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(422);
-    expect(res.body.message).toBe('Não pode ser criado');
-    expect(res.body.error.name[0]).toBe(
+    expect(status).toBe(422);
+    expect(body.message).toBe('Não pode ser criado');
+    expect(body.error.name[0]).toBe(
       'O nome da competências deverá conter pelo menos uma letra do alfabeto.',
     );
 
-    expect(validate.jsonSchema(res.body, businessErrorSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
   each`
@@ -161,16 +161,16 @@ describe('Create skill', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
-      const res = await request
+      const { status, body, headers } = await request
         .post('skills')
         .send(payload)
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty('content-type', 'application/json');
-      expect(res.status).toBe(statusCode);
-      expect(res.body.error.message).toBe(message);
+      expect(headers).toHaveProperty('content-type', 'application/json');
+      expect(status).toBe(statusCode);
+      expect(body.error.message).toBe(message);
 
-      expect(validate.jsonSchema(res.body, errorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, errorSchema)).toBeTrue();
     },
   );
 
@@ -181,19 +181,19 @@ describe('Create skill', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token }) => {
-      const res = await request
+      const { status, body, headers } = await request
         .post('skills')
         .send(payload)
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty(
+      expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('decoding error');
+      expect(status).toBe(401);
+      expect(body.errors).toBe('decoding error');
 
-      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });

@@ -2,7 +2,7 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
 import getSkillsByIdSchema from 'schemas/skills/get-skills-by-id';
-import skills from 'factories/Skills';
+import skill from 'factories/Skills';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';
@@ -12,12 +12,12 @@ import errorsSchema from 'schemas/errors/errors';
 describe('Get skill', () => {
   beforeAll(async () => {
     await client.auth();
-    await skills.getSkillsList();
+    await skill.create();
   });
 
   test('successfully', async () => {
     const { status, body, headers } = await request
-      .get(`skills/${skills.skillId}`)
+      .get(`skills/${skill.id}`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(headers).toHaveProperty(
@@ -28,7 +28,7 @@ describe('Get skill', () => {
     console.log(body.data);
     console.log(body.included);
     expect(status).toBe(200);
-    expect(body.data.id).toBe(skills.skillId);
+    expect(body.data.id).toBe(skill.id);
     expect(body.data.type).toBe('skills');
     expect(validate.jsonSchema(body, getSkillsByIdSchema)).toBeTrue();
   });
@@ -63,7 +63,7 @@ describe('Get skill', () => {
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .get(`skills/${skills.skillId}`)
+        .get(`skills/${skill.id}`)
         .set('Authorization', token);
 
       expect(headers).toHaveProperty('content-type', 'application/json');
@@ -82,7 +82,7 @@ describe('Get skill', () => {
     'should validate $scenario authentication token',
     async ({ token }) => {
       const { status, body, headers } = await request
-        .get(`skills/${skills.skillId}`)
+        .get(`skills/${skill.id}`)
         .set('Authorization', token);
 
       expect(headers).toHaveProperty(

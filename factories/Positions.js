@@ -7,15 +7,15 @@ beforeAll(async () => {
 
 class Positions {
   async getPositionList() {
-    const res = await request
+    const { body } = await request
       .get('positions')
       .set('Authorization', `Bearer ${client.accessToken}`)
       .expect(200);
 
     let list = [];
-    for (let i = 0; i < res.body.data.length; i++) {
-      if (res.body.data[i].type == 'positions') {
-        list.push(res.body.data[i].id);
+    for (let i = 0; i < body.data.length; i++) {
+      if (body.data[i].type == 'positions') {
+        list.push(body.data[i].id);
       }
     }
 

@@ -13,17 +13,17 @@ describe('List skills', () => {
   });
 
   test('successfully', async () => {
-    const res = await request
+    const { status, body, headers } = await request
       .get('skills')
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(200);
+    expect(status).toBe(200);
 
-    expect(validate.jsonSchema(res.body, getSkillsSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, getSkillsSchema)).toBeTrue();
   });
 
   each`
@@ -34,13 +34,15 @@ describe('List skills', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
-      const res = await request.get('skills').set('Authorization', token);
+      const { status, body, headers } = await request
+        .get('skills')
+        .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty('content-type', 'application/json');
-      expect(res.status).toBe(statusCode);
-      expect(res.body.error.message).toBe(message);
+      expect(headers).toHaveProperty('content-type', 'application/json');
+      expect(status).toBe(statusCode);
+      expect(body.error.message).toBe(message);
 
-      expect(validate.jsonSchema(res.body, errorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, errorSchema)).toBeTrue();
     },
   );
 
@@ -51,16 +53,18 @@ describe('List skills', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token }) => {
-      const res = await request.get('skills').set('Authorization', token);
+      const { status, body, headers } = await request
+        .get('skills')
+        .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty(
+      expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('decoding error');
+      expect(status).toBe(401);
+      expect(body.errors).toBe('decoding error');
 
-      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });
