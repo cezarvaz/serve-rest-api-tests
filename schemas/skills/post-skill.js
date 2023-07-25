@@ -25,6 +25,7 @@ const postSkillSchema = {
             'created_at',
             'updated_at',
           ],
+          additionalProperties: false,
           properties: {
             name: {
               type: 'string',
@@ -54,14 +55,17 @@ const postSkillSchema = {
         relationships: {
           type: 'object',
           required: ['skill_group', 'positions'],
+          additionalProperties: false,
           properties: {
             skill_group: {
               type: 'object',
               required: ['links', 'data'],
+              additionalProperties: false,
               properties: {
                 links: {
                   type: 'object',
                   required: ['related'],
+                  additionalProperties: false,
                   properties: {
                     related: {
                       type: 'string',
@@ -71,6 +75,7 @@ const postSkillSchema = {
                 data: {
                   type: 'object',
                   required: ['id', 'type'],
+                  additionalProperties: false,
                   properties: {
                     id: {
                       type: 'integer',
@@ -85,10 +90,21 @@ const postSkillSchema = {
             positions: {
               type: 'object',
               required: ['data'],
+              additionalProperties: false,
               properties: {
                 data: {
                   type: 'array',
                   items: {},
+                },
+                links: {
+                  type: 'object',
+                  required: ['related'],
+                  additionalProperties: false,
+                  properties: {
+                    related: {
+                      type: 'string',
+                    },
+                  },
                 },
               },
             },
@@ -101,6 +117,7 @@ const postSkillSchema = {
       items: {
         type: 'object',
         required: ['id', 'type', 'attributes'],
+        additionalProperties: false,
         properties: {
           id: {
             type: 'integer',
@@ -111,8 +128,12 @@ const postSkillSchema = {
           attributes: {
             type: 'object',
             required: ['name'],
+            additionalProperties: false,
             properties: {
               name: {
+                type: 'string',
+              },
+              description: {
                 type: 'string',
               },
               external_id: {
@@ -120,6 +141,9 @@ const postSkillSchema = {
               },
               archived: {
                 type: 'boolean',
+              },
+              axis: {
+                type: 'null',
               },
               created_at: {
                 type: 'string',
