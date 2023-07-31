@@ -1,6 +1,6 @@
 const postGroupCriteriaSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#success-post-skill-groups',
+  $id: '#post-skill-groups',
   type: 'object',
   required: ['data', 'included'],
   additionalProperties: false,

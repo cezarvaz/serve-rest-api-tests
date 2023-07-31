@@ -2,7 +2,7 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import skillGroup from 'factories/SkillGroups';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/skill-groups/get/success';
+import successSchema from 'schemas/skill-groups/get-skill-groups';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';
