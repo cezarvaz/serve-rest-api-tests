@@ -1,6 +1,6 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
-import skills from 'factories/Skills';
+import positions from 'factories/Positions';
 import validate from 'helpers/Validate';
 import successSchema from 'schemas/positions/get/success';
 import each from 'jest-each';
@@ -11,12 +11,12 @@ import errorsSchema from 'schemas/errors/errors';
 describe('Get Position', () => {
   beforeAll(async () => {
     await client.auth();
-    await skills.getPositionList();
+    await positions.getPositionList();
   });
 
   test('successfully', async () => {
     const res = await request
-      .get(`positions/${skills.positionIdList[0]}`)
+      .get(`positions/${positions.positionIdList[0]}`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(res.headers).toHaveProperty(
@@ -59,7 +59,9 @@ describe('Get Position', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token }) => {
-      const res = await request.get('positions').set('Authorization', token);
+      const res = await request
+        .get(`positions/${positions.positionIdList[0]}`)
+        .set('Authorization', token);
 
       expect(res.headers).toHaveProperty(
         'content-type',

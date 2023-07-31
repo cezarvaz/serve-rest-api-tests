@@ -1,8 +1,9 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/skills/post/success';
-import skills from 'factories/Skills';
+import postSkillSchema from 'schemas/skills/post-skill';
+import skillGroups from 'factories/SkillGroups';
+import positions from 'factories/Positions';
 import fakerBr from 'faker-br';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
@@ -15,8 +16,8 @@ let payload;
 describe('Create skill', () => {
   beforeAll(async () => {
     await client.auth();
-    await skills.getPositionList();
-    await skills.getSkillGroup();
+    await positions.getPositionList();
+    await skillGroups.getSkillGroup();
   });
 
   beforeEach(async () => {
@@ -28,128 +29,128 @@ describe('Create skill', () => {
         description: fakerBr.random.words(),
         factor: 1,
         archived: true,
-        skill_group_id: skills.groupId,
-        position_ids: skills.positionIdList,
+        skill_group_id: skillGroups.groupId,
+        position_ids: positions.positionIdList,
       },
     };
   });
 
   test('successfully with multiple positions', async () => {
-    const res = await request
+    const { status, body, headers } = await request
       .post('skills')
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(201);
+    expect(status).toBe(201);
 
-    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, postSkillSchema)).toBeTrue();
   });
 
   test('successfully with one position', async () => {
-    payload.skill.position_ids = skills.positionIdList[0];
+    payload.skill.position_ids = positions.positionIdList[0];
 
-    const res = await request
+    const { status, body, headers } = await request
       .post('skills')
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(201);
-    // expect(res.body.data.relationships.positions.data).toBe(
-    //   skills.positionIdList[0]
+    expect(status).toBe(201);
+    // expect(body.data.relationships.positions.data).toBe(
+    //   skillGroups.positionIdList[0]
     // ); // vem vazio
-    expect(res.body.data.relationships.skill_group.data.id).toBe(
-      skills.groupId,
+    expect(body.data.relationships.skill_group.data.id).toBe(
+      skillGroups.groupId,
     );
 
-    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, postSkillSchema)).toBeTrue();
   });
 
   test('successfully without any position', async () => {
     payload.skill.position_ids = [];
 
-    const res = await request
+    const { status, body, headers } = await request
       .post('skills')
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(201);
-    expect(res.body.data.relationships.skill_group.data.id).toBe(
-      skills.groupId,
+    expect(status).toBe(201);
+    expect(body.data.relationships.skill_group.data.id).toBe(
+      skillGroups.groupId,
     );
-    expect(res.body.data.relationships.positions.data).toBeEmpty();
+    expect(body.data.relationships.positions.data).toBeEmpty();
 
-    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, postSkillSchema)).toBeTrue();
   });
 
   test('unsuccessfully with empty name', async () => {
     payload.skill.name = '';
 
-    const res = await request
+    const { status, body, headers } = await request
       .post('skills')
       .send(payload)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(422);
-    expect(res.body.message).toBe('Não pode ser criado');
-    expect(res.body.error.name[0]).toBe('Este campo é obrigatório.');
+    expect(status).toBe(422);
+    expect(body.message).toBe('Não pode ser criado');
+    expect(body.error.name[0]).toBe('Este campo é obrigatório.');
 
-    expect(validate.jsonSchema(res.body, businessErrorSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
   test('unsuccessfully with null name', async () => {
     payload.skill.name = null;
 
-    const res = await request
+    const { status, body, headers } = await request
       .post('skills')
       .send(payload)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(422);
-    expect(res.body.message).toBe('Não pode ser criado');
-    expect(res.body.error.name[0]).toBe('Este campo é obrigatório.');
+    expect(status).toBe(422);
+    expect(body.message).toBe('Não pode ser criado');
+    expect(body.error.name[0]).toBe('Este campo é obrigatório.');
 
-    expect(validate.jsonSchema(res.body, businessErrorSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
   test('unsuccessfully with invalid name', async () => {
     payload.skill.name = '____';
 
-    const res = await request
+    const { status, body, headers } = await request
       .post('skills')
       .send(payload)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(422);
-    expect(res.body.message).toBe('Não pode ser criado');
-    expect(res.body.error.name[0]).toBe(
+    expect(status).toBe(422);
+    expect(body.message).toBe('Não pode ser criado');
+    expect(body.error.name[0]).toBe(
       'O nome da competências deverá conter pelo menos uma letra do alfabeto.',
     );
 
-    expect(validate.jsonSchema(res.body, businessErrorSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
   each`
@@ -160,16 +161,16 @@ describe('Create skill', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
-      const res = await request
+      const { status, body, headers } = await request
         .post('skills')
         .send(payload)
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty('content-type', 'application/json');
-      expect(res.status).toBe(statusCode);
-      expect(res.body.error.message).toBe(message);
+      expect(headers).toHaveProperty('content-type', 'application/json');
+      expect(status).toBe(statusCode);
+      expect(body.error.message).toBe(message);
 
-      expect(validate.jsonSchema(res.body, errorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, errorSchema)).toBeTrue();
     },
   );
 
@@ -180,19 +181,19 @@ describe('Create skill', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token }) => {
-      const res = await request
+      const { status, body, headers } = await request
         .post('skills')
         .send(payload)
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty(
+      expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('decoding error');
+      expect(status).toBe(401);
+      expect(body.errors).toBe('decoding error');
 
-      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });

@@ -1,6 +1,6 @@
-const successSchema = {
+const postSkillSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#success-get-skill-groups',
+  $id: '#post-skill',
   type: 'object',
   required: ['data', 'included'],
   properties: {
@@ -20,10 +20,12 @@ const successSchema = {
             'name',
             'description',
             'factor',
+            'external_id',
             'archived',
             'created_at',
             'updated_at',
           ],
+          additionalProperties: false,
           properties: {
             name: {
               type: 'string',
@@ -53,14 +55,17 @@ const successSchema = {
         relationships: {
           type: 'object',
           required: ['skill_group', 'positions'],
+          additionalProperties: false,
           properties: {
             skill_group: {
               type: 'object',
               required: ['links', 'data'],
+              additionalProperties: false,
               properties: {
                 links: {
                   type: 'object',
                   required: ['related'],
+                  additionalProperties: false,
                   properties: {
                     related: {
                       type: 'string',
@@ -70,6 +75,7 @@ const successSchema = {
                 data: {
                   type: 'object',
                   required: ['id', 'type'],
+                  additionalProperties: false,
                   properties: {
                     id: {
                       type: 'integer',
@@ -83,29 +89,20 @@ const successSchema = {
             },
             positions: {
               type: 'object',
-              required: ['links', 'data'],
+              required: ['data'],
+              additionalProperties: false,
               properties: {
+                data: {
+                  type: 'array',
+                  items: {},
+                },
                 links: {
                   type: 'object',
                   required: ['related'],
+                  additionalProperties: false,
                   properties: {
                     related: {
                       type: 'string',
-                    },
-                  },
-                },
-                data: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    required: ['id', 'type'],
-                    properties: {
-                      id: {
-                        type: 'integer',
-                      },
-                      type: {
-                        type: 'string',
-                      },
                     },
                   },
                 },
@@ -120,6 +117,7 @@ const successSchema = {
       items: {
         type: 'object',
         required: ['id', 'type', 'attributes'],
+        additionalProperties: false,
         properties: {
           id: {
             type: 'integer',
@@ -130,8 +128,12 @@ const successSchema = {
           attributes: {
             type: 'object',
             required: ['name'],
+            additionalProperties: false,
             properties: {
               name: {
+                type: 'string',
+              },
+              description: {
                 type: 'string',
               },
               external_id: {
@@ -139,6 +141,9 @@ const successSchema = {
               },
               archived: {
                 type: 'boolean',
+              },
+              axis: {
+                type: 'null',
               },
               created_at: {
                 type: 'string',
@@ -148,9 +153,6 @@ const successSchema = {
                 type: 'string',
                 format: 'date-time',
               },
-              description: {
-                type: ['string', 'null'],
-              },
             },
           },
         },
@@ -159,4 +161,4 @@ const successSchema = {
   },
 };
 
-export default successSchema;
+export default postSkillSchema;

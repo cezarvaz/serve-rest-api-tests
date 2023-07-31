@@ -4,7 +4,7 @@ default:
 stages:
   - test
 test:
-  image: node:18.15.0-alpine3.17
+  image: node:18.17.0-alpine3.18
   stage: test
   script:
     - yarn install --frozen-lockfile

@@ -19,7 +19,10 @@ describe('List of Evaluation averages', () => {
       .get(`evaluation_averages/skills`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty('content-type');
+    expect(res.headers).toHaveProperty(
+      'content-type',
+      'application/json; charset=utf-8',
+    );
     expect(res.status).toBe(200);
     expect(res.body.data[1].type).toBe('skills');
 
@@ -31,7 +34,10 @@ describe('List of Evaluation averages', () => {
       .get(`evaluation_averages/positions`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty('content-type');
+    expect(res.headers).toHaveProperty(
+      'content-type',
+      'application/json; charset=utf-8',
+    );
     expect(res.status).toBe(200);
     expect(res.body.data[1].type).toBe('positions');
 
@@ -43,7 +49,10 @@ describe('List of Evaluation averages', () => {
       .get(`evaluation_averages/departments`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty('content-type');
+    expect(res.headers).toHaveProperty(
+      'content-type',
+      'application/json; charset=utf-8',
+    );
     expect(res.status).toBe(200);
     expect(res.body.data[1].type).toBe('departments');
 
