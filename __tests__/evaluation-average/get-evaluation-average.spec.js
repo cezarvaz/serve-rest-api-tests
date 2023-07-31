@@ -15,48 +15,48 @@ describe('List of Evaluation averages', () => {
   });
 
   test('successfully with skills', async () => {
-    const res = await request
+    const { status, body, headers } = await request
       .get(`evaluation_averages/skills`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(200);
-    expect(res.body.data[1].type).toBe('skills');
+    expect(status).toBe(200);
+    expect(body.data[0].type).toBe('skills');
 
-    expect(validate.jsonSchema(res.body, successSkillsSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, successSkillsSchema)).toBeTrue();
   });
 
   test('successfully with positions', async () => {
-    const res = await request
+    const { status, body, headers } = await request
       .get(`evaluation_averages/positions`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(200);
-    expect(res.body.data[1].type).toBe('positions');
+    expect(status).toBe(200);
+    expect(body.data[0].type).toBe('positions');
 
-    expect(validate.jsonSchema(res.body, successPositionsSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, successPositionsSchema)).toBeTrue();
   });
 
   test('successfully with departments', async () => {
-    const res = await request
+    const { status, body, headers } = await request
       .get(`evaluation_averages/departments`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(200);
-    expect(res.body.data[1].type).toBe('departments');
+    expect(status).toBe(200);
+    expect(body.data[0].type).toBe('departments');
 
-    expect(validate.jsonSchema(res.body, successDepartmentsSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, successDepartmentsSchema)).toBeTrue();
   });
 
   each`
@@ -65,19 +65,19 @@ describe('List of Evaluation averages', () => {
   ${null}        | ${'a null'}
   ${'a'}         | ${'an inexistent'}
   `.test('should validate $scenario id', async ({ id }) => {
-    const res = await request
+    const { status, body, headers } = await request
       .get(`evaluation_averages/${id}`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(404);
-    expect(res.body.errors.status).toBe(404);
-    expect(res.body.errors.message).toBe('Não pode ser mostrado');
+    expect(status).toBe(404);
+    expect(body.errors.status).toBe(404);
+    expect(body.errors.message).toBe('Não pode ser mostrado');
 
-    expect(validate.jsonSchema(res.body, errorsSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
   });
 
   each`
@@ -90,18 +90,18 @@ describe('List of Evaluation averages', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token }) => {
-      const res = await request
+      const { status, body, headers } = await request
         .get(`evaluation_averages/departments`)
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty(
+      expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('decoding error');
+      expect(status).toBe(401);
+      expect(body.errors).toBe('decoding error');
 
-      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });
