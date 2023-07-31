@@ -24,12 +24,10 @@ describe('Get skill', () => {
       'content-type',
       'application/json; charset=utf-8',
     );
-    console.log(body);
-    console.log(body.data);
-    console.log(body.included);
     expect(status).toBe(200);
     expect(body.data.id).toBe(skill.id);
     expect(body.data.type).toBe('skills');
+
     expect(validate.jsonSchema(body, getSkillsByIdSchema)).toBeTrue();
   });
 
