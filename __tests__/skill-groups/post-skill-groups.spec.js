@@ -2,7 +2,7 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
 import fakerBr from 'faker-br';
-import postGroupCriteriaSchema from 'schemas/skill-groups/post/post-group-criteria';
+import postGroupCriteriaSchema from 'schemas/skill-groups/post-skill-groups';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';

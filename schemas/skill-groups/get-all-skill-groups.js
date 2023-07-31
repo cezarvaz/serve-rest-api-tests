@@ -1,6 +1,6 @@
 const sucessSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#list-skill-groups',
+  $id: '#get-all-skill-groups',
   type: 'object',
   required: ['data', 'included', 'meta'],
   additionalProperties: false,
@@ -34,7 +34,7 @@ const sucessSchema = {
                 type: 'string',
               },
               external_id: {
-                type: 'null',
+                type: ['integer', 'null'],
               },
               archived: {
                 type: 'boolean',

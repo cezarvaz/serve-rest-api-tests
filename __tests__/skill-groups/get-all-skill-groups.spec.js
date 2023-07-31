@@ -2,13 +2,13 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import skillGroups from 'factories/SkillGroups';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/skill-groups/list/success';
+import successSchema from 'schemas/skill-groups/get-all-skill-groups';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 
-describe('List all Skill Groups', () => {
+describe('All Skill Groups', () => {
   beforeAll(async () => {
     await client.auth();
     await skillGroups.create();

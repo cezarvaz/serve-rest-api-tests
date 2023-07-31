@@ -1,6 +1,6 @@
 const sucessSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#success-put-skill-groups',
+  $id: '#put-skill-groups',
   type: 'object',
   required: ['data', 'included'],
   additionalProperties: false,
