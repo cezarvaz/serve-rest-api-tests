@@ -5,7 +5,7 @@
     "node_modules",
     "gestao-performance-evaluation-api-tests"
   ],
-  "setupFilesAfterEnv": ["jest-extended/all"],
+  "setupFilesAfterEnv": ["jest-extended/all", "./utils/jestMatchers.js"],
   "reporters": [
     "default",
     [
