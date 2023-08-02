@@ -23,8 +23,6 @@ describe('All Skill Groups', () => {
       'content-type',
       'application/json; charset=utf-8',
     );
-
-    console.log(JSON.stringify(body, null, 2));
     expect(body.data[0]).toMatchObject({
       id: skillGroups.id,
       type: 'skill_groups',
