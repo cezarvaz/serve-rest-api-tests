@@ -6,13 +6,15 @@ beforeAll(async () => {
   await client.auth();
 });
 
+const name = `SkillGroup_${fakerBr.random.number({
+  max: 999999999999,
+})}_criado pela automação de testes de API`;
+
 class SkillGroups {
   async create() {
     const payload = {
       skill_group: {
-        name: `SkillGroup_${fakerBr.random.number({
-          max: 999999999999,
-        })}_criado pela automação de testes de API`,
+        name,
       },
     };
 
@@ -23,6 +25,7 @@ class SkillGroups {
       .expect(201);
 
     this.id = body.data.id;
+    this.name = body.data.attributes.name;
   }
 
   async getSkillGroup() {
