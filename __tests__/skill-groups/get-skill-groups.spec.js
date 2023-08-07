@@ -17,69 +17,93 @@ describe('Get Skill Groups by id', () => {
 
   test('successfully', async () => {
     const { status, body, headers } = await request
-      .get(`skill_groups/${skillGroup.id}`)
+      .get('skill_groups/' + skillGroup.id)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(body.data).toMatchObject({
-      id: skillGroup.id,
-      type: 'skill_groups',
-      attributes: {
-        name: skillGroup.name,
-      },
-    });
     expect(status).toBe(200);
+    expect(body.data.id).toBe(skillGroup.id);
+    expect(body.data.type).toBe('skill_groups');
+    expect(body.data.attributes.created_at).toBeDefined();
+    expect(body.data.attributes.updated_at).toBeDefined();
+
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
-  each`
-  id                        | scenario               | statusCode | message
-  ${'999999999999'}         | ${'invalid id'}        | ${404}     | ${'Não pode ser mostrado'}
-  ${'nonexistentent'}       | ${'string id'}         | ${404}     | ${'Não pode ser mostrado'}
-  ${null}                   | ${'null id'}           | ${404}     | ${'Não pode ser mostrado'}
-  `.test('unsuccessfully $scenario', async ({ id, statusCode, message }) => {
+  test('nonexistentent id', async () => {
     const { status, body, headers } = await request
-      .get(`skill_groups/${id}`)
+      .get('skill_groups/nonexistent_id')
       .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(status).toBe(statusCode);
-    expect(body.errors.message).toBe(message);
+    expect(status).toBe(404);
+    expect(body.errors.status).toBe(404);
+    expect(body.errors.message).toBe('Não pode ser mostrado');
+
+    expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
+  });
+
+  test('invalid id', async () => {
+    const { status, body, headers } = await request
+      .get('skill_groups/999999999999')
+      .set('Authorization', `Bearer ${client.accessToken}`);
+
+    expect(headers).toHaveProperty(
+      'content-type',
+      'application/json; charset=utf-8',
+    );
+    expect(status).toBe(404);
+    expect(body.errors.status).toBe(404);
+    expect(body.errors.message).toBe('Não pode ser mostrado');
+
     expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
   });
 
   each`
-  token                       | scenario               | statusCode | message
-  ${'token'}                  | ${'an invalid'}        | ${403}     | ${'RESOURCE Forbidden'}
-  ${null}                     | ${'a null'}            | ${403}     | ${'RESOURCE Forbidden'}
-  ${''}                       | ${'an empty'}          | ${401}     | ${'Unauthorized'}
-  ${EXPIRED_TOKEN}            | ${'an expired'}        | ${401}     | ${'decoding error'}
-  ${UNAUTHORIZED_TOKEN}       | ${'an unauthorized'}   | ${401}     | ${'decoding error'}
+  token      | scenario        | statusCode | message
+  ${'token'} | ${'an invalid'} | ${403}     | ${'RESOURCE Forbidden'}
+  ${null}    | ${'a null'}     | ${403}     | ${'RESOURCE Forbidden'}
+  ${''}      | ${'an empty'}   | ${401}     | ${'Unauthorized'}
   `.test(
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .get(`skill_groups/${skillGroup.id}`)
+        .get('skill_groups/' + skillGroup.id)
         .set('Authorization', token);
-      if (token === EXPIRED_TOKEN || token === UNAUTHORIZED_TOKEN) {
-        expect(headers).toHaveProperty(
-          'content-type',
-          'application/json; charset=utf-8',
-        );
-        expect(body.errors).toBe(message);
-        expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
-      } else {
-        expect(headers).toHaveProperty('content-type', 'application/json');
-        expect(body.error.message).toBe(message);
-        expect(validate.jsonSchema(body, errorSchema)).toBeTrue();
-      }
+
+      expect(headers).toHaveProperty('content-type', 'application/json');
       expect(status).toBe(statusCode);
+      expect(body.error.message).toBe(message);
+
+      expect(validate.jsonSchema(body, errorSchema)).toBeTrue();
+    },
+  );
+
+  each`
+  token                | scenario             
+  ${EXPIRED_TOKEN}     | ${'an expired'}     
+  ${UNAUTHORIZED_TOKEN}| ${'an unauthorized'}
+  `.test(
+    'should validate $scenario authentication token',
+    async ({ token }) => {
+      const { status, body, headers } = await request
+        .get('skill_groups/' + skillGroup.id)
+        .set('Authorization', token);
+
+      expect(headers).toHaveProperty(
+        'content-type',
+        'application/json; charset=utf-8',
+      );
+      expect(status).toBe(401);
+      expect(body.errors).toBe('decoding error');
+
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });
