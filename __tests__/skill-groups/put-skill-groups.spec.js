@@ -89,7 +89,6 @@ describe('Get Skill Groups by id', () => {
     expect(body.error.name[0]).toBe(
       'Já existe um grupo de competências com este nome.',
     );
-
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
@@ -106,7 +105,6 @@ describe('Get Skill Groups by id', () => {
     expect(status).toBe(422);
     expect(body.message).toBe('Não pode ser atualizado');
     expect(body.error.name[0]).toBe('Este campo é obrigatório.');
-
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
