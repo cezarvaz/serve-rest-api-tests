@@ -10,6 +10,7 @@ import errorsSchema from 'schemas/errors/errors';
 describe('Delete Evaluation Request', () => {
   beforeAll(async () => {
     await client.auth();
+    await evaluation.create();
     await evaluation.getEvaluationList();
   });
 
@@ -19,20 +20,20 @@ describe('Delete Evaluation Request', () => {
   ${null}        | ${'a null'}
   ${'999999999'} | ${'an inexistent'}
   `.test('should validate $scenario id', async ({ id }) => {
-    const res = await request
+    const { status, body, headers } = await request
       .delete(`evaluation_requests/${id}`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(evaluation.putPayload());
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(404);
-    expect(res.body.errors.status).toBe(404);
-    expect(res.body.errors.message).toBe('Error');
+    expect(status).toBe(404);
+    expect(body.errors.status).toBe(404);
+    expect(body.errors.message).toBe('Error');
 
-    expect(validate.jsonSchema(res.body, errorsSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
   });
 
   each`
@@ -45,28 +46,28 @@ describe('Delete Evaluation Request', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token }) => {
-      const res = await request
+      const { status, body, headers } = await request
         .get('evaluation_requests')
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty(
+      expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('decoding error');
+      expect(status).toBe(401);
+      expect(body.errors).toBe('decoding error');
 
-      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 
   test('successfully', async () => {
-    const res = await request
+    const { status, body, headers } = await request
       .delete(`evaluation_requests/${evaluation.evaluationId}`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty('content-type', 'application/json');
-    expect(res.status).toBe(204);
-    expect(res.body).toBe('');
+    expect(headers).toHaveProperty('content-type', 'application/json');
+    expect(status).toBe(204);
+    expect(body).toBe('');
   });
 });

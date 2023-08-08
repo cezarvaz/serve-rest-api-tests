@@ -5,14 +5,22 @@ beforeAll(async () => {
   await client.auth();
 });
 
-class Evaluations {
+class EvaluationRequest {
+  async create() {
+    await request
+      .post(`evaluation_requests`)
+      .set('Authorization', `Bearer ${client.accessToken}`)
+      .send(this.postPayload())
+      .expect(204);
+  }
+
   async getEvaluationList() {
-    const res = await request
-      .get('evaluation_requests')
+    const { body } = await request
+      .get('evaluation_requests/')
       .set('Authorization', `Bearer ${client.accessToken}`)
       .expect(200);
 
-    let fistEvaluationId = res.body.data[0].id;
+    let fistEvaluationId = body.data[0].id;
     this.evaluationId = parseInt(fistEvaluationId);
   }
 
@@ -40,4 +48,4 @@ class Evaluations {
   }
 }
 
-export default new Evaluations();
+export default new EvaluationRequest();
