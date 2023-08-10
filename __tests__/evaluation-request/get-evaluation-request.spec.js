@@ -12,18 +12,18 @@ describe('Get List of Evaluation Request', () => {
   });
 
   test('successfully', async () => {
-    const res = await request
+    const { status, body, headers } = await request
       .get('evaluation_requests')
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(200);
-    expect(res.body.data[0].type).toBe('evaluation_requests');
+    expect(status).toBe(200);
+    expect(body.data[0].type).toBe('evaluation_requests');
 
-    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
   each`
@@ -36,18 +36,18 @@ describe('Get List of Evaluation Request', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token }) => {
-      const res = await request
+      const { status, body, headers } = await request
         .get('evaluation_requests')
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty(
+      expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('decoding error');
+      expect(status).toBe(401);
+      expect(body.errors).toBe('decoding error');
 
-      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });

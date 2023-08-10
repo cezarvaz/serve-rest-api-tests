@@ -12,14 +12,14 @@ describe('Create requests to generate a report or create evaluation request', ()
   });
 
   test('successfully', async () => {
-    const res = await request
+    const { status, body, headers } = await request
       .post(`evaluation_requests`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(evaluation.postPayload());
 
-    expect(res.headers).toHaveProperty('content-type', 'application/json');
-    expect(res.status).toBe(204);
-    expect(res.body).toBe('');
+    expect(headers).toHaveProperty('content-type', 'application/json');
+    expect(status).toBe(204);
+    expect(body).toBe('');
   });
 
   each`
@@ -32,19 +32,19 @@ describe('Create requests to generate a report or create evaluation request', ()
   `.test(
     'should validate $scenario authentication token',
     async ({ token }) => {
-      const res = await request
+      const { status, body, headers } = await request
         .post(`evaluation_requests`)
         .send(evaluation.postPayload())
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty(
+      expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('decoding error');
+      expect(status).toBe(401);
+      expect(body.errors).toBe('decoding error');
 
-      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });

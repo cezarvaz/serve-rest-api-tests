@@ -11,22 +11,23 @@ import errorsSchema from 'schemas/errors/errors';
 describe('Edit Evaluation Request', () => {
   beforeAll(async () => {
     await client.auth();
+    await evaluation.create();
     await evaluation.getEvaluationList();
   });
 
   test('successfully', async () => {
-    const res = await request
+    const { status, body, headers } = await request
       .put(`evaluation_requests/${evaluation.evaluationId}`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(evaluation.putPayload());
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(202);
+    expect(status).toBe(202);
 
-    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
   each`
@@ -35,20 +36,20 @@ describe('Edit Evaluation Request', () => {
   ${null}        | ${'a null'}
   ${'999999999'} | ${'an inexistent'}
   `.test('should validate $scenario id', async ({ id }) => {
-    const res = await request
+    const { status, body, headers } = await request
       .put(`evaluation_requests/${id}`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(evaluation.putPayload());
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(404);
-    expect(res.body.errors.status).toBe(404);
-    expect(res.body.errors.message).toBe('Error');
+    expect(status).toBe(404);
+    expect(body.errors.status).toBe(404);
+    expect(body.errors.message).toBe('Error');
 
-    expect(validate.jsonSchema(res.body, errorsSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
   });
 
   each`
@@ -61,19 +62,19 @@ describe('Edit Evaluation Request', () => {
   `.test(
     'should validate $scenario authentication token',
     async ({ token }) => {
-      const res = await request
+      const { status, body, headers } = await request
         .put(`evaluation_requests/${evaluation.evaluationId}`)
         .send(evaluation.putPayload())
         .set('Authorization', token);
 
-      expect(res.headers).toHaveProperty(
+      expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('decoding error');
+      expect(status).toBe(401);
+      expect(body.errors).toBe('decoding error');
 
-      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });
