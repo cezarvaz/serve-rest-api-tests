@@ -88,7 +88,35 @@ describe('Create a solicitation', () => {
       'content-type',
       'application/json; charset=utf-8',
     );
-    console.log(body);
+    expect(body).toMatchObject({
+      message: 'Não pode ser criado',
+      error: {
+        name: [`Este campo é obrigatório.`],
+        started_at: [`Este campo é obrigatório.`],
+        finished_at: [`Este campo é obrigatório.`],
+      },
+    });
+    expect(status).toBe(422);
+    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
+  });
+
+  test('unsuccefully due to the same null', async () => {
+    const { status, body, headers } = await request
+      .post(`solicitations`)
+      .set('Authorization', `Bearer ${client.accessToken}`)
+      .send({
+        ...payload,
+        solicitation: {
+          name: null,
+          started_at: null,
+          finished_at: null,
+        },
+      });
+
+    expect(headers).toHaveProperty(
+      'content-type',
+      'application/json; charset=utf-8',
+    );
     expect(body).toMatchObject({
       message: 'Não pode ser criado',
       error: {
