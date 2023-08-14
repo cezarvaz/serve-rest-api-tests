@@ -51,7 +51,7 @@ describe('Create a solicitation', () => {
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
-  test('unsuccefully due to the same existing name', async () => {
+  test('unsuccessfully due to the same existing name', async () => {
     const { status, body, headers } = await request
       .post(`solicitations`)
       .send(payload)
@@ -71,7 +71,7 @@ describe('Create a solicitation', () => {
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
-  test('unsuccefully due to the same empty', async () => {
+  test('unsuccessfully due to the same empty', async () => {
     const { status, body, headers } = await request
       .post(`solicitations`)
       .set('Authorization', `Bearer ${client.accessToken}`)
@@ -100,7 +100,7 @@ describe('Create a solicitation', () => {
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
-  test('unsuccefully due to the same null', async () => {
+  test('unsuccessfully due to the same null', async () => {
     const { status, body, headers } = await request
       .post(`solicitations`)
       .set('Authorization', `Bearer ${client.accessToken}`)

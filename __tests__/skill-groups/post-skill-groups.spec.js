@@ -48,7 +48,7 @@ describe('Create Skill Group', () => {
     expect(validate.jsonSchema(body, postGroupCriteriaSchema)).toBeTrue();
   });
 
-  test('unsuccefully due to the same name as before', async () => {
+  test('unsuccessfully due to the same name as before', async () => {
     const { status, body, headers } = await request
       .post('skill_groups')
       .send(payload)
@@ -67,7 +67,7 @@ describe('Create Skill Group', () => {
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
-  test('unsuccefully due to the same name empty', async () => {
+  test('unsuccessfully due to the same name empty', async () => {
     const { status, body, headers } = await request
       .post('skill_groups')
       .send({ ...payload, skill_group: { name: '' } })

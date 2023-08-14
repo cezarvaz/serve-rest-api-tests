@@ -74,7 +74,7 @@ describe('Get Skill Groups by id', () => {
     expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
   });
 
-  test('unsuccefully due to the same name as before', async () => {
+  test('unsuccessfully due to the same name as before', async () => {
     const { status, body, headers } = await request
       .put(`skill_groups/${skillGroup.id - 1}`)
       .send(payload)
@@ -92,7 +92,7 @@ describe('Get Skill Groups by id', () => {
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
-  test('unsuccefully due to the same name empty', async () => {
+  test('unsuccessfully due to the same name empty', async () => {
     const { status, body, headers } = await request
       .put(`skill_groups/${skillGroup.id - 1}`)
       .send({ ...payload, skill_group: { name: '' } })
