@@ -34,53 +34,70 @@ describe('Create a solicitation', () => {
   test('successfully', async () => {
     const { status, body, headers } = await request
       .post(`solicitations`)
-      .set('Authorization', `Bearer ${client.accessToken}`)
-      .send(payload);
+      .send(payload)
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
+    expect(body.data).toMatchObject({
+      type: 'solicitations',
+      attributes: {
+        name: payload.solicitation.name,
+      },
+    });
     expect(status).toBe(201);
-    expect(body.data.type).toBe('solicitations');
-    expect(body.data.attributes.name).toBe(payload.solicitation.name);
-
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
-  test('existing name', async () => {
+  test('unsuccefully due to the same existing name', async () => {
     const { status, body, headers } = await request
       .post(`solicitations`)
-      .set('Authorization', `Bearer ${client.accessToken}`)
-      .send(payload);
+      .send(payload)
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
+    expect(body).toMatchObject({
+      message: 'Não pode ser criado',
+      error: {
+        name: [`${payload.solicitation.name} já foi cadastrado`],
+      },
+    });
     expect(status).toBe(422);
-    expect(body.message).toBe('Não pode ser criado');
-    expect(body.error.name[0]).toBe(
-      `${payload.solicitation.name} já foi cadastrado`,
-    );
-
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
-  test('empty name', async () => {
+  test('unsuccefully due to the same empty', async () => {
     const { status, body, headers } = await request
       .post(`solicitations`)
       .set('Authorization', `Bearer ${client.accessToken}`)
-      .send({ ...payload, solicitation: { name: '' } });
+      .send({
+        ...payload,
+        solicitation: {
+          name: '',
+          started_at: '',
+          finished_at: '',
+        },
+      });
 
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
+    console.log(body);
+    expect(body).toMatchObject({
+      message: 'Não pode ser criado',
+      error: {
+        name: [`Este campo é obrigatório.`],
+        started_at: [`Este campo é obrigatório.`],
+        finished_at: [`Este campo é obrigatório.`],
+      },
+    });
     expect(status).toBe(422);
-    expect(body.message).toBe('Não pode ser criado');
-    expect(body.error.name[0]).toBe('Este campo é obrigatório.');
-
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
