@@ -50,6 +50,7 @@ const post_solicitations = {
             },
             started_at: {
               type: 'string',
+              format: 'date',
             },
             actions: {
               type: 'array',
@@ -59,6 +60,7 @@ const post_solicitations = {
             },
             finished_at: {
               type: 'string',
+              format: 'date',
             },
             status: {
               type: 'string',

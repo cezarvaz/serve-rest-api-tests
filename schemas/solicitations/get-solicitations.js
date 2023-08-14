@@ -52,6 +52,7 @@ const get_solicitations = {
               },
               started_at: {
                 type: 'string',
+                format: 'date',
               },
               actions: {
                 type: 'array',
@@ -61,6 +62,7 @@ const get_solicitations = {
               },
               finished_at: {
                 type: 'string',
+                format: 'date',
               },
               status: {
                 type: 'string',
