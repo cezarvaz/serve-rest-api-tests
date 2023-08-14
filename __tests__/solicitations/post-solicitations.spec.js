@@ -2,26 +2,28 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import fakerBr from 'faker-br';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/solicitations/post/success';
+import successSchema from 'schemas/solicitations/post-solicitations';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import businessErrorSchema from 'schemas/errors/business-error';
 
-let payload, registeredName;
+let payload;
 
 describe('Create a solicitation', () => {
   beforeAll(async () => {
     await client.auth();
-  });
 
-  beforeEach(async () => {
+    const generateUniqueName = () => {
+      return `Solicitation_${fakerBr.random.number({
+        max: 999999999999,
+      })}_criado pela automação de testes de API`;
+    };
+
     payload = {
       solicitation: {
-        name: `Solicitation_${fakerBr.random.number({
-          max: 999999999999,
-        })}_criada pela automação de testes de API`,
+        name: generateUniqueName(),
         description: fakerBr.random.words(),
         started_at: '2029-11-21',
         finished_at: '2029-12-29',
@@ -44,13 +46,9 @@ describe('Create a solicitation', () => {
     expect(body.data.attributes.name).toBe(payload.solicitation.name);
 
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
-
-    registeredName = payload.solicitation.name;
   });
 
   test('existing name', async () => {
-    payload.solicitation.name = registeredName;
-
     const { status, body, headers } = await request
       .post(`solicitations`)
       .set('Authorization', `Bearer ${client.accessToken}`)
@@ -70,12 +68,10 @@ describe('Create a solicitation', () => {
   });
 
   test('empty name', async () => {
-    payload.solicitation.name = '';
-
     const { status, body, headers } = await request
       .post(`solicitations`)
       .set('Authorization', `Bearer ${client.accessToken}`)
-      .send(payload);
+      .send({ ...payload, solicitation: { name: '' } });
 
     expect(headers).toHaveProperty(
       'content-type',
@@ -89,46 +85,32 @@ describe('Create a solicitation', () => {
   });
 
   each`
-  token      | scenario        | statusCode | message
-  ${'token'} | ${'an invalid'} | ${403}     | ${'RESOURCE Forbidden'}
-  ${null}    | ${'a null'}     | ${403}     | ${'RESOURCE Forbidden'}
-  ${''}      | ${'an empty'}   | ${401}     | ${'Unauthorized'}
+  token                       | scenario               | statusCode | message
+  ${'token'}                  | ${'an invalid'}        | ${403}     | ${'RESOURCE Forbidden'}
+  ${null}                     | ${'a null'}            | ${403}     | ${'RESOURCE Forbidden'}
+  ${''}                       | ${'an empty'}          | ${401}     | ${'Unauthorized'}
+  ${EXPIRED_TOKEN}            | ${'an expired'}        | ${401}     | ${'decoding error'}
+  ${UNAUTHORIZED_TOKEN}       | ${'an unauthorized'}   | ${401}     | ${'decoding error'}
   `.test(
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
         .post(`solicitations`)
-        .set('Authorization', token)
-        .send(payload);
-
-      expect(headers).toHaveProperty('content-type', 'application/json');
+        .send(payload)
+        .set('Authorization', token);
+      if (token === EXPIRED_TOKEN || token === UNAUTHORIZED_TOKEN) {
+        expect(headers).toHaveProperty(
+          'content-type',
+          'application/json; charset=utf-8',
+        );
+        expect(body.errors).toBe(message);
+        expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
+      } else {
+        expect(headers).toHaveProperty('content-type', 'application/json');
+        expect(body.error.message).toBe(message);
+        expect(validate.jsonSchema(body, errorSchema)).toBeTrue();
+      }
       expect(status).toBe(statusCode);
-      expect(body.error.message).toBe(message);
-
-      expect(validate.jsonSchema(body, errorSchema)).toBeTrue();
-    },
-  );
-
-  each`
-  token                | scenario             
-  ${EXPIRED_TOKEN}     | ${'an expired'}     
-  ${UNAUTHORIZED_TOKEN}| ${'an unauthorized'}
-  `.test(
-    'should validate $scenario authentication token',
-    async ({ token }) => {
-      const { status, body, headers } = await request
-        .post(`solicitations`)
-        .set('Authorization', token)
-        .send(payload);
-
-      expect(headers).toHaveProperty(
-        'content-type',
-        'application/json; charset=utf-8',
-      );
-      expect(status).toBe(401);
-      expect(body.errors).toBe('decoding error');
-
-      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });
