@@ -24,8 +24,8 @@ class Solicitations {
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload)
       .expect(201);
-
     this.id = body.data.id;
+    this.name = body.data.attributes.name;
   }
 }
 
