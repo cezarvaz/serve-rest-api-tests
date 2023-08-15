@@ -21,6 +21,8 @@ describe('Get Skill Groups by id', () => {
     const generateUniqueName = () => {
       return `SkillGroup_${fakerBr.random.number({
         max: 999999999999,
+      })}${fakerBr.random.number({
+        max: 999999999999,
       })}_criado pela automação de testes de API`;
     };
 
