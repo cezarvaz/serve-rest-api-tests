@@ -38,6 +38,15 @@ class Solicitations {
       .set('Authorization', `Bearer ${client.accessToken}`)
       .expect(204);
   }
+
+  async getLastItem() {
+    const { body } = await request
+      .get('solicitations?q[s]=created_at+desc')
+      .set('Authorization', `Bearer ${client.accessToken}`)
+      .expect(200);
+
+    this.lastId = body.data[3].id;
+  }
 }
 
 export default new Solicitations();
