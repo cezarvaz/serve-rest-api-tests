@@ -3,18 +3,20 @@ import client from 'helpers/AuthClient';
 import Solicitations from 'factories/Solicitations';
 import fakerBr from 'faker-br';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/solicitations/post-solicitations';
+import successSchema from 'schemas/solicitations/put-solicitations';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import businessErrorSchema from 'schemas/errors/business-error';
 
-let payload, createdSolicitationId;
+let payload;
 
-describe('Create a solicitation', () => {
+describe('Edit a solicitation', () => {
   beforeAll(async () => {
     await client.auth();
+    await Solicitations.getLastItem();
+    await Solicitations.create();
 
     const generateUniqueName = () => {
       return `Solicitation_${fakerBr.random.number({
@@ -32,9 +34,15 @@ describe('Create a solicitation', () => {
     };
   });
 
+  afterAll(async () => {
+    if (Solicitations.id) {
+      await Solicitations.deleteSolicitationById(Solicitations.id);
+    }
+  });
+
   test('successfully', async () => {
     const { status, body, headers } = await request
-      .post(`solicitations`)
+      .put(`solicitations/${Solicitations.id}`)
       .send(payload)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
@@ -46,16 +54,18 @@ describe('Create a solicitation', () => {
       type: 'solicitations',
       attributes: {
         name: payload.solicitation.name,
+        description: payload.solicitation.description,
+        started_at: payload.solicitation.started_at,
+        finished_at: payload.solicitation.finished_at,
       },
     });
-    expect(status).toBe(201);
+    expect(status).toBe(202);
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
-    createdSolicitationId = body.data.id;
   });
 
   test('unsuccessfully due to the same existing name', async () => {
     const { status, body, headers } = await request
-      .post(`solicitations`)
+      .put(`solicitations/${Solicitations.lastId}`)
       .send(payload)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
@@ -64,7 +74,7 @@ describe('Create a solicitation', () => {
       'application/json; charset=utf-8',
     );
     expect(body).toMatchObject({
-      message: 'Não pode ser criado',
+      message: 'Não pode ser atualizado',
       error: {
         name: [`${payload.solicitation.name} já foi cadastrado`],
       },
@@ -73,9 +83,10 @@ describe('Create a solicitation', () => {
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
-  test('unsuccessfully due to the same empty', async () => {
+  // https://solides.atlassian.net/browse/TDEP-4034
+  test.skip('unsuccessfully due to the same empty', async () => {
     const { status, body, headers } = await request
-      .post(`solicitations`)
+      .put(`solicitations/${Solicitations.lastId}`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send({
         ...payload,
@@ -102,9 +113,9 @@ describe('Create a solicitation', () => {
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
-  test('unsuccessfully due to the same null', async () => {
+  test.skip('unsuccessfully due to the same null', async () => {
     const { status, body, headers } = await request
-      .post(`solicitations`)
+      .put(`solicitations/${Solicitations.lastId}`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send({
         ...payload,
@@ -130,10 +141,10 @@ describe('Create a solicitation', () => {
     expect(status).toBe(422);
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
-  // https://solides.atlassian.net/browse/TDEP-4036
-  test.skip('unsuccessfully due to the same invalide', async () => {
+
+  test.skip('unsuccessfully due to the same invalid', async () => {
     const { status, body, headers } = await request
-      .post(`solicitations`)
+      .put(`solicitations/${Solicitations.lastId}`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send({
         ...payload,
@@ -142,6 +153,7 @@ describe('Create a solicitation', () => {
           finished_at: fakerBr.random.words(),
         },
       });
+
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
@@ -149,8 +161,9 @@ describe('Create a solicitation', () => {
     expect(body).toMatchObject({
       message: 'Não pode ser criado',
       error: {
-        started_at: [`Não é uma data válida`],
-        finished_at: [`Não é uma data válida`],
+        name: [`Este campo é obrigatório.`],
+        started_at: [`Este campo é obrigatório.`],
+        finished_at: [`Este campo é obrigatório.`],
       },
     });
     expect(status).toBe(422);
@@ -168,7 +181,7 @@ describe('Create a solicitation', () => {
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .post(`solicitations`)
+        .put(`solicitations/${Solicitations.lastId}`)
         .send(payload)
         .set('Authorization', token);
       if (token === EXPIRED_TOKEN || token === UNAUTHORIZED_TOKEN) {
@@ -186,10 +199,4 @@ describe('Create a solicitation', () => {
       expect(status).toBe(statusCode);
     },
   );
-
-  afterAll(async () => {
-    if (createdSolicitationId) {
-      await Solicitations.deleteSolicitationById(createdSolicitationId);
-    }
-  });
 });

@@ -8,6 +8,8 @@ beforeAll(async () => {
 
 const name = `SkillGroup_${fakerBr.random.number({
   max: 999999999999,
+})}${fakerBr.random.number({
+  max: 999999999999,
 })}_criado pela automação de testes de API`;
 
 class SkillGroups {
