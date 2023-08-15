@@ -31,6 +31,13 @@ class Solicitations {
     this.started_at = body.data.attributes.started_at;
     this.finished_at = body.data.attributes.finished_at;
   }
+
+  async deleteSolicitationById(id) {
+    await request
+      .delete(`solicitations/${id}`)
+      .set('Authorization', `Bearer ${client.accessToken}`)
+      .expect(204);
+  }
 }
 
 export default new Solicitations();
