@@ -130,6 +130,32 @@ describe('Create a solicitation', () => {
     expect(status).toBe(422);
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
+  // https://solides.atlassian.net/browse/TDEP-4036
+  test.skip('unsuccessfully due to the same invalide', async () => {
+    const { status, body, headers } = await request
+      .post(`solicitations`)
+      .set('Authorization', `Bearer ${client.accessToken}`)
+      .send({
+        ...payload,
+        solicitation: {
+          started_at: fakerBr.random.words(),
+          finished_at: fakerBr.random.words(),
+        },
+      });
+    expect(headers).toHaveProperty(
+      'content-type',
+      'application/json; charset=utf-8',
+    );
+    expect(body).toMatchObject({
+      message: 'Não pode ser criado',
+      error: {
+        started_at: [`Não é uma data válida`],
+        finished_at: [`Não é uma data válida`],
+      },
+    });
+    expect(status).toBe(422);
+    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
+  });
 
   each`
   token                       | scenario               | statusCode | message
