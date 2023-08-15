@@ -8,7 +8,7 @@ import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 
-describe('List of solicitations', () => {
+describe('All solicitations', () => {
   beforeAll(async () => {
     await client.auth();
     await Solicitations.create();
@@ -18,7 +18,6 @@ describe('List of solicitations', () => {
     const { status, body, headers } = await request
       .get(`solicitations?q[s]=created_at+desc`)
       .set('Authorization', `Bearer ${client.accessToken}`);
-
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
@@ -28,6 +27,9 @@ describe('List of solicitations', () => {
       type: 'solicitations',
       attributes: {
         name: Solicitations.name,
+        description: Solicitations.description,
+        started_at: Solicitations.started_at,
+        finished_at: Solicitations.finished_at,
       },
     });
     expect(status).toBe(200);
