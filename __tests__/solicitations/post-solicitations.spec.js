@@ -1,5 +1,6 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
+import Solicitations from 'factories/Solicitations';
 import fakerBr from 'faker-br';
 import validate from 'helpers/Validate';
 import successSchema from 'schemas/solicitations/post-solicitations';
@@ -9,7 +10,7 @@ import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import businessErrorSchema from 'schemas/errors/business-error';
 
-let payload;
+let payload, createdSolicitationId;
 
 describe('Create a solicitation', () => {
   beforeAll(async () => {
@@ -49,6 +50,7 @@ describe('Create a solicitation', () => {
     });
     expect(status).toBe(201);
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
+    createdSolicitationId = body.data.id;
   });
 
   test('unsuccessfully due to the same existing name', async () => {
@@ -158,4 +160,10 @@ describe('Create a solicitation', () => {
       expect(status).toBe(statusCode);
     },
   );
+
+  afterAll(async () => {
+    if (createdSolicitationId) {
+      await Solicitations.deleteSolicitationById(createdSolicitationId);
+    }
+  });
 });

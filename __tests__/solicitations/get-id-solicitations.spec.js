@@ -84,4 +84,10 @@ describe('Get Solicitations by id', () => {
       expect(status).toBe(statusCode);
     },
   );
+
+  afterAll(async () => {
+    if (Solicitations.id) {
+      await Solicitations.deleteSolicitationById(Solicitations.id);
+    }
+  });
 });
