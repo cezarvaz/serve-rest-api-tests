@@ -13,7 +13,7 @@ import businessErrorSchema from 'schemas/errors/business-error';
 
 let payload;
 
-describe('Get Skill Groups by id', () => {
+describe('Edit Skill Groups by id', () => {
   beforeAll(async () => {
     await client.auth();
     await skillGroup.create();
