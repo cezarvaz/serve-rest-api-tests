@@ -4,33 +4,26 @@ import Solicitations from 'factories/Solicitations';
 import each from 'jest-each';
 import validate from 'helpers/Validate';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
-import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import errorsSchema from 'schemas/errors/errors';
+import errorSchema from 'schemas/errors/error';
 
-describe('Delete Solicitations by id', () => {
+describe('Get ninebox report Solicitations by id', () => {
   beforeAll(async () => {
     await client.auth();
-  });
-
-  beforeEach(async () => {
     await Solicitations.create();
   });
 
-  afterEach(async () => {
-    try {
-      await Solicitations.deleteSolicitationById(Solicitations.id);
-    } catch (error) {
-      //
-    }
+  afterAll(async () => {
+    await Solicitations.deleteSolicitationById(Solicitations.id);
   });
 
   test('successfully', async () => {
     const { status, headers } = await request
-      .delete(`solicitations/${Solicitations.id}`)
+      .get(`solicitations/${Solicitations.id}/ninebox_report`)
       .set('Authorization', `Bearer ${client.accessToken}`);
-    expect(headers).toHaveProperty('content-type', 'application/json');
-    expect(status).toBe(204);
+    expect(headers).toHaveProperty('content-type', 'text/csv');
+    expect(status).toBe(200);
   });
 
   each`
@@ -40,7 +33,7 @@ describe('Delete Solicitations by id', () => {
   ${null}                   | ${'null id'}           | ${404}     | ${'Não pode ser mostrado'}
   `.test('unsuccessfully $scenario', async ({ id, statusCode, message }) => {
     const { status, body, headers } = await request
-      .delete(`solicitations/${id}`)
+      .get(`solicitations/${id}/ninebox_report`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(headers).toHaveProperty(
@@ -63,7 +56,7 @@ describe('Delete Solicitations by id', () => {
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .delete(`solicitations/${Solicitations.id}`)
+        .get(`solicitations/${Solicitations.id}/ninebox_report`)
         .set('Authorization', token);
       if (token === EXPIRED_TOKEN || token === UNAUTHORIZED_TOKEN) {
         expect(headers).toHaveProperty(

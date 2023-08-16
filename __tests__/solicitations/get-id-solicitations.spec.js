@@ -15,6 +15,10 @@ describe('Get Solicitations by id', () => {
     await Solicitations.create();
   });
 
+  afterAll(async () => {
+    await Solicitations.deleteSolicitationById(Solicitations.id);
+  });
+
   test('successfully', async () => {
     const { status, body, headers } = await request
       .get(`solicitations/${Solicitations.id}`)
@@ -84,10 +88,4 @@ describe('Get Solicitations by id', () => {
       expect(status).toBe(statusCode);
     },
   );
-
-  afterAll(async () => {
-    if (Solicitations.id) {
-      await Solicitations.deleteSolicitationById(Solicitations.id);
-    }
-  });
 });
