@@ -163,7 +163,7 @@ describe('Create skill', () => {
     expect(validate.jsonSchema(body, postSkillSchema)).toBeTrue();
   });
 
-  test('successfully without skill group', async () => {
+  test('unsuccessfully without skill group', async () => {
     delete payload.skill.skill_group_id;
 
     const { status, body, headers } = await request
@@ -177,29 +177,42 @@ describe('Create skill', () => {
     );
     expect(status).toBe(422);
     expect(body.message).toBe('Não pode ser criado');
-    // expect(body.error.name[0]).toBe('Este campo é obrigatório.'); //https://solides.atlassian.net/browse/TDEP-4049
+    // expect(body.error.skill_group[0]).toBe('Este campo é obrigatório.'); //https://solides.atlassian.net/browse/TDEP-4049
 
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
-  test('successfully with an empty skill group id', async () => {
-    payload.skill.skill_group_id = '';
+  each`
+  skill_group | scenario
+  ${'____'}   | ${'an invalid'}
+  ${null}     | ${'a null'}
+  ${''}       | ${'an empty'}
+  `.test(
+    'should validate $scenario skill group id',
+    async ({ skill_group }) => {
+      payload.skill.skill_group_id = skill_group;
 
-    const { status, body, headers } = await request
-      .post('skills')
-      .set('Authorization', `Bearer ${client.accessToken}`)
-      .send(payload);
+      const { status, body, headers } = await request
+        .post('skills')
+        .send(payload)
+        .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8',
-    );
-    expect(status).toBe(422);
-    expect(body.message).toBe('Não pode ser criado');
-    // expect(body.error.name[0]).toBe('Este campo é obrigatório.'); //https://solides.atlassian.net/browse/TDEP-4049
+      expect(headers).toHaveProperty(
+        'content-type',
+        'application/json; charset=utf-8',
+      );
+      expect(status).toBe(422);
+      expect(body.message).toBe('Não pode ser criado');
+      expect(body.error.skill_group[0]).toBe(
+        'translation missing: pt-BR.activerecord.errors.models.skill.attributes.skill_group.required',
+      ); // https://solides.atlassian.net/browse/TDEP-4049
+      if (skill_group == '____') {
+        expect(body.error.skill_group_id[0]).toBe('não é válido');
+      }
 
-    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
-  });
+      expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
+    },
+  );
 
   test('should validate a skill with no name', async () => {
     delete payload.skill.name;

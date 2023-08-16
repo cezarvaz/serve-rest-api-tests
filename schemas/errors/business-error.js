@@ -19,6 +19,9 @@ const businessErrorSchema = {
         skill_group: {
           type: 'array',
         },
+        skill_group_id: {
+          type: 'array',
+        },
         started_at: {
           type: 'array',
         },
