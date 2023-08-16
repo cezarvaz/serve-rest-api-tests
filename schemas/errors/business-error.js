@@ -10,10 +10,13 @@ const businessErrorSchema = {
     },
     error: {
       type: 'object',
-      required: ['name'],
+      required: [],
       additionalProperties: false,
       properties: {
         name: {
+          type: 'array',
+        },
+        skill_group: {
           type: 'array',
         },
         started_at: {
