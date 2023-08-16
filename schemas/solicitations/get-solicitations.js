@@ -76,7 +76,7 @@ const get_solicitations = {
                 format: 'date-time',
               },
               scale: {
-                type: 'null',
+                type: ['string', 'null'],
               },
               pattern: {
                 type: 'null',
