@@ -14,6 +14,10 @@ describe('All solicitations', () => {
     await Solicitations.create();
   });
 
+  afterAll(async () => {
+    await Solicitations.deleteSolicitationById(Solicitations.id);
+  });
+
   test('successfully', async () => {
     const { status, body, headers } = await request
       .get(`solicitations?q[s]=created_at+desc`)
@@ -64,10 +68,4 @@ describe('All solicitations', () => {
       expect(status).toBe(statusCode);
     },
   );
-
-  afterAll(async () => {
-    if (Solicitations.id) {
-      await Solicitations.deleteSolicitationById(Solicitations.id);
-    }
-  });
 });

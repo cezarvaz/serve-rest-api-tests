@@ -18,12 +18,10 @@ describe('Delete Solicitations by id', () => {
   });
 
   afterEach(async () => {
-    if (Solicitations.id) {
-      try {
-        await Solicitations.deleteSolicitationById(Solicitations.id);
-      } catch (error) {
-        //
-      }
+    try {
+      await Solicitations.deleteSolicitationById(Solicitations.id);
+    } catch (error) {
+      //
     }
   });
 
