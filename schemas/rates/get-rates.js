@@ -47,7 +47,7 @@ const get_rates = {
                 type: 'number',
               },
               department_id: {
-                type: 'number',
+                type: ['null', 'number'],
               },
               position_id: {
                 type: 'number',
