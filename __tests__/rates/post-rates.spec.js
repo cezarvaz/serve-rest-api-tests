@@ -164,6 +164,7 @@ describe('Post rates', () => {
     expect(validate.jsonSchema(body, ratesErrorSchema)).toBeTrue();
   });
 
+  //https://solides.atlassian.net/browse/TDEP-4060
   test.skip('unsuccessfully due to the same invalid', async () => {
     const { status, body, headers } = await request
       .post(`evaluations/${Rates.evaluationId}/rates`)
