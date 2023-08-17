@@ -79,7 +79,7 @@ const get_solicitations = {
                 type: ['string', 'null'],
               },
               pattern: {
-                type: 'null',
+                type: ['string', 'null'],
               },
               self_evaluation_considerated: {
                 type: 'boolean',
