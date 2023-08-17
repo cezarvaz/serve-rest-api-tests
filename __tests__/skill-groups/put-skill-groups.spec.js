@@ -76,6 +76,7 @@ describe('Edit Skill Groups by id', () => {
     expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
   });
 
+  //https://solides.atlassian.net/browse/TDEP-4067
   test('unsuccessfully due to the same name as before', async () => {
     const { status, body, headers } = await request
       .put(`skill_groups/${skillGroup.id - 1}`)
