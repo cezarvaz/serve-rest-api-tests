@@ -1,33 +1,45 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
+import Rates from 'factories/rates';
 import Solicitations from 'factories/Solicitations';
+import SolicitationsEvaluations from 'factories/solicitationsEvaluations';
 import each from 'jest-each';
 import validate from 'helpers/Validate';
+//import successSchema from 'schemas/rates/get-rates';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
+import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
-import successSchema from 'schemas/solicitations/get-ninebox-results-solicitations';
 import errorsSchema from 'schemas/errors/errors';
 
-describe('Get ninebox results Solicitations by id', () => {
+describe('Get rates', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.create();
-  });
-
-  afterAll(async () => {
-    await Solicitations.deleteSolicitationById(Solicitations.id);
+    await Solicitations.getLastItem();
+    await SolicitationsEvaluations.create(Solicitations.lastId);
+    await Rates.getLastItem(Solicitations.lastId);
   });
 
   test('successfully', async () => {
-    const { status, body, headers } = await request
-      .get(`solicitations/${Solicitations.id}/ninebox_results`)
+    const { status, headers } = await request
+      .get(`evaluations/${Rates.evaluationId}/rates`)
       .set('Authorization', `Bearer ${client.accessToken}`);
+
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
+    // expect(body.data[0]).toMatchObject({
+    //   id: Solicitations.id,
+    //   type: 'solicitations',
+    //   attributes: {
+    //     name: Solicitations.name,
+    //     description: Solicitations.description,
+    //     started_at: Solicitations.started_at,
+    //     finished_at: Solicitations.finished_at,
+    //   },
+    // });
     expect(status).toBe(200);
-    expect(validate.jsonSchema(body, successSchema)).toBeTrue();
+    // expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
   each`
@@ -37,7 +49,7 @@ describe('Get ninebox results Solicitations by id', () => {
   ${null}                   | ${'null id'}           | ${404}     | ${'Não pode ser mostrado'}
   `.test('unsuccessfully $scenario', async ({ id, statusCode, message }) => {
     const { status, body, headers } = await request
-      .get(`solicitations/${id}/ninebox_results`)
+      .get(`evaluations/${id}/rates`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(headers).toHaveProperty(
@@ -51,24 +63,30 @@ describe('Get ninebox results Solicitations by id', () => {
 
   each`
   token                       | scenario               | statusCode | message
-  ${'token'}                  | ${'an invalid'}        | ${401}     | ${'decoding error'}
-  ${null}                     | ${'a null'}            | ${401}     | ${'decoding error'}
-  ${''}                       | ${'an empty'}          | ${401}     | ${'decoding error'}
+  ${'token'}                  | ${'an invalid'}        | ${403}     | ${'RESOURCE Forbidden'}
+  ${null}                     | ${'a null'}            | ${403}     | ${'RESOURCE Forbidden'}
+  ${''}                       | ${'an empty'}          | ${401}     | ${'Unauthorized'}
   ${EXPIRED_TOKEN}            | ${'an expired'}        | ${401}     | ${'decoding error'}
   ${UNAUTHORIZED_TOKEN}       | ${'an unauthorized'}   | ${401}     | ${'decoding error'}
   `.test(
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .get(`solicitations/${Solicitations.id}/ninebox_results`)
+        .get(`evaluations/${Rates.evaluationId}/rates`)
         .set('Authorization', token);
-      expect(headers).toHaveProperty(
-        'content-type',
-        'application/json; charset=utf-8',
-      );
-      expect(body.errors).toBe(message);
+      if (token === EXPIRED_TOKEN || token === UNAUTHORIZED_TOKEN) {
+        expect(headers).toHaveProperty(
+          'content-type',
+          'application/json; charset=utf-8',
+        );
+        expect(body.errors).toBe(message);
+        expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
+      } else {
+        expect(headers).toHaveProperty('content-type', 'application/json');
+        expect(body.error.message).toBe(message);
+        expect(validate.jsonSchema(body, errorSchema)).toBeTrue();
+      }
       expect(status).toBe(statusCode);
-      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });
