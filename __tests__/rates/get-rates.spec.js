@@ -5,7 +5,7 @@ import Solicitations from 'factories/Solicitations';
 import SolicitationsEvaluations from 'factories/solicitationsEvaluations';
 import each from 'jest-each';
 import validate from 'helpers/Validate';
-//import successSchema from 'schemas/rates/get-rates';
+import successSchema from 'schemas/rates/get-rates';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
@@ -17,29 +17,39 @@ describe('Get rates', () => {
     await Solicitations.getLastItem();
     await SolicitationsEvaluations.create(Solicitations.lastId);
     await Rates.getLastItem(Solicitations.lastId);
+    await Rates.create(Rates.evaluationId);
   });
 
   test('successfully', async () => {
-    const { status, headers } = await request
+    const { status, body, headers } = await request
       .get(`evaluations/${Rates.evaluationId}/rates`)
       .set('Authorization', `Bearer ${client.accessToken}`);
-
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    // expect(body.data[0]).toMatchObject({
-    //   id: Solicitations.id,
-    //   type: 'solicitations',
-    //   attributes: {
-    //     name: Solicitations.name,
-    //     description: Solicitations.description,
-    //     started_at: Solicitations.started_at,
-    //     finished_at: Solicitations.finished_at,
-    //   },
-    // });
+    expect(body.data).toMatchObject([
+      {
+        type: 'rates',
+        attributes: {
+          rate: Rates.rate_1,
+        },
+      },
+      {
+        type: 'rates',
+        attributes: {
+          rate: Rates.rate_2,
+        },
+      },
+      {
+        type: 'rates',
+        attributes: {
+          rate: Rates.rate_3,
+        },
+      },
+    ]);
     expect(status).toBe(200);
-    // expect(validate.jsonSchema(body, successSchema)).toBeTrue();
+    expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
   each`

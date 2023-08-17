@@ -1,6 +1,6 @@
-const get_rates = {
+const post_rates = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#success-get-rates',
+  $id: '#success-post-rates',
   type: 'object',
   required: ['data', 'included', 'meta'],
   additionalProperties: false,
@@ -79,40 +79,11 @@ const get_rates = {
       additionalProperties: false,
       properties: {
         pagination: {
-          type: 'object',
-          required: [
-            'current',
-            'previous',
-            'next',
-            'per_page',
-            'pages',
-            'total_count',
-          ],
-          additionalProperties: false,
-          properties: {
-            current: {
-              type: 'number',
-            },
-            previous: {
-              type: 'null',
-            },
-            next: {
-              type: 'null',
-            },
-            per_page: {
-              type: 'number',
-            },
-            pages: {
-              type: 'number',
-            },
-            total_count: {
-              type: 'number',
-            },
-          },
+          type: 'null',
         },
       },
     },
   },
 };
 
-export default get_rates;
+export default post_rates;
