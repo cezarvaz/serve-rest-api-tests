@@ -44,7 +44,6 @@ describe('put rates', () => {
       'content-type',
       'application/json; charset=utf-8',
     );
-    console.log(JSON.stringify(body, null, 2));
     expect(body.data).toMatchObject([
       {
         type: 'rates',
