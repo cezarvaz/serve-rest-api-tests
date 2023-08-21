@@ -98,7 +98,7 @@ const sucessSchema = {
                 type: 'string',
               },
               factor: {
-                type: 'integer',
+                type: ['null', 'integer'],
               },
               external_id: {
                 type: 'null',
