@@ -1,7 +1,7 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/evaluation-requests/get/success';
+import successSchema from 'schemas/evaluation-request/get/success';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import simpleErrorSchema from 'schemas/errors/simple-error';
