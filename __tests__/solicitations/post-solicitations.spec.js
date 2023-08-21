@@ -32,6 +32,10 @@ describe('Create a solicitation', () => {
     };
   });
 
+  afterAll(async () => {
+    await Solicitations.deleteSolicitationById(createdSolicitationId);
+  });
+
   test('successfully', async () => {
     const { status, body, headers } = await request
       .post(`solicitations`)
@@ -186,10 +190,4 @@ describe('Create a solicitation', () => {
       expect(status).toBe(statusCode);
     },
   );
-
-  afterAll(async () => {
-    if (createdSolicitationId) {
-      await Solicitations.deleteSolicitationById(createdSolicitationId);
-    }
-  });
 });

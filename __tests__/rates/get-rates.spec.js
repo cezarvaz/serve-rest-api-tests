@@ -1,58 +1,54 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
-import skillGroup from 'factories/SkillGroups';
-import validate from 'helpers/Validate';
-import fakerBr from 'faker-br';
-import successSchema from 'schemas/skill-groups/put-skill-groups.js';
+import Rates from 'factories/rates';
+import Solicitations from 'factories/Solicitations';
+import SolicitationsEvaluations from 'factories/solicitationsEvaluations';
 import each from 'jest-each';
+import validate from 'helpers/Validate';
+import successSchema from 'schemas/rates/get-rates';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import errorsSchema from 'schemas/errors/errors';
-import businessErrorSchema from 'schemas/errors/business-error';
 
-let payload;
-
-describe('Edit Skill Groups by id', () => {
+describe('Get rates', () => {
   beforeAll(async () => {
     await client.auth();
-    await skillGroup.create();
-
-    const generateUniqueName = () => {
-      return `SkillGroup_${fakerBr.random.number({
-        max: 999999999999,
-      })}${fakerBr.random.number({
-        max: 999999999999,
-      })}_criado pela automação de testes de API`;
-    };
-
-    payload = {
-      skill_group: {
-        name: generateUniqueName(),
-        archived: true,
-      },
-    };
+    await Solicitations.getLastItem();
+    await SolicitationsEvaluations.create(Solicitations.lastId);
+    await Rates.getLastItem(Solicitations.lastId);
+    await Rates.create(Rates.evaluationId);
   });
 
   test('successfully', async () => {
     const { status, body, headers } = await request
-      .put(`skill_groups/${skillGroup.id}`)
-      .send(payload)
+      .get(`evaluations/${Rates.evaluationId}/rates`)
       .set('Authorization', `Bearer ${client.accessToken}`);
-
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(body.data).toMatchObject({
-      id: skillGroup.id,
-      type: 'skill_groups',
-      attributes: {
-        name: payload.skill_group.name,
-        archived: true,
+    expect(body.data).toMatchObject([
+      {
+        type: 'rates',
+        attributes: {
+          rate: Rates.rate_1,
+        },
       },
-    });
-    expect(status).toBe(202);
+      {
+        type: 'rates',
+        attributes: {
+          rate: Rates.rate_2,
+        },
+      },
+      {
+        type: 'rates',
+        attributes: {
+          rate: Rates.rate_3,
+        },
+      },
+    ]);
+    expect(status).toBe(200);
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
@@ -63,8 +59,7 @@ describe('Edit Skill Groups by id', () => {
   ${null}                   | ${'null id'}           | ${404}     | ${'Não pode ser mostrado'}
   `.test('unsuccessfully $scenario', async ({ id, statusCode, message }) => {
     const { status, body, headers } = await request
-      .put(`skill_groups/${id}`)
-      .send(payload)
+      .get(`evaluations/${id}/rates`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(headers).toHaveProperty(
@@ -74,41 +69,6 @@ describe('Edit Skill Groups by id', () => {
     expect(status).toBe(statusCode);
     expect(body.errors.message).toBe(message);
     expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
-  });
-
-  //https://solides.atlassian.net/browse/TDEP-4067
-  test('unsuccessfully due to the same name as before', async () => {
-    const { status, body, headers } = await request
-      .put(`skill_groups/${skillGroup.id - 1}`)
-      .send(payload)
-      .set('Authorization', `Bearer ${client.accessToken}`);
-
-    expect(headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8',
-    );
-    expect(status).toBe(422);
-    expect(body.message).toBe('Não pode ser atualizado');
-    expect(body.error.name[0]).toBe(
-      'Já existe um grupo de competências com este nome.',
-    );
-    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
-  });
-
-  test('unsuccessfully due to the same name empty', async () => {
-    const { status, body, headers } = await request
-      .put(`skill_groups/${skillGroup.id - 1}`)
-      .send({ ...payload, skill_group: { name: '' } })
-      .set('Authorization', `Bearer ${client.accessToken}`);
-
-    expect(headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8',
-    );
-    expect(status).toBe(422);
-    expect(body.message).toBe('Não pode ser atualizado');
-    expect(body.error.name[0]).toBe('Este campo é obrigatório.');
-    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
   each`
@@ -122,8 +82,7 @@ describe('Edit Skill Groups by id', () => {
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .put(`skill_groups/${skillGroup.id}`)
-        .send(payload)
+        .get(`evaluations/${Rates.evaluationId}/rates`)
         .set('Authorization', token);
       if (token === EXPIRED_TOKEN || token === UNAUTHORIZED_TOKEN) {
         expect(headers).toHaveProperty(

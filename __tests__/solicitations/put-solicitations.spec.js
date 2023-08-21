@@ -35,9 +35,7 @@ describe('Edit a solicitation', () => {
   });
 
   afterAll(async () => {
-    if (Solicitations.id) {
-      await Solicitations.deleteSolicitationById(Solicitations.id);
-    }
+    await Solicitations.deleteSolicitationById(Solicitations.id);
   });
 
   test('successfully', async () => {

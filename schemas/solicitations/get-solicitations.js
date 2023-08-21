@@ -76,10 +76,10 @@ const get_solicitations = {
                 format: 'date-time',
               },
               scale: {
-                type: 'null',
+                type: ['string', 'null'],
               },
               pattern: {
-                type: 'null',
+                type: ['string', 'null'],
               },
               self_evaluation_considerated: {
                 type: 'boolean',

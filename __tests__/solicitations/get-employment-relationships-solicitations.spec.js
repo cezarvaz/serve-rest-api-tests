@@ -3,34 +3,31 @@ import client from 'helpers/AuthClient';
 import Solicitations from 'factories/Solicitations';
 import each from 'jest-each';
 import validate from 'helpers/Validate';
+import successSchema from 'schemas/solicitations/get-employment-relationships-solicitations';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
-import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import errorsSchema from 'schemas/errors/errors';
 
-describe('Delete Solicitations by id', () => {
+describe('Get employment relationships Solicitations by id', () => {
   beforeAll(async () => {
     await client.auth();
-  });
-
-  beforeEach(async () => {
     await Solicitations.create();
   });
 
-  afterEach(async () => {
-    try {
-      await Solicitations.deleteSolicitationById(Solicitations.id);
-    } catch (error) {
-      //
-    }
+  afterAll(async () => {
+    await Solicitations.deleteSolicitationById(Solicitations.id);
   });
 
   test('successfully', async () => {
-    const { status, headers } = await request
-      .delete(`solicitations/${Solicitations.id}`)
+    const { status, body, headers } = await request
+      .get(`solicitations/${Solicitations.id}/employment_relationships`)
       .set('Authorization', `Bearer ${client.accessToken}`);
-    expect(headers).toHaveProperty('content-type', 'application/json');
-    expect(status).toBe(204);
+    expect(headers).toHaveProperty(
+      'content-type',
+      'application/json; charset=utf-8',
+    );
+    expect(status).toBe(200);
+    expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
   each`
@@ -40,7 +37,7 @@ describe('Delete Solicitations by id', () => {
   ${null}                   | ${'null id'}           | ${404}     | ${'Não pode ser mostrado'}
   `.test('unsuccessfully $scenario', async ({ id, statusCode, message }) => {
     const { status, body, headers } = await request
-      .delete(`solicitations/${id}`)
+      .get(`solicitations/${id}/employment_relationships`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(headers).toHaveProperty(
@@ -54,30 +51,24 @@ describe('Delete Solicitations by id', () => {
 
   each`
   token                       | scenario               | statusCode | message
-  ${'token'}                  | ${'an invalid'}        | ${403}     | ${'RESOURCE Forbidden'}
-  ${null}                     | ${'a null'}            | ${403}     | ${'RESOURCE Forbidden'}
-  ${''}                       | ${'an empty'}          | ${401}     | ${'Unauthorized'}
+  ${'token'}                  | ${'an invalid'}        | ${401}     | ${'decoding error'}
+  ${null}                     | ${'a null'}            | ${401}     | ${'decoding error'}
+  ${''}                       | ${'an empty'}          | ${401}     | ${'decoding error'}
   ${EXPIRED_TOKEN}            | ${'an expired'}        | ${401}     | ${'decoding error'}
   ${UNAUTHORIZED_TOKEN}       | ${'an unauthorized'}   | ${401}     | ${'decoding error'}
   `.test(
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .delete(`solicitations/${Solicitations.id}`)
+        .get(`solicitations/${Solicitations.id}/employment_relationships`)
         .set('Authorization', token);
-      if (token === EXPIRED_TOKEN || token === UNAUTHORIZED_TOKEN) {
-        expect(headers).toHaveProperty(
-          'content-type',
-          'application/json; charset=utf-8',
-        );
-        expect(body.errors).toBe(message);
-        expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
-      } else {
-        expect(headers).toHaveProperty('content-type', 'application/json');
-        expect(body.error.message).toBe(message);
-        expect(validate.jsonSchema(body, errorSchema)).toBeTrue();
-      }
+      expect(headers).toHaveProperty(
+        'content-type',
+        'application/json; charset=utf-8',
+      );
+      expect(body.errors).toBe(message);
       expect(status).toBe(statusCode);
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });
