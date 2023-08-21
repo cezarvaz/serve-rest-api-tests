@@ -2,7 +2,7 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
 import evaluation from 'factories/EvaluationRequest';
-import successSchema from 'schemas/evaluation-requests/put/success';
+import successSchema from 'schemas/evaluation-request/put/success';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import simpleErrorSchema from 'schemas/errors/simple-error';

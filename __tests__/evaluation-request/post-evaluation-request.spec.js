@@ -1,9 +1,9 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
-import evaluation from 'factories/EvaluationRequest';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
+import successSchema from 'schemas/evaluation-request/post-evaluation-request';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 
 describe('Create requests to generate a report or create evaluation request', () => {
@@ -13,37 +13,36 @@ describe('Create requests to generate a report or create evaluation request', ()
 
   test('successfully', async () => {
     const { status, body, headers } = await request
-      .post(`evaluation_requests`)
-      .set('Authorization', `Bearer ${client.accessToken}`)
-      .send(evaluation.postPayload());
+      .post(`evaluation_requests?request_report=true`)
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(headers).toHaveProperty('content-type', 'application/json');
-    expect(status).toBe(204);
-    expect(body).toBe('');
+    expect(headers).toHaveProperty(
+      'content-type',
+      'application/json; charset=utf-8',
+    );
+    expect(status).toBe(200);
+    expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
   each`
-  token                | scenario
-  ${'token'}           | ${'an invalid'}
-  ${null}              | ${'a null'}
-  ${''}                | ${'an empty'}
-  ${EXPIRED_TOKEN}     | ${'an expired'}
-  ${UNAUTHORIZED_TOKEN}| ${'an unauthorized'}
+  token                       | scenario               | statusCode | message
+  ${'token'}                  | ${'an invalid'}        | ${401}     | ${'decoding error'}
+  ${null}                     | ${'a null'}            | ${401}     | ${'decoding error'}
+  ${''}                       | ${'an empty'}          | ${401}     | ${'decoding error'}
+  ${EXPIRED_TOKEN}            | ${'an expired'}        | ${401}     | ${'decoding error'}
+  ${UNAUTHORIZED_TOKEN}       | ${'an unauthorized'}   | ${401}     | ${'decoding error'}
   `.test(
     'should validate $scenario authentication token',
-    async ({ token }) => {
+    async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .post(`evaluation_requests`)
-        .send(evaluation.postPayload())
+        .post(`evaluation_requests?request_report=true`)
         .set('Authorization', token);
-
       expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(status).toBe(401);
-      expect(body.errors).toBe('decoding error');
-
+      expect(body.errors).toBe(message);
+      expect(status).toBe(statusCode);
       expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
