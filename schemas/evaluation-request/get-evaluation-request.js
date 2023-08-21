@@ -1,6 +1,6 @@
 const successSchema = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#success-get-evaluation-requests',
+  $id: '#success-get-evaluation-request',
   type: 'object',
   required: ['data', 'included', 'meta'],
   additionalProperties: false,
@@ -9,11 +9,11 @@ const successSchema = {
       type: 'array',
       items: {
         type: 'object',
-        required: ['id', 'type', 'attributes'],
+        required: ['id', 'type', 'attributes', 'relationships'],
         additionalProperties: false,
         properties: {
           id: {
-            type: 'integer',
+            type: 'number',
           },
           type: {
             type: 'string',
@@ -26,7 +26,11 @@ const successSchema = {
               'evaluated_name',
               'status',
               'created_at',
+              'expired_at',
+              'answered_at',
+              'evaluator_position',
             ],
+            additionalProperties: false,
             properties: {
               evaluator_name: {
                 type: 'string',
@@ -42,21 +46,32 @@ const successSchema = {
               },
               created_at: {
                 type: 'string',
-                format: 'date-time',
+              },
+              expired_at: {
+                type: 'string',
+              },
+              answered_at: {
+                type: ['null', 'string'],
+              },
+              evaluator_position: {
+                type: 'string',
               },
             },
           },
           relationships: {
             type: 'object',
             required: ['position'],
+            additionalProperties: false,
             properties: {
               position: {
                 type: 'object',
                 required: ['links', 'data'],
+                additionalProperties: false,
                 properties: {
                   links: {
                     type: 'object',
                     required: ['self', 'related'],
+                    additionalProperties: false,
                     properties: {
                       self: {
                         type: 'string',
@@ -69,9 +84,10 @@ const successSchema = {
                   data: {
                     type: 'object',
                     required: ['id', 'type'],
+                    additionalProperties: false,
                     properties: {
                       id: {
-                        type: 'integer',
+                        type: 'number',
                       },
                       type: {
                         type: 'string',
@@ -90,18 +106,23 @@ const successSchema = {
       items: {
         type: 'object',
         required: ['id', 'type', 'attributes'],
+        additionalProperties: false,
         properties: {
           id: {
-            type: 'integer',
+            type: 'number',
           },
           type: {
             type: 'string',
           },
           attributes: {
             type: 'object',
-            required: ['name'],
+            required: ['name', 'description'],
+            additionalProperties: false,
             properties: {
               name: {
+                type: 'string',
+              },
+              description: {
                 type: 'string',
               },
             },
@@ -112,6 +133,7 @@ const successSchema = {
     meta: {
       type: 'object',
       required: ['pagination'],
+      additionalProperties: false,
       properties: {
         pagination: {
           type: 'object',
@@ -123,24 +145,25 @@ const successSchema = {
             'pages',
             'total_count',
           ],
+          additionalProperties: false,
           properties: {
             current: {
-              type: 'integer',
+              type: 'number',
             },
             previous: {
               type: 'null',
             },
             next: {
-              type: ['integer', 'null'],
+              type: 'null',
             },
             per_page: {
-              type: 'integer',
+              type: 'number',
             },
             pages: {
-              type: 'integer',
+              type: 'number',
             },
             total_count: {
-              type: 'integer',
+              type: 'number',
             },
           },
         },
