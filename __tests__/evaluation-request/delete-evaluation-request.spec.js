@@ -16,59 +16,44 @@ describe('Delete Evaluation Request', () => {
   });
 
   each`
-  id             | scenario            
-  ${'a'}         | ${'an invalid'}
-  ${null}        | ${'a null'}
-  ${'999999999'} | ${'an inexistent'}
-  `.test('should validate $scenario id', async ({ id }) => {
+  id                        | scenario               | statusCode | message
+  ${'999999999999'}         | ${'invalid id'}        | ${404}     | ${'Error'}
+  ${'nonexistentent'}       | ${'string id'}         | ${404}     | ${'Error'}
+  ${null}                   | ${'null id'}           | ${404}     | ${'Error'}
+  `.test('unsuccessfully $scenario', async ({ id, statusCode, message }) => {
     const { status, body, headers } = await request
       .delete(`evaluation_requests/${id}`)
-      .set('Authorization', `Bearer ${client.accessToken}`)
-      .send(evaluation.putPayload());
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(status).toBe(404);
-    expect(body.errors.status).toBe(404);
-    expect(body.errors.message).toBe('Error');
-
+    expect(status).toBe(statusCode);
+    expect(body.errors.message).toBe(message);
     expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
   });
 
   each`
-  token                | scenario
-  ${'token'}           | ${'an invalid'}
-  ${null}              | ${'a null'}
-  ${''}                | ${'an empty'}
-  ${EXPIRED_TOKEN}     | ${'an expired'}
-  ${UNAUTHORIZED_TOKEN}| ${'an unauthorized'}
+  token                       | scenario               | statusCode | message
+  ${'token'}                  | ${'an invalid'}        | ${401}     | ${'decoding error'}
+  ${null}                     | ${'a null'}            | ${401}     | ${'decoding error'}
+  ${''}                       | ${'an empty'}          | ${401}     | ${'decoding error'}
+  ${EXPIRED_TOKEN}            | ${'an expired'}        | ${401}     | ${'decoding error'}
+  ${UNAUTHORIZED_TOKEN}       | ${'an unauthorized'}   | ${401}     | ${'decoding error'}
   `.test(
     'should validate $scenario authentication token',
-    async ({ token }) => {
+    async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .get('evaluation_requests')
+        .delete(`evaluation_requests/${evaluation.evaluationId}`)
         .set('Authorization', token);
-
       expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(status).toBe(401);
-      expect(body.errors).toBe('decoding error');
-
+      expect(body.errors).toBe(message);
+      expect(status).toBe(statusCode);
       expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
-
-  test.skip('successfully', async () => {
-    const { status, body, headers } = await request
-      .delete(`evaluation_requests/${evaluation.evaluationId}`)
-      .set('Authorization', `Bearer ${client.accessToken}`);
-
-    expect(headers).toHaveProperty('content-type', 'application/json');
-    expect(status).toBe(204);
-    expect(body).toBe('');
-  });
 });
