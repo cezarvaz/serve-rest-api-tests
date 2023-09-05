@@ -28,13 +28,13 @@ describe('Post solicitations evaluations', () => {
         ],
         evaluateds: [
           {
-            evaluated_id: 518434,
-            evaluated_name: 'Isabelle Maya Maya Barros',
+            evaluated_id: 518435,
+            evaluated_name: 'Sebastião Yago Moura',
             position_id: 181842,
           },
           {
-            evaluated_id: 518435,
-            evaluated_name: 'Sebastião Yago Moura',
+            evaluated_id: 518434,
+            evaluated_name: 'Isabelle Maya Maya Barros',
             position_id: 181842,
           },
         ],
@@ -53,30 +53,20 @@ describe('Post solicitations evaluations', () => {
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(body.data).toMatchObject([
-      {
+    for (let i = 0; i < payload.evaluation.evaluateds.length; i++) {
+      const expectedEvaluation = {
         type: 'evaluations',
         attributes: {
           solicitation_id: Solicitations.lastId,
           evaluator_id: payload.evaluation.evaluators[0].evaluator_id,
           evaluator_name: payload.evaluation.evaluators[0].evaluator_name,
-          evaluated_id: payload.evaluation.evaluateds[0].evaluated_id,
-          evaluated_name: payload.evaluation.evaluateds[0].evaluated_name,
-          position_id: payload.evaluation.evaluateds[0].position_id,
+          evaluated_id: payload.evaluation.evaluateds[i].evaluated_id,
+          evaluated_name: payload.evaluation.evaluateds[i].evaluated_name,
+          position_id: payload.evaluation.evaluateds[i].position_id,
         },
-      },
-      {
-        type: 'evaluations',
-        attributes: {
-          solicitation_id: Solicitations.lastId,
-          evaluator_id: payload.evaluation.evaluators[0].evaluator_id,
-          evaluator_name: payload.evaluation.evaluators[0].evaluator_name,
-          evaluated_id: payload.evaluation.evaluateds[1].evaluated_id,
-          evaluated_name: payload.evaluation.evaluateds[1].evaluated_name,
-          position_id: payload.evaluation.evaluateds[1].position_id,
-        },
-      },
-    ]);
+      };
+      expect(body.data[i]).toMatchObject(expectedEvaluation);
+    }
     expect(status).toBe(201);
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
