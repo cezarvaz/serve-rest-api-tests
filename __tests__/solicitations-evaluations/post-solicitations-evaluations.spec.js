@@ -2,7 +2,6 @@ import request from 'config/request';
 import fakerBr from 'faker-br';
 import client from 'helpers/AuthClient';
 import Solicitations from 'factories/Solicitations';
-import SolicitationsEvaluations from 'factories/solicitationsEvaluations';
 import each from 'jest-each';
 import validate from 'helpers/Validate';
 import successSchema from 'schemas/solicitations-evaluations/post-solicitations-evaluations';
@@ -17,7 +16,6 @@ describe('Post solicitations evaluations', () => {
   beforeAll(async () => {
     await client.auth();
     await Solicitations.getLastItem();
-    await SolicitationsEvaluations.create(Solicitations.lastId);
 
     payload = {
       evaluation: {
@@ -62,9 +60,9 @@ describe('Post solicitations evaluations', () => {
           solicitation_id: Solicitations.lastId,
           evaluator_id: payload.evaluation.evaluators[0].evaluator_id,
           evaluator_name: payload.evaluation.evaluators[0].evaluator_name,
-          evaluated_id: payload.evaluation.evaluateds[1].evaluated_id,
-          evaluated_name: payload.evaluation.evaluateds[1].evaluated_name,
-          position_id: payload.evaluation.evaluateds[1].position_id,
+          evaluated_id: payload.evaluation.evaluateds[0].evaluated_id,
+          evaluated_name: payload.evaluation.evaluateds[0].evaluated_name,
+          position_id: payload.evaluation.evaluateds[0].position_id,
         },
       },
       {
@@ -73,9 +71,9 @@ describe('Post solicitations evaluations', () => {
           solicitation_id: Solicitations.lastId,
           evaluator_id: payload.evaluation.evaluators[0].evaluator_id,
           evaluator_name: payload.evaluation.evaluators[0].evaluator_name,
-          evaluated_id: payload.evaluation.evaluateds[0].evaluated_id,
-          evaluated_name: payload.evaluation.evaluateds[0].evaluated_name,
-          position_id: payload.evaluation.evaluateds[0].position_id,
+          evaluated_id: payload.evaluation.evaluateds[1].evaluated_id,
+          evaluated_name: payload.evaluation.evaluateds[1].evaluated_name,
+          position_id: payload.evaluation.evaluateds[1].position_id,
         },
       },
     ]);
