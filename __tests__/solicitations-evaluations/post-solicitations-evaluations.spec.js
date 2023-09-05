@@ -53,6 +53,7 @@ describe('Post solicitations evaluations', () => {
       'content-type',
       'application/json; charset=utf-8',
     );
+    expect(status).toBe(201);
     for (let i = 0; i < payload.evaluation.evaluateds.length; i++) {
       const expectedEvaluation = {
         type: 'evaluations',
@@ -67,7 +68,6 @@ describe('Post solicitations evaluations', () => {
       };
       expect(body.data[i]).toMatchObject(expectedEvaluation);
     }
-    expect(status).toBe(201);
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
