@@ -17,7 +17,7 @@ let payload;
 describe('Post rates', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getLastItem(3);
+    await Solicitations.getLastItem(0);
     await SolicitationsEvaluations.create(Solicitations.lastId);
     await Rates.getLastItem(Solicitations.lastId);
 
