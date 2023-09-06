@@ -15,7 +15,7 @@ let payload;
 describe('Post solicitations evaluations', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getLastItem();
+    await Solicitations.getLastItem(3);
 
     payload = {
       evaluation: {

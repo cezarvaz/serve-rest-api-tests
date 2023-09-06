@@ -14,7 +14,7 @@ import errorsSchema from 'schemas/errors/errors';
 describe('Get rates', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getLastItem();
+    await Solicitations.getLastItem(3);
     await SolicitationsEvaluations.create(Solicitations.lastId);
     await Rates.getLastItem(Solicitations.lastId);
     await Rates.create(Rates.evaluationId);

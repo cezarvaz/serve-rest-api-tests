@@ -17,7 +17,7 @@ let payload;
 describe('put rates', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getLastItem();
+    await Solicitations.getLastItem(3);
     await SolicitationsEvaluations.create(Solicitations.lastId);
     await Rates.getLastItem(Solicitations.lastId);
 
