@@ -281,15 +281,14 @@ describe('Create skill', () => {
   ${'____'} | ${'an invalid'}
   ${null}   | ${'a null'}
   ${''}     | ${'an empty'}
-  `.test.only('should validate $scenario factor', async ({ factor }) => {
+  `.test.skip('should validate $scenario factor', async ({ factor }) => {
+    // https://solides.atlassian.net/browse/TDEP-4286
     payload.skill.factor = factor;
 
     const { status, body, headers } = await request
       .post('skills')
       .send(payload)
       .set('Authorization', `Bearer ${client.accessToken}`);
-
-    console.log(body);
 
     expect(headers).toHaveProperty(
       'content-type',

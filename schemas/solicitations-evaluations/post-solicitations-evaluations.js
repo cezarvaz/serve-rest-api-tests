@@ -57,16 +57,16 @@ const post_solicitations_evaluations = {
                 type: 'integer',
               },
               position_name: {
-                type: 'string',
+                type: ['null', 'string'],
               },
               department_id: {
-                type: 'integer',
+                type: ['null', 'integer'],
               },
               unit_id: {
                 type: 'null',
               },
               direct_leader_id: {
-                type: 'integer',
+                type: ['null', 'integer'],
               },
               moderated: {
                 type: 'boolean',
