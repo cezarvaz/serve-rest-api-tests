@@ -1,5 +1,6 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
+import skill from 'factories/Skills';
 import validate from 'helpers/Validate';
 import getSkillsSchema from 'schemas/skills/get-skills';
 import each from 'jest-each';
@@ -10,6 +11,7 @@ import simpleErrorSchema from 'schemas/errors/simple-error';
 describe('List skills', () => {
   beforeAll(async () => {
     await client.auth();
+    await skill.create();
   });
 
   test('successfully', async () => {
