@@ -255,26 +255,38 @@ describe('Create skill', () => {
     expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
   });
 
-  // test('should validate a skill with no factor', async () => {
-  //   payload.skill.factor = 'null';
+  each`
+  position  | scenario
+  ${'____'} | ${'an invalid'}
+  ${null}   | ${'a null'}
+  ${''}     | ${'an empty'}
+  `.test('should validate $scenario skill group id', async ({ position }) => {
+    payload.skill.position_ids = position;
 
-  //   const { status, body, headers } = await request
-  //     .post('skills')
-  //     .send(payload)
-  //     .set('Authorization', `Bearer ${client.accessToken}`);
+    const { status, body, headers } = await request
+      .post('skills')
+      .send(payload)
+      .set('Authorization', `Bearer ${client.accessToken}`);
 
-  //   console.log(body);
+    console.log(position);
+    console.log(body.data.relationships.positions);
 
-  //   expect(headers).toHaveProperty(
-  //     'content-type',
-  //     'application/json; charset=utf-8',
-  //   );
-  //   expect(status).toBe(422);
-  //   expect(body.message).toBe('Não pode ser criado');
-  //   expect(body.error.name[0]).toBe('Este campo é obrigatório.');
+    expect(headers).toHaveProperty(
+      'content-type',
+      'application/json; charset=utf-8',
+    );
+    expect(status).toBe(422);
+    expect(body.message).toBe('Não pode ser criado');
+    expect(body.error.position[0]).toBe(
+      'translation missing: pt-BR.activerecord.errors.models.skill.attributes.skill_group.required',
+    ); // https://solides.atlassian.net/browse/TDEP-4049
 
-  //   expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
-  // });
+    if (position == '____') {
+      expect(body.error.position_id[0]).toBe('não é válido');
+    }
+
+    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
+  });
 
   each`
   factor    | scenario
