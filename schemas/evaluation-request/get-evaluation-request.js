@@ -1,4 +1,4 @@
-const successSchema = {
+const get_evaluation_request = {
   $schema: 'http://json-schema.org/draft-07/schema',
   $id: '#success-get-evaluation-request',
   type: 'object',
@@ -172,4 +172,4 @@ const successSchema = {
   },
 };
 
-export default successSchema;
+export default get_evaluation_request;

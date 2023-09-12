@@ -39,13 +39,13 @@ class Solicitations {
       .expect(204);
   }
 
-  async getLastItem() {
+  async getLastItem(i) {
     const { body } = await request
       .get('solicitations?q[s]=created_at+desc')
       .set('Authorization', `Bearer ${client.accessToken}`)
       .expect(200);
 
-    this.lastId = body.data[3].id;
+    this.lastId = body.data[i].id;
   }
 }
 

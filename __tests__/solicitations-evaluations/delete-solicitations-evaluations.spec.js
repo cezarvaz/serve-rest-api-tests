@@ -1,55 +1,29 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
-import Rates from 'factories/rates';
 import Solicitations from 'factories/Solicitations';
 import SolicitationsEvaluations from 'factories/solicitationsEvaluations';
 import each from 'jest-each';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/rates/get-rates';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import errorsSchema from 'schemas/errors/errors';
 
-describe('Get rates', () => {
+describe('Delete solicitations evaluations', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getLastItem(3);
+    await Solicitations.getLastItem(2);
     await SolicitationsEvaluations.create(Solicitations.lastId);
-    await Rates.getLastItem(Solicitations.lastId);
-    await Rates.create(Rates.evaluationId);
   });
 
   test('successfully', async () => {
-    const { status, body, headers } = await request
-      .get(`evaluations/${Rates.evaluationId}/rates`)
+    const { status, headers } = await request
+      .delete(
+        `solicitations/${Solicitations.lastId}/evaluations/${SolicitationsEvaluations.evaluationsId}`,
+      )
       .set('Authorization', `Bearer ${client.accessToken}`);
-    expect(headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8',
-    );
-    expect(body.data).toMatchObject([
-      {
-        type: 'rates',
-        attributes: {
-          rate: Rates.rate_1,
-        },
-      },
-      {
-        type: 'rates',
-        attributes: {
-          rate: Rates.rate_2,
-        },
-      },
-      {
-        type: 'rates',
-        attributes: {
-          rate: Rates.rate_3,
-        },
-      },
-    ]);
-    expect(status).toBe(200);
-    expect(validate.jsonSchema(body, successSchema)).toBeTrue();
+    expect(headers).toHaveProperty('content-type', 'application/json');
+    expect(status).toBe(204);
   });
 
   each`
@@ -59,7 +33,7 @@ describe('Get rates', () => {
   ${null}                   | ${'null id'}           | ${404}     | ${'Não pode ser mostrado'}
   `.test('unsuccessfully $scenario', async ({ id, statusCode, message }) => {
     const { status, body, headers } = await request
-      .get(`evaluations/${id}/rates`)
+      .delete(`solicitations/${id}/evaluations/${id}`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(headers).toHaveProperty(
@@ -82,7 +56,9 @@ describe('Get rates', () => {
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .get(`evaluations/${Rates.evaluationId}/rates`)
+        .delete(
+          `solicitations/${Solicitations.lastId}/evaluations/${SolicitationsEvaluations.evaluationsId}`,
+        )
         .set('Authorization', token);
       if (token === EXPIRED_TOKEN || token === UNAUTHORIZED_TOKEN) {
         expect(headers).toHaveProperty(

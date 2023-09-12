@@ -33,11 +33,13 @@ class SolicitationsEvaluations {
       },
     };
 
-    await request
+    const { body } = await request
       .post(`solicitations/${solicitation_id}/evaluations`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .send(payload)
       .expect(201);
+
+    this.evaluationsId = body.data[0].id;
   }
 }
 

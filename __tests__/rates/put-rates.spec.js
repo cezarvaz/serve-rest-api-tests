@@ -17,7 +17,7 @@ let payload;
 describe('put rates', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getLastItem();
+    await Solicitations.getLastItem(0);
     await SolicitationsEvaluations.create(Solicitations.lastId);
     await Rates.getLastItem(Solicitations.lastId);
 
@@ -44,7 +44,6 @@ describe('put rates', () => {
       'content-type',
       'application/json; charset=utf-8',
     );
-    console.log(JSON.stringify(body, null, 2));
     expect(body.data).toMatchObject([
       {
         type: 'rates',

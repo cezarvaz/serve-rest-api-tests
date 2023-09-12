@@ -16,23 +16,11 @@ class EvaluationRequest {
 
   async getEvaluationList() {
     const { body } = await request
-      .get('evaluation_requests/')
+      .get('evaluation_requests')
       .set('Authorization', `Bearer ${client.accessToken}`)
       .expect(200);
 
-    let fistEvaluationId = body.data[0].id;
-    this.evaluationId = parseInt(fistEvaluationId);
-  }
-
-  putPayload() {
-    const payload = {
-      evaluation_request: {
-        expired_at: '2099-01-31',
-        resend: true,
-      },
-    };
-
-    return payload;
+    this.evaluationId = body.data[0].id;
   }
 
   postPayload() {

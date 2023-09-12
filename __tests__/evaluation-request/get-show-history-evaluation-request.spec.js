@@ -1,37 +1,28 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
-import solicitation from 'factories/Solicitations';
-import evaluation from 'factories/EvaluationRequest';
+import successSchema from 'schemas/evaluation-request/get-show-history-evaluation-request';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import simpleErrorSchema from 'schemas/errors/simple-error';
-import errorsSchema from 'schemas/errors/errors';
 
-describe('Delete Evaluation Request', () => {
+describe('Get Show History', () => {
   beforeAll(async () => {
     await client.auth();
-    await solicitation.create();
-    await evaluation.getEvaluationList();
   });
 
-  each`
-  id                        | scenario               | statusCode | message
-  ${'999999999999'}         | ${'invalid id'}        | ${404}     | ${'Error'}
-  ${'nonexistentent'}       | ${'string id'}         | ${404}     | ${'Error'}
-  ${null}                   | ${'null id'}           | ${404}     | ${'Error'}
-  `.test('unsuccessfully $scenario', async ({ id, statusCode, message }) => {
+  test('successfully', async () => {
     const { status, body, headers } = await request
-      .delete(`evaluation_requests/${id}`)
+      .get('evaluation_requests/show_history')
       .set('Authorization', `Bearer ${client.accessToken}`);
 
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(status).toBe(statusCode);
-    expect(body.errors.message).toBe(message);
-    expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
+    expect(status).toBe(200);
+    expect(body.data.type).toBe('show_histories');
+    expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
   each`
@@ -45,7 +36,7 @@ describe('Delete Evaluation Request', () => {
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .delete(`evaluation_requests/${evaluation.evaluationId}`)
+        .get('evaluation_requests/show_history')
         .set('Authorization', token);
       expect(headers).toHaveProperty(
         'content-type',
