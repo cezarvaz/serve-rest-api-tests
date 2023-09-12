@@ -13,6 +13,9 @@ const businessErrorSchema = {
       required: [],
       additionalProperties: false,
       properties: {
+        factor: {
+          type: 'array',
+        },
         name: {
           type: 'array',
         },

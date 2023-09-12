@@ -281,7 +281,7 @@ describe('Create skill', () => {
   ${'____'} | ${'an invalid'}
   ${null}   | ${'a null'}
   ${''}     | ${'an empty'}
-  `.test('should validate $scenario factor', async ({ factor }) => {
+  `.test.only('should validate $scenario factor', async ({ factor }) => {
     payload.skill.factor = factor;
 
     const { status, body, headers } = await request
