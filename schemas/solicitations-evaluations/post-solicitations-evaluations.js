@@ -60,13 +60,13 @@ const post_solicitations_evaluations = {
                 type: ['string', 'null'],
               },
               department_id: {
-                type: 'integer',
+                type: ['integer', 'null'],
               },
               unit_id: {
                 type: 'null',
               },
               direct_leader_id: {
-                type: 'integer',
+                type: ['integer', 'null'],
               },
               moderated: {
                 type: 'boolean',
