@@ -40,6 +40,7 @@ class SolicitationsEvaluations {
       .expect(201);
 
     this.evaluationsId = body.data[0].id;
+    this.evaluatedId = body.data[0].attributes.evaluated_id;
   }
 }
 
