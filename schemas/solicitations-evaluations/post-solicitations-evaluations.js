@@ -57,7 +57,7 @@ const post_solicitations_evaluations = {
                 type: 'integer',
               },
               position_name: {
-                type: 'string',
+                type: ['string', 'null'],
               },
               department_id: {
                 type: 'integer',
