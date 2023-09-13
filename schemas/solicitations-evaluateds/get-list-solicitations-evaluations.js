@@ -74,9 +74,11 @@ const get_list_solicitations_evaluateds = {
               },
               started_at: {
                 type: 'string',
+                format: 'date',
               },
               finished_at: {
                 type: 'string',
+                format: 'date',
               },
             },
           },
