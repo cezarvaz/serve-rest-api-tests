@@ -168,7 +168,7 @@ const get_evaluations = {
                 type: 'string',
               },
               profiler: {
-                type: 'null',
+                type: ['null', 'string'],
               },
               direct_leader: {
                 type: 'string',

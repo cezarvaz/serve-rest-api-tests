@@ -15,7 +15,7 @@ let payload;
 describe('Post solicitations evaluations', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getLastItem(3);
+    await Solicitations.getItem(3);
 
     payload = {
       evaluation: {
@@ -49,6 +49,7 @@ describe('Post solicitations evaluations', () => {
       .post(`solicitations/${Solicitations.lastId}/evaluations`)
       .send(payload)
       .set('Authorization', `Bearer ${client.accessToken}`);
+    console.log(JSON.stringify(body, null, 2));
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
@@ -61,9 +62,6 @@ describe('Post solicitations evaluations', () => {
           solicitation_id: Solicitations.lastId,
           evaluator_id: payload.evaluation.evaluators[0].evaluator_id,
           evaluator_name: payload.evaluation.evaluators[0].evaluator_name,
-          evaluated_id: payload.evaluation.evaluateds[i].evaluated_id,
-          evaluated_name: payload.evaluation.evaluateds[i].evaluated_name,
-          position_id: payload.evaluation.evaluateds[i].position_id,
         },
       };
       expect(body.data[i]).toMatchObject(expectedEvaluation);

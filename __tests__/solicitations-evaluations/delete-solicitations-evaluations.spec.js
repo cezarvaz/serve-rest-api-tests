@@ -12,7 +12,7 @@ import errorsSchema from 'schemas/errors/errors';
 describe('Delete solicitations evaluations', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getLastItem(2);
+    await Solicitations.getItem(2);
     await SolicitationsEvaluations.create(Solicitations.lastId);
   });
 

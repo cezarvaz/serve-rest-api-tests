@@ -63,7 +63,7 @@ const post_solicitations_evaluations = {
                 type: ['integer', 'null'],
               },
               unit_id: {
-                type: 'null',
+                type: ['integer', 'null'],
               },
               direct_leader_id: {
                 type: ['integer', 'null'],

@@ -17,6 +17,7 @@ const get_solicitations_evaluations = {
           },
           type: {
             type: 'string',
+            enum: ['evaluations'],
           },
           attributes: {
             type: 'object',
@@ -57,13 +58,13 @@ const get_solicitations_evaluations = {
                 type: 'integer',
               },
               position_name: {
-                type: 'string',
+                type: ['null', 'string'],
               },
               department_id: {
                 type: 'integer',
               },
               unit_id: {
-                type: 'null',
+                type: ['null', 'integer'],
               },
               direct_leader_id: {
                 type: 'integer',

@@ -17,6 +17,7 @@ const get_list_solicitations_evaluations = {
           },
           type: {
             type: 'string',
+            enum: ['evaluations'],
           },
           attributes: {
             type: 'object',
@@ -63,7 +64,7 @@ const get_list_solicitations_evaluations = {
                 type: 'integer',
               },
               unit_id: {
-                type: 'null',
+                type: ['integer', 'null'],
               },
               direct_leader_id: {
                 type: 'integer',

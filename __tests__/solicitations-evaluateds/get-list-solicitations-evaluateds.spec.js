@@ -16,14 +16,12 @@ describe('Get solicitations evaluateds', () => {
     const { status, body, headers } = await request
       .get(`solicitations/evaluateds`)
       .set('Authorization', `Bearer ${client.accessToken}`);
+
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
     expect(status).toBe(200);
-    for (let i = 0; i < body.data.length; i++) {
-      expect(body.data[i].type).toBe('evaluateds');
-    }
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 

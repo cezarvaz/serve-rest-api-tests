@@ -66,7 +66,7 @@ const get_solicitations_evaluateds_details = {
               type: 'null',
             },
             unit_id: {
-              type: 'null',
+              type: ['integer', 'null'],
             },
             idp_id: {
               type: 'null',
