@@ -67,7 +67,7 @@ const get_solicitations_evaluations = {
                 type: ['null', 'integer'],
               },
               direct_leader_id: {
-                type: 'integer',
+                type: ['null', 'integer'],
               },
               moderated: {
                 type: 'boolean',
