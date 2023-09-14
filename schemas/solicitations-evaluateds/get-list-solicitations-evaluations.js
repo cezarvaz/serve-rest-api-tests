@@ -1,11 +1,57 @@
-const get_list_solicitations_evaluations = {
+const get_list_solicitations_evaluateds = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#get-list-solicitations-evaluations',
+  $id: '#get-list-solicitations-evaluateds',
   type: 'object',
   required: ['data', 'included', 'meta'],
   additionalProperties: false,
   properties: {
     data: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['id', 'type', 'attributes', 'relationships'],
+        additionalProperties: false,
+        properties: {
+          id: {
+            type: 'integer',
+          },
+          type: {
+            type: 'string',
+          },
+          attributes: {
+            type: 'object',
+            required: ['evaluated_name'],
+            additionalProperties: false,
+            properties: {
+              evaluated_name: {
+                type: 'string',
+              },
+            },
+          },
+          relationships: {
+            type: 'object',
+            required: ['data'],
+            additionalProperties: false,
+            properties: {
+              data: {
+                type: 'object',
+                required: ['id', 'type'],
+                additionalProperties: false,
+                properties: {
+                  id: {
+                    type: 'integer',
+                  },
+                  type: {
+                    type: 'string',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    included: {
       type: 'array',
       items: {
         type: 'object',
@@ -17,80 +63,28 @@ const get_list_solicitations_evaluations = {
           },
           type: {
             type: 'string',
-            enum: ['evaluations'],
+            enum: ['evaluateds', 'solicitations'],
           },
           attributes: {
             type: 'object',
-            required: [
-              'solicitation_id',
-              'evaluator_id',
-              'evaluator_name',
-              'evaluated_id',
-              'evaluated_name',
-              'position_id',
-              'position_name',
-              'department_id',
-              'unit_id',
-              'direct_leader_id',
-              'moderated',
-              'status',
-              'created_at',
-              'updated_at',
-            ],
+            required: ['name', 'started_at', 'finished_at'],
             additionalProperties: false,
             properties: {
-              solicitation_id: {
-                type: 'integer',
-              },
-              evaluator_id: {
-                type: 'integer',
-              },
-              evaluator_name: {
+              name: {
                 type: 'string',
               },
-              evaluated_id: {
-                type: 'integer',
-              },
-              evaluated_name: {
+              started_at: {
                 type: 'string',
+                format: 'date',
               },
-              position_id: {
-                type: 'integer',
-              },
-              position_name: {
+              finished_at: {
                 type: 'string',
-              },
-              department_id: {
-                type: 'integer',
-              },
-              unit_id: {
-                type: ['integer', 'null'],
-              },
-              direct_leader_id: {
-                type: 'integer',
-              },
-              moderated: {
-                type: 'boolean',
-              },
-              status: {
-                type: 'string',
-              },
-              created_at: {
-                type: 'string',
-                format: 'date-time',
-              },
-              updated_at: {
-                type: 'string',
-                format: 'date-time',
+                format: 'date',
               },
             },
           },
         },
       },
-    },
-    included: {
-      type: 'array',
-      items: {},
     },
     meta: {
       type: 'object',
@@ -134,4 +128,4 @@ const get_list_solicitations_evaluations = {
   },
 };
 
-export default get_list_solicitations_evaluations;
+export default get_list_solicitations_evaluateds;

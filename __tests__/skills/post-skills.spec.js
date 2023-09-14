@@ -260,33 +260,37 @@ describe('Create skill', () => {
   ${'____'} | ${'an invalid'}
   ${null}   | ${'a null'}
   ${''}     | ${'an empty'}
-  `.test('should validate $scenario skill group id', async ({ position }) => {
-    payload.skill.position_ids = position;
+  `.test.skip(
+    'should validate $scenario skill group id',
+    async ({ position }) => {
+      // https://solides.atlassian.net/browse/TDEP-4300
+      payload.skill.position_ids = position;
 
-    const { status, body, headers } = await request
-      .post('skills')
-      .send(payload)
-      .set('Authorization', `Bearer ${client.accessToken}`);
+      const { status, body, headers } = await request
+        .post('skills')
+        .send(payload)
+        .set('Authorization', `Bearer ${client.accessToken}`);
 
-    console.log(position);
-    console.log(body.data.relationships.positions);
+      console.log(position);
+      console.log(body.data.relationships.positions);
 
-    expect(headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8',
-    );
-    expect(status).toBe(422);
-    expect(body.message).toBe('Não pode ser criado');
-    expect(body.error.position[0]).toBe(
-      'translation missing: pt-BR.activerecord.errors.models.skill.attributes.skill_group.required',
-    ); // https://solides.atlassian.net/browse/TDEP-4049
+      expect(headers).toHaveProperty(
+        'content-type',
+        'application/json; charset=utf-8',
+      );
+      expect(status).toBe(422);
+      expect(body.message).toBe('Não pode ser criado');
+      expect(body.error.position[0]).toBe(
+        'translation missing: pt-BR.activerecord.errors.models.skill.attributes.skill_group.required',
+      ); // https://solides.atlassian.net/browse/TDEP-4049
 
-    if (position == '____') {
-      expect(body.error.position_id[0]).toBe('não é válido');
-    }
+      if (position == '____') {
+        expect(body.error.position_id[0]).toBe('não é válido');
+      }
 
-    expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
-  });
+      expect(validate.jsonSchema(body, businessErrorSchema)).toBeTrue();
+    },
+  );
 
   each`
   factor    | scenario

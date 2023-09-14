@@ -2,27 +2,39 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import Solicitations from 'factories/Solicitations';
 import each from 'jest-each';
+import SolicitationsEvaluations from 'factories/SolicitationsEvaluations';
+import Rates from 'factories/Rates';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/solicitations-evaluations/get-solicitations-evaluations';
+import successSchema from 'schemas/solicitations-evaluateds/get-solicitations-evaluateds-skill-rates';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import errorsSchema from 'schemas/errors/errors';
 
-describe('Get solicitations evaluations', () => {
+describe('Get evaluateds skill rates', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getItem(1);
+    await Solicitations.create();
+    await SolicitationsEvaluations.create(Solicitations.id);
+    await Rates.create(SolicitationsEvaluations.evaluationsId);
+  });
+
+  afterAll(async () => {
+    await Solicitations.deleteSolicitationById(Solicitations.id);
   });
 
   test('successfully', async () => {
     const { status, body, headers } = await request
-      .get(`solicitations/${Solicitations.lastId}/evaluations`)
+      .get(
+        `solicitations/${Solicitations.id}/evaluateds/${SolicitationsEvaluations.evaluatedId}/skill_rates`,
+      )
       .set('Authorization', `Bearer ${client.accessToken}`);
+
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
+    expect(body.data[0].type).toBe('skill_rates');
     expect(status).toBe(200);
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
@@ -32,19 +44,47 @@ describe('Get solicitations evaluations', () => {
   ${'999999999999'}         | ${'invalid id'}        | ${404}     | ${'Não pode ser mostrado'}
   ${'nonexistentent'}       | ${'string id'}         | ${404}     | ${'Não pode ser mostrado'}
   ${null}                   | ${'null id'}           | ${404}     | ${'Não pode ser mostrado'}
-  `.test('unsuccessfully $scenario', async ({ id, statusCode, message }) => {
-    const { status, body, headers } = await request
-      .get(`solicitations/${id}/evaluations`)
-      .set('Authorization', `Bearer ${client.accessToken}`);
+  `.test(
+    'unsuccessfully solicitation $scenario',
+    async ({ id, statusCode, message }) => {
+      const { status, body, headers } = await request
+        .get(
+          `solicitations/${id}/evaluateds/${SolicitationsEvaluations.evaluatedId}/skill_rates`,
+        )
+        .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8',
-    );
-    expect(status).toBe(statusCode);
-    expect(body.errors.message).toBe(message);
-    expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
-  });
+      expect(headers).toHaveProperty(
+        'content-type',
+        'application/json; charset=utf-8',
+      );
+      expect(status).toBe(statusCode);
+      expect(body.errors.message).toBe(message);
+      expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
+    },
+  );
+
+  //https://solides.atlassian.net/browse/TDEP-4289
+  each`
+  id                        | scenario               | statusCode | message
+  ${'999999999999'}         | ${'invalid id'}        | ${404}     | ${'Não pode ser mostrado'}
+  ${'nonexistentent'}       | ${'string id'}         | ${404}     | ${'Não pode ser mostrado'}
+  ${null}                   | ${'null id'}           | ${404}     | ${'Não pode ser mostrado'}
+  `.test.skip(
+    'unsuccessfully evaluated $scenario',
+    async ({ id, statusCode, message }) => {
+      const { status, body, headers } = await request
+        .get(`solicitations/${Solicitations.id}/evaluateds/${id}/skill_rates`)
+        .set('Authorization', `Bearer ${client.accessToken}`);
+
+      expect(headers).toHaveProperty(
+        'content-type',
+        'application/json; charset=utf-8',
+      );
+      expect(status).toBe(statusCode);
+      expect(body.errors.message).toBe(message);
+      expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
+    },
+  );
 
   each`
   token                       | scenario               | statusCode | message
@@ -57,7 +97,9 @@ describe('Get solicitations evaluations', () => {
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .get(`solicitations/${Solicitations.lastId}/evaluations`)
+        .get(
+          `solicitations/${Solicitations.id}/evaluateds/${SolicitationsEvaluations.evaluatedId}/skill_rates`,
+        )
         .set('Authorization', token);
       if (token === EXPIRED_TOKEN || token === UNAUTHORIZED_TOKEN) {
         expect(headers).toHaveProperty(

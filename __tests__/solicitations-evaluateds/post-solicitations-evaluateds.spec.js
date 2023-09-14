@@ -1,29 +1,34 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import Solicitations from 'factories/Solicitations';
-import SolicitationsEvaluations from 'factories/SolicitationsEvaluations';
 import each from 'jest-each';
 import validate from 'helpers/Validate';
+import successSchema from 'schemas/solicitations-evaluateds/post-solicitations-evaluateds';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import errorsSchema from 'schemas/errors/errors';
 
-describe('Delete solicitations evaluations', () => {
+describe('Post solicitations evaluateds', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getItem(2);
-    await SolicitationsEvaluations.create(Solicitations.lastId);
+    await Solicitations.getItem(3);
   });
 
   test('successfully', async () => {
-    const { status, headers } = await request
-      .delete(
-        `solicitations/${Solicitations.lastId}/evaluations/${SolicitationsEvaluations.evaluationsId}`,
-      )
+    const { status, body, headers } = await request
+      .post(`solicitations/${Solicitations.lastId}/general_report_csv`)
       .set('Authorization', `Bearer ${client.accessToken}`);
-    expect(headers).toHaveProperty('content-type', 'application/json');
-    expect(status).toBe(204);
+    expect(headers).toHaveProperty(
+      'content-type',
+      'application/json; charset=utf-8',
+    );
+    expect(body).toMatchObject({
+      message: 'Em breve enviaremos o relatório CSV para o seu e-mail.',
+      status: 'requested',
+    });
+    expect(status).toBe(201);
+    expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
   each`
@@ -33,9 +38,8 @@ describe('Delete solicitations evaluations', () => {
   ${null}                   | ${'null id'}           | ${404}     | ${'Não pode ser mostrado'}
   `.test('unsuccessfully $scenario', async ({ id, statusCode, message }) => {
     const { status, body, headers } = await request
-      .delete(`solicitations/${id}/evaluations/${id}`)
+      .post(`solicitations/${id}/general_report_csv`)
       .set('Authorization', `Bearer ${client.accessToken}`);
-
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
@@ -56,9 +60,7 @@ describe('Delete solicitations evaluations', () => {
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .delete(
-          `solicitations/${Solicitations.lastId}/evaluations/${SolicitationsEvaluations.evaluationsId}`,
-        )
+        .post(`solicitations/${Solicitations.lastId}/evaluations`)
         .set('Authorization', token);
       if (token === EXPIRED_TOKEN || token === UNAUTHORIZED_TOKEN) {
         expect(headers).toHaveProperty(

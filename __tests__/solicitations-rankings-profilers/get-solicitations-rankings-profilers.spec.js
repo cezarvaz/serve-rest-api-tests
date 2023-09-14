@@ -2,29 +2,51 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import each from 'jest-each';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/solicitations-evaluations/get-report-csv-solicitations-evaluations';
+import successSchema from 'schemas/solicitations-rankings-profilers/get-solicitations-rankings-profilers';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import simpleErrorSchema from 'schemas/errors/simple-error';
+import errorsSchema from 'schemas/errors/errors';
 
-describe('Get solicitations evaluations', () => {
+describe('Get rankings profilers', () => {
   beforeAll(async () => {
     await client.auth();
   });
 
   test('successfully', async () => {
     const { status, body, headers } = await request
-      .get(`solicitations/evaluations/report_csv`)
+      .get(`solicitations/12547/rankings/profilers`)
       .set('Authorization', `Bearer ${client.accessToken}`);
+
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(body.message).toBe(
-      'Em breve enviaremos o relatório CSV para o seu e-mail.',
-    );
     expect(status).toBe(200);
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
+
+  each`
+  id                        | scenario               | statusCode | message
+  ${'999999999999'}         | ${'invalid id'}        | ${404}     | ${'Não pode ser mostrado'}
+  ${'nonexistentent'}       | ${'string id'}         | ${404}     | ${'Não pode ser mostrado'}
+  ${null}                   | ${'null id'}           | ${404}     | ${'Não pode ser mostrado'}
+  `.test(
+    'unsuccessfully solicitation $scenario',
+    async ({ id, statusCode, message }) => {
+      const { status, body, headers } = await request
+        .get(`solicitations/${id}/rankings/profilers`)
+        .set('accept', 'application/json')
+        .set('Authorization', `Bearer ${client.accessToken}`);
+
+      expect(headers).toHaveProperty(
+        'content-type',
+        'application/json; charset=utf-8',
+      );
+      expect(status).toBe(statusCode);
+      expect(body.errors.message).toBe(message);
+      expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
+    },
+  );
 
   each`
   token                       | scenario               | statusCode | message
@@ -37,7 +59,7 @@ describe('Get solicitations evaluations', () => {
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .get(`solicitations/evaluations/report_csv`)
+        .get(`solicitations/12547/rankings/profilers`)
         .set('Authorization', token);
       expect(headers).toHaveProperty(
         'content-type',
