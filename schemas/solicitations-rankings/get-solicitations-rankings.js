@@ -1,6 +1,6 @@
-const get_solicitations_rankings_collaborator = {
+const get_solicitations_rankings = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#get-solicitations-rankings-collaborator',
+  $id: '#get-solicitations-rankings',
   type: 'object',
   required: ['data', 'included', 'meta'],
   additionalProperties: false,
@@ -81,4 +81,4 @@ const get_solicitations_rankings_collaborator = {
   },
 };
 
-export default get_solicitations_rankings_collaborator;
+export default get_solicitations_rankings;
