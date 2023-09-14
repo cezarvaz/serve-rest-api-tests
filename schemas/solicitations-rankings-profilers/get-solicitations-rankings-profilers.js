@@ -1,6 +1,6 @@
-const get_solicitations_rankings = {
+const get_solicitations_rankings_profilers = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#get-solicitations-rankings',
+  $id: '#get-solicitations-rankings-profilers',
   type: 'object',
   required: ['data', 'included', 'meta'],
   additionalProperties: false,
@@ -13,21 +13,24 @@ const get_solicitations_rankings = {
         additionalProperties: false,
         properties: {
           id: {
-            type: 'integer',
+            type: 'string',
           },
           type: {
             type: 'string',
-            enum: ['rankings'],
+            enum: ['ranking_profilers'],
           },
           attributes: {
             type: 'object',
-            required: ['name', 'average'],
+            required: ['name', 'average', 'total'],
             additionalProperties: false,
             properties: {
               name: {
                 type: 'string',
               },
               average: {
+                type: 'integer',
+              },
+              total: {
                 type: 'integer',
               },
             },
@@ -45,40 +48,11 @@ const get_solicitations_rankings = {
       additionalProperties: false,
       properties: {
         pagination: {
-          type: 'object',
-          required: [
-            'current',
-            'previous',
-            'next',
-            'per_page',
-            'pages',
-            'total_count',
-          ],
-          additionalProperties: false,
-          properties: {
-            current: {
-              type: 'integer',
-            },
-            previous: {
-              type: 'null',
-            },
-            next: {
-              type: 'null',
-            },
-            per_page: {
-              type: 'integer',
-            },
-            pages: {
-              type: 'integer',
-            },
-            total_count: {
-              type: 'integer',
-            },
-          },
+          type: 'null',
         },
       },
     },
   },
 };
 
-export default get_solicitations_rankings;
+export default get_solicitations_rankings_profilers;
