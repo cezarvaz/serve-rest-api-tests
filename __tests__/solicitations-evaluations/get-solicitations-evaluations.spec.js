@@ -23,6 +23,7 @@ describe('Get solicitations evaluations', () => {
       'content-type',
       'application/json; charset=utf-8',
     );
+    console.log(JSON.stringify(body, null, 2));
     expect(status).toBe(200);
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });

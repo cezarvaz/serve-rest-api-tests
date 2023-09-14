@@ -61,7 +61,7 @@ const get_solicitations_evaluations = {
                 type: ['null', 'string'],
               },
               department_id: {
-                type: 'integer',
+                type: ['null', 'integer'],
               },
               unit_id: {
                 type: ['null', 'integer'],
