@@ -37,8 +37,8 @@ describe('Get solicitations stats', () => {
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
         .get(`solicitations/stats`)
-
         .set('Authorization', token);
+
       if (token === EXPIRED_TOKEN || token === UNAUTHORIZED_TOKEN) {
         expect(headers).toHaveProperty(
           'content-type',
