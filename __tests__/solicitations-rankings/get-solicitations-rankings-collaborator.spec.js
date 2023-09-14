@@ -2,12 +2,12 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import each from 'jest-each';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/solicitations-rankings/get-solicitations-rankings-collaborator';
+import successSchema from 'schemas/solicitations-rankings/get-solicitations-rankings';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import errorsSchema from 'schemas/errors/errors';
 
-describe('Get evaluateds details', () => {
+describe('Get rankings collaborator', () => {
   beforeAll(async () => {
     await client.auth();
   });
