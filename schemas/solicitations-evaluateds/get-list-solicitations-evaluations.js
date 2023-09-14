@@ -63,6 +63,7 @@ const get_list_solicitations_evaluateds = {
           },
           type: {
             type: 'string',
+            enum: ['evaluateds', 'solicitations'],
           },
           attributes: {
             type: 'object',

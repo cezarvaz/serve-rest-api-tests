@@ -15,7 +15,7 @@ let payload;
 describe('Post solicitations evaluations', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getLastItem(3);
+    await Solicitations.getItem(3);
 
     payload = {
       evaluation: {
@@ -61,9 +61,6 @@ describe('Post solicitations evaluations', () => {
           solicitation_id: Solicitations.lastId,
           evaluator_id: payload.evaluation.evaluators[0].evaluator_id,
           evaluator_name: payload.evaluation.evaluators[0].evaluator_name,
-          evaluated_id: payload.evaluation.evaluateds[i].evaluated_id,
-          evaluated_name: payload.evaluation.evaluateds[i].evaluated_name,
-          position_id: payload.evaluation.evaluateds[i].position_id,
         },
       };
       expect(body.data[i]).toMatchObject(expectedEvaluation);

@@ -19,7 +19,9 @@ describe('Get solicitations evaluations', () => {
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(body.message).toBe('O CSV está pronto para ser baixado');
+    expect(body.message).toBe(
+      'Em breve enviaremos o relatório CSV para o seu e-mail.',
+    );
     expect(status).toBe(200);
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });

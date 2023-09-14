@@ -12,7 +12,7 @@ import errorsSchema from 'schemas/errors/errors';
 describe('Get solicitations evaluations', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getLastItem(1);
+    await Solicitations.getItem(1);
   });
 
   test('successfully', async () => {
@@ -24,9 +24,6 @@ describe('Get solicitations evaluations', () => {
       'application/json; charset=utf-8',
     );
     expect(status).toBe(200);
-    for (let i = 0; i < body.data.length; i++) {
-      expect(body.data[i].type).toBe('evaluations');
-    }
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 

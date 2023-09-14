@@ -12,7 +12,7 @@ import errorsSchema from 'schemas/errors/errors';
 describe('Post solicitations evaluateds', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getLastItem(3);
+    await Solicitations.getItem(3);
   });
 
   test('successfully', async () => {

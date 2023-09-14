@@ -15,7 +15,7 @@ let payload;
 describe('Edit a solicitation', () => {
   beforeAll(async () => {
     await client.auth();
-    await Solicitations.getLastItem(3);
+    await Solicitations.getItem(3);
     await Solicitations.create();
 
     const generateUniqueName = () => {

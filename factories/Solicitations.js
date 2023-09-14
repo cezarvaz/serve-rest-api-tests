@@ -2,6 +2,8 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import fakerBr from 'faker-br';
 
+const dayjs = require('dayjs');
+
 beforeAll(async () => {
   await client.auth();
 });
@@ -14,8 +16,8 @@ class Solicitations {
           max: 999999999999,
         })}_criada pela automação de testes de API`,
         description: fakerBr.random.words(),
-        started_at: '2029-11-21',
-        finished_at: '2029-12-29',
+        started_at: dayjs().format('YYYY-MM-DD'),
+        finished_at: dayjs().add(1, 'month').format('YYYY-MM-DD'),
       },
     };
 
@@ -39,7 +41,7 @@ class Solicitations {
       .expect(204);
   }
 
-  async getLastItem(i) {
+  async getItem(i) {
     const { body } = await request
       .get('solicitations?q[s]=created_at+desc')
       .set('Authorization', `Bearer ${client.accessToken}`)
