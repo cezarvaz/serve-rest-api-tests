@@ -49,7 +49,6 @@ describe('Post solicitations evaluations', () => {
       .post(`solicitations/${Solicitations.lastId}/evaluations`)
       .send(payload)
       .set('Authorization', `Bearer ${client.accessToken}`);
-    console.log(JSON.stringify(body, null, 2));
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
