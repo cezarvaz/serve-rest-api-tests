@@ -7,17 +7,16 @@ import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 import errorsSchema from 'schemas/errors/errors';
 
-describe('Get rankings collaborator', () => {
+describe('Get rankings unit', () => {
   beforeAll(async () => {
     await client.auth();
   });
 
   test('successfully', async () => {
     const { status, body, headers } = await request
-      .get(`solicitations/12547/rankings/by/collaborator`)
+      .get(`solicitations/12547/rankings/by/unit`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .set('accept', 'application/json');
-
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
@@ -28,7 +27,7 @@ describe('Get rankings collaborator', () => {
 
   test('Unsuccessfully accept', async () => {
     const { status } = await request
-      .get(`solicitations/12547/rankings/by/collaborator`)
+      .get(`solicitations/12547/rankings/by/unit`)
       .set('Authorization', `Bearer ${client.accessToken}`)
       .set('accept', 'application/xml');
 
@@ -44,7 +43,7 @@ describe('Get rankings collaborator', () => {
     'unsuccessfully solicitation $scenario',
     async ({ id, statusCode, message }) => {
       const { status, body, headers } = await request
-        .get(`solicitations/${id}/rankings/by/collaborator`)
+        .get(`solicitations/${id}/rankings/by/unit`)
         .set('accept', 'application/json')
         .set('Authorization', `Bearer ${client.accessToken}`);
 
@@ -69,7 +68,7 @@ describe('Get rankings collaborator', () => {
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .get(`solicitations/12547/rankings/by/collaborator`)
+        .get(`solicitations/12547/rankings/by/unit`)
         .set('accept', 'application/json')
         .set('Authorization', token);
       expect(headers).toHaveProperty(
