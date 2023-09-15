@@ -2,30 +2,29 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import skill from 'factories/Skills';
 import validate from 'helpers/Validate';
-import getSkillsSchema from 'schemas/skills/get-skills';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import errorSchema from 'schemas/errors/error';
 import simpleErrorSchema from 'schemas/errors/simple-error';
 
-describe('List skills', () => {
+describe('Get skills csv general report', () => {
   beforeAll(async () => {
     await client.auth();
     await skill.create();
   });
 
   test('successfully', async () => {
-    const { status, body, headers } = await request
-      .get('skills')
+    const { status, headers, text } = await request
+      .get('skills/general_report_csv')
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(headers).toHaveProperty(
-      'content-type',
-      'application/json; charset=utf-8',
-    );
+    expect(headers).toHaveProperty('content-type', 'text/csv');
     expect(status).toBe(200);
-
-    expect(validate.jsonSchema(body, getSkillsSchema)).toBeTrue();
+    expect(text).toContain('Competência');
+    expect(text).toContain('Grupo de competência');
+    expect(text).toContain('Descrição');
+    expect(text).toContain('Peso');
+    expect(text).toContain('Cargo');
   });
 
   each`
@@ -39,7 +38,7 @@ describe('List skills', () => {
     'should validate $scenario authentication token',
     async ({ token, statusCode, message }) => {
       const { status, body, headers } = await request
-        .get(`skills`)
+        .get('skills/general_report_csv')
         .set('Authorization', token);
       if (token === EXPIRED_TOKEN || token === UNAUTHORIZED_TOKEN) {
         expect(headers).toHaveProperty(
