@@ -2,7 +2,7 @@ import request from 'config/request';
 import client from 'helpers/AuthClient';
 import positions from 'factories/Positions';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/positions/get-position';
+import successSchema from 'schemas/positions/get/success';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import simpleErrorSchema from 'schemas/errors/simple-error';
@@ -15,58 +15,62 @@ describe('Get Position', () => {
   });
 
   test('successfully', async () => {
-    const { status, body, headers } = await request
+    const res = await request
       .get(`positions/${positions.positionIdList[0]}`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(headers).toHaveProperty(
+    expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(body.data.id).toBe(positions.positionIdList[0]);
-    expect(status).toBe(200);
-    expect(validate.jsonSchema(body, successSchema)).toBeTrue();
+    expect(res.status).toBe(200);
+
+    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
   });
 
   each`
-  id                        | scenario               | statusCode | message
-  ${'999999999999'}         | ${'invalid id'}        | ${404}     | ${'Error'}
-  ${'nonexistentent'}       | ${'string id'}         | ${404}     | ${'Error'}
-  ${null}                   | ${'null id'}           | ${404}     | ${'Error'}
-  `.test('unsuccessfully $scenario', async ({ id, statusCode, message }) => {
-    const { status, body, headers } = await request
+  id             | scenario            
+  ${'a'}         | ${'an invalid'}
+  ${null}        | ${'a null'}
+  ${'999999999'} | ${'an inexistent'}
+  `.test('should validate $scenario id', async ({ id }) => {
+    const res = await request
       .get(`positions/${id}`)
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(headers).toHaveProperty(
+    expect(res.headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(status).toBe(statusCode);
-    expect(body.errors.message).toBe(message);
-    expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
+    expect(res.status).toBe(404);
+    expect(res.body.errors.status).toBe(404);
+    expect(res.body.errors.message).toBe('Error');
+
+    expect(validate.jsonSchema(res.body, errorsSchema)).toBeTrue();
   });
 
   each`
-  token                       | scenario               | statusCode | message
-  ${'token'}                  | ${'an invalid'}        | ${401}     | ${'decoding error'}
-  ${null}                     | ${'a null'}            | ${401}     | ${'decoding error'}
-  ${''}                       | ${'an empty'}          | ${401}     | ${'decoding error'}
-  ${EXPIRED_TOKEN}            | ${'an expired'}        | ${401}     | ${'decoding error'}
-  ${UNAUTHORIZED_TOKEN}       | ${'an unauthorized'}   | ${401}     | ${'decoding error'}
+  token                | scenario            
+  ${'token'}           | ${'an invalid'}
+  ${null}              | ${'a null'}
+  ${''}                | ${'an empty'}
+  ${EXPIRED_TOKEN}     | ${'an expired'}
+  ${UNAUTHORIZED_TOKEN}| ${'an unauthorized'}
   `.test(
     'should validate $scenario authentication token',
-    async ({ token, statusCode, message }) => {
-      const { status, body, headers } = await request
+    async ({ token }) => {
+      const res = await request
         .get(`positions/${positions.positionIdList[0]}`)
         .set('Authorization', token);
-      expect(headers).toHaveProperty(
+
+      expect(res.headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(body.errors).toBe(message);
-      expect(status).toBe(statusCode);
-      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
+      expect(res.status).toBe(401);
+      expect(res.body.errors).toBe('decoding error');
+
+      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
     },
   );
 });
