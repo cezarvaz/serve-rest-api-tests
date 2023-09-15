@@ -1,9 +1,9 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
-import successSkillsSchema from 'schemas/evaluation-average/get/success-skills';
-import successPositionsSchema from 'schemas/evaluation-average/get/success-positions';
-import successDepartmentsSchema from 'schemas/evaluation-average/get/success-departments';
+import successSkillsSchema from 'schemas/evaluation-average/get-evaluation-average-skills';
+import successPositionsSchema from 'schemas/evaluation-average/get-evaluation-average-positions';
+import successDepartmentsSchema from 'schemas/evaluation-average/get-evaluation-average-departments';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import simpleErrorSchema from 'schemas/errors/simple-error';
@@ -24,8 +24,6 @@ describe('List of Evaluation averages', () => {
       'application/json; charset=utf-8',
     );
     expect(status).toBe(200);
-    expect(body.data[0].type).toBe('skills');
-
     expect(validate.jsonSchema(body, successSkillsSchema)).toBeTrue();
   });
 
@@ -39,8 +37,6 @@ describe('List of Evaluation averages', () => {
       'application/json; charset=utf-8',
     );
     expect(status).toBe(200);
-    expect(body.data[0].type).toBe('positions');
-
     expect(validate.jsonSchema(body, successPositionsSchema)).toBeTrue();
   });
 
@@ -54,17 +50,15 @@ describe('List of Evaluation averages', () => {
       'application/json; charset=utf-8',
     );
     expect(status).toBe(200);
-    expect(body.data[0].type).toBe('departments');
-
     expect(validate.jsonSchema(body, successDepartmentsSchema)).toBeTrue();
   });
 
   each`
-  id             | scenario            
-  ${'999999999'} | ${'an invalid'}
-  ${null}        | ${'a null'}
-  ${'a'}         | ${'an inexistent'}
-  `.test('should validate $scenario id', async ({ id }) => {
+  id                        | scenario               | statusCode | message
+  ${'999999999999'}         | ${'invalid id'}        | ${404}     | ${'Não pode ser mostrado'}
+  ${'nonexistentent'}       | ${'string id'}         | ${404}     | ${'Não pode ser mostrado'}
+  ${null}                   | ${'null id'}           | ${404}     | ${'Não pode ser mostrado'}
+  `.test('unsuccessfully $scenario', async ({ id, statusCode, message }) => {
     const { status, body, headers } = await request
       .get(`evaluation_averages/${id}`)
       .set('Authorization', `Bearer ${client.accessToken}`);
@@ -73,34 +67,42 @@ describe('List of Evaluation averages', () => {
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(status).toBe(404);
-    expect(body.errors.status).toBe(404);
-    expect(body.errors.message).toBe('Não pode ser mostrado');
-
+    expect(status).toBe(statusCode);
+    expect(body.errors.message).toBe(message);
     expect(validate.jsonSchema(body, errorsSchema)).toBeTrue();
   });
 
   each`
-  token                | scenario
-  ${'token'}           | ${'an invalid'}
-  ${null}              | ${'a null'}
-  ${''}                | ${'an empty'}
-  ${EXPIRED_TOKEN}     | ${'an expired'}
-  ${UNAUTHORIZED_TOKEN}| ${'an unauthorized'}
-  `.test(
-    'should validate $scenario authentication token',
-    async ({ token }) => {
-      const { status, body, headers } = await request
-        .get(`evaluation_averages/departments`)
-        .set('Authorization', token);
+  type                |token                       | scenario               | statusCode | message
+  ${'skills'}         |${'token'}                  | ${'an invalid'}        | ${401}     | ${'decoding error'}
+  ${'skills'}         |${null}                     | ${'a null'}            | ${401}     | ${'decoding error'}
+  ${'skills'}         |${''}                       | ${'an empty'}          | ${401}     | ${'decoding error'}
+  ${'skills'}         |${EXPIRED_TOKEN}            | ${'an expired'}        | ${401}     | ${'decoding error'}
+  ${'skills'}         |${UNAUTHORIZED_TOKEN}       | ${'an unauthorized'}   | ${401}     | ${'decoding error'}
 
+  ${'departments'}    |${'token'}                  | ${'an invalid'}        | ${401}     | ${'decoding error'}
+  ${'departments'}    |${null}                     | ${'a null'}            | ${401}     | ${'decoding error'}
+  ${'departments'}    |${''}                       | ${'an empty'}          | ${401}     | ${'decoding error'}
+  ${'departments'}    |${EXPIRED_TOKEN}            | ${'an expired'}        | ${401}     | ${'decoding error'}
+  ${'departments'}    |${UNAUTHORIZED_TOKEN}       | ${'an unauthorized'}   | ${401}     | ${'decoding error'}
+  
+  ${'positions'}      |${'token'}                  | ${'an invalid'}        | ${401}     | ${'decoding error'}
+  ${'positions'}      |${null}                     | ${'a null'}            | ${401}     | ${'decoding error'}
+  ${'positions'}      |${''}                       | ${'an empty'}          | ${401}     | ${'decoding error'}
+  ${'positions'}      |${EXPIRED_TOKEN}            | ${'an expired'}        | ${401}     | ${'decoding error'}
+  ${'positions'}      |${UNAUTHORIZED_TOKEN}       | ${'an unauthorized'}   | ${401}     | ${'decoding error'}
+  `.test(
+    'should validate $type $scenario authentication token',
+    async ({ type, token, statusCode, message }) => {
+      const { status, body, headers } = await request
+        .get(`evaluation_averages/${type}`)
+        .set('Authorization', token);
       expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(status).toBe(401);
-      expect(body.errors).toBe('decoding error');
-
+      expect(body.errors).toBe(message);
+      expect(status).toBe(statusCode);
       expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
