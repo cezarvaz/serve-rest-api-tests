@@ -1,7 +1,7 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import Solicitations from 'factories/Solicitations';
-import SolicitationsEvaluations from 'factories/solicitationsEvaluations';
+import SolicitationsEvaluations from 'factories/SolicitationsEvaluations';
 import each from 'jest-each';
 import validate from 'helpers/Validate';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';

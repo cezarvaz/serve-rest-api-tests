@@ -13,6 +13,7 @@ const postSkillSchema = {
         },
         type: {
           type: 'string',
+          enum: ['skills'],
         },
         attributes: {
           type: 'object',
@@ -82,6 +83,7 @@ const postSkillSchema = {
                     },
                     type: {
                       type: 'string',
+                      enum: ['skill_groups', 'positions'],
                     },
                   },
                 },

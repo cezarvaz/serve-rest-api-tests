@@ -17,6 +17,7 @@ const getSkillsSchema = {
           },
           type: {
             type: 'string',
+            enum: ['skills'],
           },
           attributes: {
             type: 'object',
@@ -128,6 +129,7 @@ const getSkillsSchema = {
           },
           type: {
             type: 'string',
+            enum: ['skill_groups', 'positions'],
           },
           attributes: {
             type: 'object',

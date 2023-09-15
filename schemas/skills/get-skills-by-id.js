@@ -15,6 +15,7 @@ const getSkillsByIdSchema = {
         },
         type: {
           type: 'string',
+          enum: ['skills'],
         },
         attributes: {
           type: 'object',
@@ -83,6 +84,7 @@ const getSkillsByIdSchema = {
                     },
                     type: {
                       type: 'string',
+                      enum: ['skill_groups'],
                     },
                   },
                 },
@@ -115,6 +117,7 @@ const getSkillsByIdSchema = {
                       },
                       type: {
                         type: 'string',
+                        enum: ['positions'],
                       },
                     },
                   },
