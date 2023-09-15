@@ -1,4 +1,4 @@
-const postEvaluationAverageSchema = {
+const post_evaluation_avarage = {
   $schema: 'http://json-schema.org/draft-07/schema',
   $id: '#post-evaluation-avarage',
   type: 'object',
@@ -11,4 +11,4 @@ const postEvaluationAverageSchema = {
   },
 };
 
-export default postEvaluationAverageSchema;
+export default post_evaluation_avarage;
