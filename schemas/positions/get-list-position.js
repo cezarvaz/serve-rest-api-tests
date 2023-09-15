@@ -15,6 +15,7 @@ const get_list_position = {
           },
           type: {
             type: 'string',
+            enum: ['positions', 'skills'],
           },
           attributes: {
             type: 'object',
