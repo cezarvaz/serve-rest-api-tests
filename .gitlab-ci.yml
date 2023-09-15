@@ -6,7 +6,7 @@ stages:
   - test
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}-node-modules
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
     - node_modules/
     - .yarn/
