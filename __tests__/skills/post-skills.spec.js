@@ -271,9 +271,6 @@ describe('Create skill', () => {
         .send(payload)
         .set('Authorization', `Bearer ${client.accessToken}`);
 
-      console.log(position);
-      console.log(body.data.relationships.positions);
-
       expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
