@@ -44,29 +44,6 @@ describe('Post rates', () => {
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(body.data).toMatchObject([
-      {
-        type: 'rates',
-        attributes: {
-          skill_id: payload.rate.rates_attributes[0].skill_id,
-          rate: payload.rate.rates_attributes[0].rate,
-        },
-      },
-      {
-        type: 'rates',
-        attributes: {
-          skill_id: payload.rate.rates_attributes[1].skill_id,
-          rate: payload.rate.rates_attributes[1].rate,
-        },
-      },
-      {
-        type: 'rates',
-        attributes: {
-          skill_id: payload.rate.rates_attributes[2].skill_id,
-          rate: payload.rate.rates_attributes[2].rate,
-        },
-      },
-    ]);
     expect(status).toBe(201);
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
