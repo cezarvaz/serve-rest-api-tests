@@ -13,6 +13,7 @@ const sucessSchema = {
         },
         type: {
           type: 'string',
+          enum: ['positions', 'skills'],
         },
         attributes: {
           type: 'object',
