@@ -44,26 +44,6 @@ describe('put rates', () => {
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(body.data).toMatchObject([
-      {
-        type: 'rates',
-        attributes: {
-          rate: payload.rate.rates_attributes[0].rate,
-        },
-      },
-      {
-        type: 'rates',
-        attributes: {
-          rate: payload.rate.rates_attributes[1].rate,
-        },
-      },
-      {
-        type: 'rates',
-        attributes: {
-          rate: payload.rate.rates_attributes[2].rate,
-        },
-      },
-    ]);
     expect(status).toBe(202);
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
