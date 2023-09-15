@@ -6,7 +6,7 @@ beforeAll(async () => {
   await client.auth();
 });
 
-class rates {
+class Rates {
   async create(evaluationId) {
     const payload = {
       rate: {
@@ -41,4 +41,4 @@ class rates {
   }
 }
 
-export default new rates();
+export default new Rates();

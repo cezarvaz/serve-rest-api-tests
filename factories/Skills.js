@@ -49,19 +49,6 @@ class Skills {
 
     this.skillsList = list;
   }
-
-  async getDataToPut() {
-    const { body } = await request
-      .get('skills')
-      .set('Authorization', `Bearer ${client.accessToken}`)
-      .expect(200);
-
-    let dataJson = {
-      skillId: body.data[0].id,
-      groupId: body.data[0].relationships.skill_group.data.id,
-    };
-    this.data = dataJson;
-  }
 }
 
 export default new Skills();

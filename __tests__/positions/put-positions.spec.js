@@ -14,7 +14,7 @@ let payload;
 describe('Update Position', () => {
   beforeAll(async () => {
     await client.auth();
-    await skills.getDataToPut();
+    await skills.create();
     await positions.getPositionList();
     await skills.getList();
   });
@@ -22,7 +22,7 @@ describe('Update Position', () => {
   beforeEach(() => {
     payload = {
       position: {
-        skill_ids: [skills.data.skillId],
+        skill_ids: [skills.id],
       },
     };
   });
