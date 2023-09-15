@@ -1,6 +1,6 @@
-const sucessSchema = {
+const put_position = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#success-put-position-one-skill',
+  $id: '#put-position',
   type: 'object',
   required: ['data', 'included'],
   properties: {
@@ -13,6 +13,7 @@ const sucessSchema = {
         },
         type: {
           type: 'string',
+          enum: ['positions'],
         },
         attributes: {
           type: 'object',
@@ -118,4 +119,4 @@ const sucessSchema = {
     },
   },
 };
-export default sucessSchema;
+export default put_position;
