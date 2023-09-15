@@ -26,7 +26,11 @@ test:
   image: node:18.17.1-alpine3.18
   stage: test
   script:
-    - yarn test
+    - |
+      if [ ! -d "node_modules" ]; then
+        yarn install --frozen-lockfile
+      fi
+      yarn test
   artifacts:
     expire_in: 1 week
     when: always
