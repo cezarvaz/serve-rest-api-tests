@@ -74,7 +74,6 @@ describe('Update Position', () => {
           skill_ids: [''],
         },
       });
-    console.log(JSON.stringify(body, null, 2));
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
@@ -100,7 +99,6 @@ describe('Update Position', () => {
           skill_ids: [null],
         },
       });
-    console.log(JSON.stringify(body, null, 2));
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
@@ -125,7 +123,6 @@ describe('Update Position', () => {
           skill_ids: [fakerBr.random.words()],
         },
       });
-    console.log(JSON.stringify(body, null, 2));
     expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',

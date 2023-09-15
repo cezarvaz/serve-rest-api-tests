@@ -1,4 +1,4 @@
-const sucessSchema = {
+const get_list_position = {
   $schema: 'http://json-schema.org/draft-07/schema',
   $id: '#success-get-list-positions',
   type: 'object',
@@ -158,4 +158,4 @@ const sucessSchema = {
     },
   },
 };
-export default sucessSchema;
+export default get_list_position;
