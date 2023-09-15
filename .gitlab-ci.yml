@@ -3,7 +3,6 @@ default:
     - aws-linux
 
 stages:
-  - setup
   - test
 
 cache:
@@ -11,26 +10,12 @@ cache:
   paths:
     - node_modules/
 
-setup:
-  image: node:18.17.1-alpine3.18
-  stage: setup
-  script:
-    - |
-      if [ ! -d "node_modules" ]; then
-        yarn install --frozen-lockfile
-      fi
-  only:
-    - main
-
 test:
   image: node:18.17.1-alpine3.18
   stage: test
   script:
-    - |
-      if [ ! -d "node_modules" ]; then
-        yarn install --frozen-lockfile
-      fi
-      yarn test
+    - yarn install --frozen-lockfile
+    - yarn test
   artifacts:
     expire_in: 1 week
     when: always
