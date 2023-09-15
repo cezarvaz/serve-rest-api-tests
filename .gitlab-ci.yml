@@ -9,7 +9,6 @@ cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - node_modules/
-    - .yarn/
 
 test:
   image: node:18.17.1-alpine3.18
