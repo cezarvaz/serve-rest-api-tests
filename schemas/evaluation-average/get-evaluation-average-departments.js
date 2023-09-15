@@ -1,6 +1,6 @@
-const successDepartmentsSchema = {
+const get_evaluation_average_departments = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#success-get-departments-evaluation-average',
+  $id: '#get-evaluation-average-departments',
   type: 'object',
   required: ['data', 'included', 'meta'],
   properties: {
@@ -15,6 +15,7 @@ const successDepartmentsSchema = {
           },
           type: {
             type: 'string',
+            enum: ['departments'],
           },
           attributes: {
             type: 'object',
@@ -75,4 +76,4 @@ const successDepartmentsSchema = {
   },
 };
 
-export default successDepartmentsSchema;
+export default get_evaluation_average_departments;

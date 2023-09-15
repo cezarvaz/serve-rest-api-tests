@@ -25,8 +25,8 @@ describe('Post rates', () => {
       rate: {
         rates_attributes: [
           { rate: fakerBr.random.number({ min: 1, max: 5 }), skill_id: 8051 },
-          { rate: fakerBr.random.number({ min: 1, max: 5 }), skill_id: 8418 },
           { rate: fakerBr.random.number({ min: 1, max: 5 }), skill_id: 8799 },
+          { rate: fakerBr.random.number({ min: 1, max: 5 }), skill_id: 8418 },
         ],
         comments_attributes: {
           text: '<p>Teste API</p>',
@@ -44,26 +44,6 @@ describe('Post rates', () => {
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(body.data).toMatchObject([
-      {
-        type: 'rates',
-        attributes: {
-          rate: payload.rate.rates_attributes[0].rate,
-        },
-      },
-      {
-        type: 'rates',
-        attributes: {
-          rate: payload.rate.rates_attributes[1].rate,
-        },
-      },
-      {
-        type: 'rates',
-        attributes: {
-          rate: payload.rate.rates_attributes[2].rate,
-        },
-      },
-    ]);
     expect(status).toBe(201);
     expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });

@@ -25,6 +25,8 @@ const get_evaluations_solicitation_evaluator_evaluated = {
             'status',
             'expired_at',
             'expired',
+            'evaluator_name',
+            'created_at',
           ],
           additionalProperties: false,
           properties: {
@@ -45,6 +47,13 @@ const get_evaluations_solicitation_evaluator_evaluated = {
             },
             expired: {
               type: 'boolean',
+            },
+            evaluator_name: {
+              type: 'string',
+            },
+            created_at: {
+              type: 'string',
+              format: 'date-time',
             },
           },
         },

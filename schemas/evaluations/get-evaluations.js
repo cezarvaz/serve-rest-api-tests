@@ -27,6 +27,8 @@ const get_evaluations = {
               'status',
               'expired_at',
               'expired',
+              'evaluator_name',
+              'created_at',
             ],
             additionalProperties: false,
             properties: {
@@ -47,6 +49,13 @@ const get_evaluations = {
               },
               expired: {
                 type: 'boolean',
+              },
+              evaluator_name: {
+                type: 'string',
+              },
+              created_at: {
+                type: 'string',
+                format: 'date-time',
               },
             },
           },
@@ -168,7 +177,7 @@ const get_evaluations = {
                 type: 'string',
               },
               profiler: {
-                type: ['null', 'string'],
+                type: ['string', 'null'],
               },
               direct_leader: {
                 type: 'string',

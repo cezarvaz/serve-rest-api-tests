@@ -1,6 +1,6 @@
-const successSkillsSchema = {
+const get_evaluation_average_positions = {
   $schema: 'http://json-schema.org/draft-07/schema',
-  $id: '#success-get-skills-evaluation-average',
+  $id: '#get-evaluation-average-positions',
   type: 'object',
   required: ['data', 'included', 'meta'],
   properties: {
@@ -15,6 +15,7 @@ const successSkillsSchema = {
           },
           type: {
             type: 'string',
+            enum: ['positions'],
           },
           attributes: {
             type: 'object',
@@ -84,4 +85,4 @@ const successSkillsSchema = {
   },
 };
 
-export default successSkillsSchema;
+export default get_evaluation_average_positions;
