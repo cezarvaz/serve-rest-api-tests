@@ -15,6 +15,7 @@ const successSchema = {
           },
           type: {
             type: 'string',
+            enum: ['departments'],
           },
           attributes: {
             type: 'object',
