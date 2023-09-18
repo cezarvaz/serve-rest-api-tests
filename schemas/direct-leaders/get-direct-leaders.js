@@ -15,6 +15,7 @@ const successSchema = {
           },
           type: {
             type: 'string',
+            enum: ['direct_leaders'],
           },
           attributes: {
             type: 'object',
