@@ -1,4 +1,4 @@
-const successSchema = {
+const get_departments = {
   $schema: 'http://json-schema.org/draft-07/schema',
   $id: '#success-get-departments',
   type: 'object',
@@ -48,4 +48,4 @@ const successSchema = {
   },
 };
 
-export default successSchema;
+export default get_departments;

@@ -1,4 +1,4 @@
-const successSchema = {
+const get_direct_leaders = {
   $schema: 'http://json-schema.org/draft-07/schema',
   $id: '#success-get-direct-leaders',
   type: 'object',
@@ -101,4 +101,4 @@ const successSchema = {
   },
 };
 
-export default successSchema;
+export default get_direct_leaders;
