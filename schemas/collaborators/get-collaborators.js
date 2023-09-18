@@ -1,4 +1,4 @@
-const getCollaboratorsSchema = {
+const get_collaborators = {
   $schema: 'http://json-schema.org/draft-07/schema',
   $id: '#get-collaborators',
   type: 'object',
@@ -17,6 +17,7 @@ const getCollaboratorsSchema = {
           },
           type: {
             type: 'string',
+            enum: ['collaborators'],
           },
           attributes: {
             type: 'object',
@@ -95,4 +96,4 @@ const getCollaboratorsSchema = {
   },
 };
 
-export default getCollaboratorsSchema;
+export default get_collaborators;
