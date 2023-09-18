@@ -1,7 +1,7 @@
 import request from 'config/request';
 import client from 'helpers/AuthClient';
 import validate from 'helpers/Validate';
-import successSchema from 'schemas/hierarchy/get/success';
+import successSchema from 'schemas/hierarchy/get-hierarchy';
 import each from 'jest-each';
 import { EXPIRED_TOKEN, UNAUTHORIZED_TOKEN } from 'utils/constants';
 import simpleErrorSchema from 'schemas/errors/simple-error';
@@ -12,38 +12,38 @@ describe('Hierarchies list', () => {
   });
 
   test('successfully', async () => {
-    const res = await request
+    const { status, body, headers } = await request
       .get('hierarchy')
       .set('Authorization', `Bearer ${client.accessToken}`);
 
-    expect(res.headers).toHaveProperty(
+    expect(headers).toHaveProperty(
       'content-type',
       'application/json; charset=utf-8',
     );
-    expect(res.status).toBe(200);
-    expect(validate.jsonSchema(res.body, successSchema)).toBeTrue();
+    expect(status).toBe(200);
+    expect(validate.jsonSchema(body, successSchema)).toBeTrue();
   });
 
   each`
-  token                | scenario            
-  ${'token'}           | ${'an invalid'}
-  ${null}              | ${'a null'}
-  ${''}                | ${'an empty'}
-  ${EXPIRED_TOKEN}     | ${'an expired'}
-  ${UNAUTHORIZED_TOKEN}| ${'an unauthorized'}
+  token                       | scenario               | statusCode | message
+  ${'token'}                  | ${'an invalid'}        | ${401}     | ${'decoding error'}
+  ${null}                     | ${'a null'}            | ${401}     | ${'decoding error'}
+  ${''}                       | ${'an empty'}          | ${401}     | ${'decoding error'}
+  ${EXPIRED_TOKEN}            | ${'an expired'}        | ${401}     | ${'decoding error'}
+  ${UNAUTHORIZED_TOKEN}       | ${'an unauthorized'}   | ${401}     | ${'decoding error'}
   `.test(
     'should validate $scenario authentication token',
-    async ({ token }) => {
-      const res = await request.get('hierarchy').set('Authorization', token);
-
-      expect(res.headers).toHaveProperty(
+    async ({ token, statusCode, message }) => {
+      const { status, body, headers } = await request
+        .get('hierarchy')
+        .set('Authorization', token);
+      expect(headers).toHaveProperty(
         'content-type',
         'application/json; charset=utf-8',
       );
-      expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('decoding error');
-
-      expect(validate.jsonSchema(res.body, simpleErrorSchema)).toBeTrue();
+      expect(body.errors).toBe(message);
+      expect(status).toBe(statusCode);
+      expect(validate.jsonSchema(body, simpleErrorSchema)).toBeTrue();
     },
   );
 });

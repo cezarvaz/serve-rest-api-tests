@@ -1,4 +1,4 @@
-const successSchema = {
+const get_hierarchy = {
   $schema: 'http://json-schema.org/draft-07/schema',
   $id: '#success-get-hierarchy',
   type: 'object',
@@ -34,4 +34,4 @@ const successSchema = {
   },
 };
 
-export default successSchema;
+export default get_hierarchy;
