@@ -97,7 +97,7 @@ const get_solicitations = {
                 type: 'boolean',
               },
               employment_relationships: {
-                type: 'null',
+                type: ['null', 'array'],
               },
             },
           },
