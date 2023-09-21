@@ -174,7 +174,7 @@ const get_evaluations_solicitation_evaluator_evaluated = {
                 type: 'string',
               },
               profiler: {
-                type: 'null',
+                type: ['null', 'string'],
               },
               direct_leader: {
                 type: 'string',
