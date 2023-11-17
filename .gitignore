@@ -2,4 +2,3 @@ node_modules/
 html-report/
 .env
 .vscode
-package-lock.json

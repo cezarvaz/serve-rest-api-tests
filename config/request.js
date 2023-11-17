@@ -1,5 +1,3 @@
 import supertest from 'supertest';
-const request = supertest(
-  'https://apigwstg.solides.com.br/management/evaluation/api/',
-);
+const request = supertest('https://serverest.dev/');
 export default request;

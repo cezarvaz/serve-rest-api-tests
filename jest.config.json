@@ -1,11 +1,11 @@
 {
   "verbose": true,
-  "testTimeout": 70000,
+  "testTimeout": 30000,
   "moduleDirectories": [
     "node_modules",
-    "gestao-performance-evaluation-api-tests"
+    "serve-rest-api-tests"
   ],
-  "setupFilesAfterEnv": ["jest-extended/all", "./utils/jestMatchers.js"],
+  "setupFilesAfterEnv": ["jest-extended/all"],
   "reporters": [
     "default",
     [
@@ -15,7 +15,7 @@
         "filename": "report.html",
         "expand": true,
         "openReport": false,
-        "pageTitle": "Test Report - AVD API TESTS"
+        "pageTitle": "Test Report - SERVE REST API TESTS"
       }
     ]
   ]
